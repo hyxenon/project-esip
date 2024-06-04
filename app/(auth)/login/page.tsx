@@ -1,9 +1,6 @@
-import Social from "@/components/auth/Social";
 import LoginForm from "@/components/auth/login-form";
 import AuthFormWrapper from "@/components/auth/auth-form-wrapper";
 import React from "react";
-//Zzzz
-
 
 const LoginPage = () => {
   return (
@@ -12,7 +9,6 @@ const LoginPage = () => {
         title="login"
         backBtnRef="/register"
         backBtnLabel="Don't have an account? Click here to register."
-        social
       >
         <LoginForm />
       </AuthFormWrapper>
