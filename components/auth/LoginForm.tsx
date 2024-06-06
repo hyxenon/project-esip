@@ -1,15 +1,12 @@
 "use client";
 import React, { useState, useTransition } from "react";
-import AuthNav from "./auth-nav";
 import Image from "next/image";
-import bgLogo from "../../assets/watermark_copy-removebg-preview 1.png";
 import searchBg from "../../assets/search-removebg-preview 1.png";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "../ui/form";
 import { useForm } from "react-hook-form";
@@ -23,6 +20,7 @@ import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import AuthFormWrapper from "./auth-form-wrapper";
 
 const LoginForm = () => {
   const searchParams = useSearchParams();
@@ -53,101 +51,83 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="h-screen">
-      <AuthNav />
-      {/* Container */}
-      <div className="px-16 flex items-center justify-center h-[80%]">
-        {/* Login Form Container */}
-        <div className="relative px-16 flex justify-center items-center flex-1">
-          {/* Background Logo */}
-          <Image
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-            src={bgLogo}
-            alt=""
-          />
-          {/* Form */}
-          <div className="h-[500px] bg-gray-400 w-[800px] flex">
-            <div className="bg-black bg-opacity-55">
-              <Image
-                className="-z-50"
-                draggable="false"
-                src={searchBg}
-                alt=""
-              />
-            </div>
-            <div className="flex-1 flex items-center py-4 z-1 flex-col bg-[#D9D9D9]">
-              <h1 className="text-3xl mt-4 text-[#4DAB67]">Welcome Back</h1>
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="w-full px-8 z-10"
+    <AuthFormWrapper>
+      {/* Login Form */}
+      <div className="h-[500px] bg-gray-400 w-[800px] flex">
+        <div className="bg-black bg-opacity-55">
+          <Image className="-z-50" draggable="false" src={searchBg} alt="" />
+        </div>
+        <div className="flex-1 flex items-center py-4 z-1 flex-col bg-[#D9D9D9]">
+          <h1 className="text-3xl mt-4 text-[#4DAB67]">Welcome Back</h1>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="w-full px-8 z-10"
+            >
+              <div className="space-y-5 mt-16">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="email"
+                          placeholder="Email Address"
+                          className="bg-[#948B8B] text-white border-none outline-none placeholder:text-white"
+                        />
+                      </FormControl>
+                      <FormMessage className="text-red-400" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="password"
+                          placeholder="Password"
+                          className="bg-[#948B8B] text-white border-none outline-none placeholder:text-white"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  size={"sm"}
+                  variant={"link"}
+                  asChild
+                  className="px-0 font-normal"
                 >
-                  <div className="space-y-5 mt-16">
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              type="email"
-                              placeholder="Email Address"
-                              className="bg-[#948B8B] text-white border-none outline-none placeholder:text-white"
-                            />
-                          </FormControl>
-                          <FormMessage className="text-red-400" />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              type="password"
-                              placeholder="Password"
-                              className="bg-[#948B8B] text-white border-none outline-none placeholder:text-white"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Button
-                      size={"sm"}
-                      variant={"link"}
-                      asChild
-                      className="px-0 font-normal"
-                    >
-                      <Link href={"/reset-password"}>Forgot password?</Link>
-                    </Button>
-                  </div>
-                  <FormError message={error || urlError} />
-                  <FormSuccess message={success} />
-                  <Button
-                    disabled={isPending}
-                    className="w-full mt-4 bg-[#948B8B]"
-                    type="submit"
-                  >
-                    Login
-                  </Button>
-                  <p className="text-sm mt-4 text-center">
-                    Don't have an account? Click here to {""}
-                    <Link href={"/register"} className="font-bold">
-                      register
-                    </Link>
-                  </p>
-                </form>
-              </Form>
-            </div>
-          </div>
+                  <Link href={"/reset-password"}>Forgot password?</Link>
+                </Button>
+              </div>
+              <FormError message={error || urlError} />
+              <FormSuccess message={success} />
+              <Button
+                disabled={isPending}
+                className="w-full mt-4 bg-[#948B8B]"
+                type="submit"
+              >
+                Login
+              </Button>
+              <p className="text-sm mt-4 text-center">
+                Don't have an account? Click here to {""}
+                <Link href={"/register"} className="font-bold">
+                  register
+                </Link>
+              </p>
+            </form>
+          </Form>
         </div>
       </div>
-    </div>
+    </AuthFormWrapper>
   );
 };
 
