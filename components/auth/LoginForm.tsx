@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useTransition } from "react";
 import Image from "next/image";
-import searchBg from "../../assets/search-removebg-preview 1.png";
+import searchBg from "../../assets/authForm/searchBg.svg";
 import {
   Form,
   FormControl,
@@ -21,6 +21,12 @@ import { FormSuccess } from "../form-success";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import AuthFormWrapper from "./auth-form-wrapper";
+import { Jacques_Francois } from "next/font/google";
+
+const jacques = Jacques_Francois({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 const LoginForm = () => {
   const searchParams = useSearchParams();
@@ -53,18 +59,20 @@ const LoginForm = () => {
   return (
     <AuthFormWrapper>
       {/* Login Form */}
-      <div className="h-[500px] bg-gray-400 w-[800px] flex">
-        <div className="bg-black bg-opacity-55">
-          <Image className="-z-50" draggable="false" src={searchBg} alt="" />
+      <div className=" h-[450px] w-[800px] flex gap-0.5 bg-white z-50">
+        <div className="bg-[#283618] flex items-center justify-center px-12 border border-gray-300 shadow-2xl">
+          <Image draggable="false" src={searchBg} alt="" />
         </div>
-        <div className="flex-1 flex items-center py-4 z-1 flex-col bg-[#D9D9D9]">
-          <h1 className="text-3xl mt-4 text-[#4DAB67]">Welcome Back</h1>
+        <div className="flex-1 flex items-center py-4 flex-col border border-gray-300 shadow-2xl">
+          <h1 className={`text-4xl mt-4 text-[#606C38] ${jacques.className}`}>
+            Welcome Back
+          </h1>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full px-8 z-10"
+              className="w-full px-8 z-10 mt-8"
             >
-              <div className="space-y-5 mt-16">
+              <div className="space-y-5">
                 <FormField
                   control={form.control}
                   name="email"
@@ -75,7 +83,7 @@ const LoginForm = () => {
                           {...field}
                           type="email"
                           placeholder="Email Address"
-                          className="bg-[#948B8B] text-white border-none outline-none placeholder:text-white"
+                          className="border-gray-400"
                         />
                       </FormControl>
                       <FormMessage className="text-red-400" />
@@ -92,7 +100,7 @@ const LoginForm = () => {
                           {...field}
                           type="password"
                           placeholder="Password"
-                          className="bg-[#948B8B] text-white border-none outline-none placeholder:text-white"
+                          className="border-gray-400"
                         />
                       </FormControl>
                       <FormMessage />
@@ -103,7 +111,7 @@ const LoginForm = () => {
                   size={"sm"}
                   variant={"link"}
                   asChild
-                  className="px-0 font-normal"
+                  className="px-0 font-normal text-[#606C38]"
                 >
                   <Link href={"/reset-password"}>Forgot password?</Link>
                 </Button>
@@ -112,14 +120,14 @@ const LoginForm = () => {
               <FormSuccess message={success} />
               <Button
                 disabled={isPending}
-                className="w-full mt-4 bg-[#948B8B]"
+                className="w-full mt-4 bg-[#606C38] hover:bg-[#283618]"
                 type="submit"
               >
                 Login
               </Button>
               <p className="text-sm mt-4 text-center">
                 Don't have an account? Click here to {""}
-                <Link href={"/register"} className="font-bold">
+                <Link href={"/register"} className="text-[#BC6C25]">
                   register
                 </Link>
               </p>

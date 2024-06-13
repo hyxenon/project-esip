@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import AuthNav from "./auth-nav";
-import bgLogo from "../../assets/watermark_copy-removebg-preview 1.png";
+import authTopBg from "../../assets/authForm/bgTop.svg";
+import authBotBg from "../../assets/authForm/bgBot.svg";
 
 type AuthFormWrapperProps = {
   children: React.ReactNode;
@@ -10,17 +11,24 @@ type AuthFormWrapperProps = {
 
 const AuthFormWrapper = ({ children }: AuthFormWrapperProps) => {
   return (
-    <div className="h-screen">
+    <div className="h-screen relative">
+      <Image
+        draggable="false"
+        alt=""
+        src={authTopBg}
+        className="absolute top-0 left-0 max-w-[550px]"
+      />
       <AuthNav />
+      <Image
+        draggable="false"
+        alt=""
+        src={authBotBg}
+        className="absolute bottom-0 right-0 max-w-[550px]"
+      />
       {/* Container */}
-      <div className="px-16 flex items-center justify-center h-[80%]">
+      <div className=" flex items-center justify-center h-[80%]">
         {/* Form Container*/}
         <div className="relative px-16 flex justify-center items-center flex-1">
-          <Image
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-            src={bgLogo}
-            alt=""
-          />
           {children}
         </div>
       </div>
