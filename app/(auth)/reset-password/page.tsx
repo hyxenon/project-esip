@@ -4,14 +4,8 @@ import React from "react";
 
 const ResetPage = () => {
   return (
-    <div className="flex items-center justify-center py-8 px-4">
-      <AuthFormWrapper
-        title="Forgot your password?"
-        backBtnLabel="Back to login"
-        backBtnRef="/login"
-      >
-        <ResetForm />
-      </AuthFormWrapper>
+    <div className="">
+      <ResetForm />
     </div>
   );
 };

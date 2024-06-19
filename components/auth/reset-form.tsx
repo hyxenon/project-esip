@@ -19,6 +19,8 @@ import { ResetSchema } from "@/models/models";
 import { FormSuccess } from "../form-success";
 import { reset } from "@/actions/reset";
 import { FormError } from "../form-error";
+import AuthFormWrapper from "./auth-form-wrapper";
+import Link from "next/link";
 
 const ResetForm = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -43,30 +45,38 @@ const ResetForm = () => {
     });
   };
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="space-y-4">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input {...field} type="email" placeholder="" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <FormError message={error} />
-        <FormSuccess message={success} />
-        <Button disabled={isPending} className="w-full" type="submit">
-          Send reset email
+    <AuthFormWrapper>
+      <div className="flex flex-col border border-gray-200 w-[400px] px-16 py-8 shadow-2xl">
+        <h1 className="font-bold mb-8">Forgot your password?</h1>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="email" placeholder="" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormError message={error} />
+            <FormSuccess message={success} />
+            <Button disabled={isPending} className="w-full" type="submit">
+              Send reset email
+            </Button>
+          </form>
+        </Form>
+        <Button variant="link" className="mt-4">
+          <Link href={"/login"}>Back to login</Link>
         </Button>
-      </form>
-    </Form>
+      </div>
+    </AuthFormWrapper>
   );
 };
 
