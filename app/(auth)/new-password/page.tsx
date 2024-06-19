@@ -5,11 +5,7 @@ import React from "react";
 const NewPassword = () => {
   return (
     <div className="flex items-center justify-center py-8 px-4">
-      <AuthFormWrapper
-        title="Enter your new password"
-        backBtnLabel="Back to login"
-        backBtnRef="/login"
-      >
+      <AuthFormWrapper>
         <NewPasswordForm />
       </AuthFormWrapper>
     </div>

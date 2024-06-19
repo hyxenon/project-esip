@@ -38,11 +38,7 @@ const NewVerificationForm = () => {
     onSubmit();
   }, [onSubmit]);
   return (
-    <AuthFormWrapper
-      title="Confirming your verification"
-      backBtnRef="/login"
-      backBtnLabel="Back to Login"
-    >
+    <AuthFormWrapper>
       <div className="flex items-center w-full justify-center">
         {!success && !error && <ClipLoader />}
         <FormError message={error} />
