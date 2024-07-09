@@ -9,9 +9,11 @@ const lalezar = Lalezar({
 });
 const AuthNav = () => {
   return (
-    <nav className="flex items-center ml-24 py-8 z-20 relative">
-      <Image alt="" src={logo} className="w-[100px]" />
-      <h1 className={`text-5xl ${lalezar.className} mt-4`}>
+    <nav className="flex items-center px-4 py-4 xl:ml-16 xl:py-8 z-20 relative">
+      <Image alt="" src={logo} className="w-[60px] xl:w-[100px]" />
+      <h1
+        className={`text-2xl md:text-3xl lg:text-4xl ${lalezar.className} mt-4`}
+      >
         <span className="text-[#293618]">PROJECT</span>{" "}
         <span className="text-[#BC6C25]">E-SIP</span>
       </h1>

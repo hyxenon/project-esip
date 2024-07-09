@@ -59,12 +59,14 @@ const LoginForm = () => {
   return (
     <AuthFormWrapper>
       {/* Login Form */}
-      <div className=" h-[450px] w-[800px] flex gap-0.5 bg-white z-50">
-        <div className="bg-[#283618] flex items-center justify-center px-12 border border-gray-300 shadow-2xl">
+      <div className="min-w-[300px] xl:w-[800px] h-[400px] flex flex-col lg:flex-row gap-0.5 bg-white mt-16 z-50">
+        <div className="bg-[#283618] hidden lg:flex items-center justify-center px-12 border border-gray-300 shadow-2xl">
           <Image draggable="false" src={searchBg} alt="" />
         </div>
-        <div className="flex-1 flex items-center py-4 flex-col border border-gray-300 shadow-2xl">
-          <h1 className={`text-4xl mt-4 text-[#606C38] ${jacques.className}`}>
+        <div className="flex-1 flex items-center justify-center py-4 flex-col border border-gray-300 shadow-2xl">
+          <h1
+            className={`text-3xl xl:text-4xl text-[#606C38] ${jacques.className}`}
+          >
             Welcome Back
           </h1>
           <Form {...form}>
@@ -86,7 +88,7 @@ const LoginForm = () => {
                           className="border-gray-400"
                         />
                       </FormControl>
-                      <FormMessage className="text-red-400" />
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -111,7 +113,7 @@ const LoginForm = () => {
                   size={"sm"}
                   variant={"link"}
                   asChild
-                  className="px-0 font-normal text-[#BC6C25]"
+                  className="px-0 font-semibold text-[#BC6C25]"
                 >
                   <Link href={"/reset-password"}>Forgot password?</Link>
                 </Button>
@@ -127,7 +129,10 @@ const LoginForm = () => {
               </Button>
               <p className="text-sm mt-4 text-center">
                 Don't have an account? Click here to {""}
-                <Link href={"/register"} className="text-[#BC6C25]">
+                <Link
+                  href={"/register"}
+                  className="text-[#BC6C25] font-semibold"
+                >
                   register
                 </Link>
               </p>

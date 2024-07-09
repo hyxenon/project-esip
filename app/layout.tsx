@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import Navbar from "@/components/navbar/navbar";
-import { auth } from "@/auth";
+import SessionWrapper from "@/components/auth/SessionWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,19 +15,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+    <SessionWrapper>
+      <html lang="en">
+        <body className={inter.className}>{children}</body>
+      </html>
+    </SessionWrapper>
   );
 }

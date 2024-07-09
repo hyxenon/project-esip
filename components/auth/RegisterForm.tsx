@@ -71,16 +71,16 @@ const RegisterForm = () => {
   return (
     <AuthFormWrapper>
       {/* Register Form */}
-      <div className="w-[800px] flex z-10">
-        <div className="flex flex-col items-center px-8 py-12 w-[65%] border border-gray-300 shadow-2xl">
+      <div className="lg:w-[650px] xl:w-[800px] flex flex-col lg:flex-row z-10 mt-16">
+        <div className="flex flex-col bg-white items-center px-8 py-12 border border-gray-300 shadow-2xl">
           <h1
-            className={`text-4xl font-semibold text-[#606C38] ${jacques.className}`}
+            className={`text-3xl xl:text-4xl text-[#606C38] ${jacques.className}`}
           >
             Register
           </h1>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
-              <div className="space-y-5 mt-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 ">
+              <div className="space-y-5 mt-4">
                 <FormField
                   control={form.control}
                   name="email"
@@ -199,7 +199,7 @@ const RegisterForm = () => {
               </Button>
               <p className="text-sm text-center">
                 Already have an account? {""}
-                <Link href={"/login"} className="font-bold text-[#BC6C25]">
+                <Link href={"/login"} className="font-semibold text-[#BC6C25]">
                   Login
                 </Link>{" "}
                 here
@@ -207,7 +207,7 @@ const RegisterForm = () => {
             </form>
           </Form>
         </div>
-        <div className="bg-[#667240]  flex items-center justify-center border border-gray-300 shadow-2xl">
+        <div className="bg-[#667240] hidden lg:flex items-center justify-center border border-gray-300 shadow-2xl">
           <Image draggable="false" alt="" src={sideBg} className="" />
         </div>
       </div>
