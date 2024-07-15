@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useState } from "react";
+import PaginationTable from "./paginationTable";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -156,6 +157,10 @@ export function DataTable<TData, TValue>({
       </div>
       {/* Pagination */}
       <div className="flex items-center justify-end space-x-2 py-4">
+        <PaginationTable
+          table={table}
+          pageIndex={table.options.state.pagination?.pageIndex}
+        />
         <Button
           variant="outline"
           size="sm"

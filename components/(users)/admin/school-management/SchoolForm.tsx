@@ -1,3 +1,4 @@
+import SchoolTable from "./SchoolTable";
 import { columns } from "./schoolTable/columns";
 import { DataTable } from "./schoolTable/data-table";
 
@@ -118,8 +119,7 @@ const SchoolForm = () => {
   ];
   return (
     <section className="w-full">
-      <div className="container">
-        <h1 className="mb-6 text-3xl font-bold">All Schools</h1>
+      <div className="">
         <DataTable columns={columns} data={data} />
       </div>
     </section>
