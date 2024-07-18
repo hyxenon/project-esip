@@ -42,3 +42,37 @@ export const RegisterSchema = z.object({
     message: "Last name is required",
   }),
 });
+
+
+
+export const AddSchoolSchema = z.object({
+  email: z.string().email({
+    message: "Email is required",
+  }),
+  schoolName: z.string().min(1, {
+    message: "Enter your school name",
+  }),
+  streetAddress: z.string().min(1, {
+    message: "Enter your street address",
+  }),
+  city: z.string().min(1, {
+    message: "Enter your school city",
+  }),
+  province: z.string().min(1, {
+    message: "Enter your school province",
+  }),
+  postalCode: z.string().regex(/^\d{4}$/, {
+    message: "Enter a valid 4-digit postal code",
+  }),
+  image: z.string().min(1, {
+    message: "You need to provide a valid image logo"
+  }),
+  contactNumber: z
+    .string()
+    .regex(/^09\d{9}$/, {
+      message: "Enter a valid phone number starting with 09",
+    })
+    .min(11, { message: "Phone number must be 11 digits long" })
+    .max(11, { message: "Phone number must be 11 digits long" }),
+    
+});

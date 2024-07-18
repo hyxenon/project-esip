@@ -84,15 +84,15 @@ const SchoolRegister = () => {
                   name="schoolName"
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>School Name</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
                           type="text"
-                          placeholder="School Name"
+                          placeholder="Jose Rizal High School"
                           className="border-gray-400"
                         />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -101,15 +101,15 @@ const SchoolRegister = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
                           type="email"
-                          placeholder="School Email Address"
+                          placeholder="joserizal@gmail.com"
                           className="border-gray-400"
                         />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -128,7 +128,6 @@ const SchoolRegister = () => {
                             className="border-gray-400"
                           />
                         </FormControl>
-                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -146,7 +145,6 @@ const SchoolRegister = () => {
                             className="border-gray-400"
                           />
                         </FormControl>
-                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -166,7 +164,6 @@ const SchoolRegister = () => {
                             className="border-gray-400"
                           />
                         </FormControl>
-                        <FormMessage />
                       </FormItem>
                     )}
                   />

@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useState } from "react";
-import PaginationTable from "./paginationTable";
+import PaginationTable from "../paginationTable";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -161,22 +161,6 @@ export function DataTable<TData, TValue>({
           table={table}
           pageIndex={table.options.state.pagination?.pageIndex}
         />
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
       </div>
     </>
   );

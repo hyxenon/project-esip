@@ -1,32 +1,36 @@
-import SchoolTable from "@/components/(users)/admin/school-management/SchoolTable";
-import { ScrollArea } from "@/components/ui/scroll-area";
+"use client";
 import SubscriptionCard from "@/components/(users)/admin/school-management/cards/SubscriptionCard";
 import TotalSchoolCard from "@/components/(users)/admin/school-management/cards/TotalSchoolCard";
 import ActiveSchoolCard from "@/components/(users)/admin/school-management/cards/ActiveSchoolCard";
-import SchoolForm from "@/components/(users)/admin/school-management/SchoolForm";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { FaAlignLeft } from "react-icons/fa6";
+import MobileMenu from "@/components/(users)/admin/mobileMenu";
+import TableTabs from "@/components/(users)/admin/school-management/TableTabs";
 
 const SchoolManagement = () => {
   return (
-    <ScrollArea className="w-full px-16 py-8">
-      <div>
-        <p>School Management</p>
-        {/* Card Count */}
-        <div className="flex gap-4 mt-4">
-          <TotalSchoolCard />
-          <ActiveSchoolCard />
-          <SubscriptionCard />
-        </div>
+    <div className="w-full h-screen overflow-y-scroll px-2 py-4">
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button className="flex lg:hidden" variant="ghost" size={"icon"}>
+            <FaAlignLeft />
+          </Button>
+        </SheetTrigger>
+        <MobileMenu />
+      </Sheet>
 
-        <div className="flex gap-8 mt-8">
-          <SchoolTable cardTitle="Schools">
-            <SchoolForm />
-          </SchoolTable>
-          {/* <SchoolTable cardTitle="Pending Schools">
-            <SchoolForm />
-          </SchoolTable> */}
-        </div>
+      {/* Card Count */}
+      <div className="flex gap-4 flex-wrap">
+        <TotalSchoolCard />
+        <ActiveSchoolCard />
+        <SubscriptionCard />
       </div>
-    </ScrollArea>
+
+      <div className="flex gap-8 mt-8">
+        <TableTabs />
+      </div>
+    </div>
   );
 };
 

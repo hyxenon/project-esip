@@ -9,9 +9,9 @@ interface SchoolTableProps {
 
 const SchoolTable = ({ children, cardTitle }: SchoolTableProps) => {
   return (
-    <Card className="flex-1">
+    <Card className="w-full">
       <CardHeader className="font-bold text-xl">{cardTitle}</CardHeader>
-      <CardContent className="flex gap-8">{children}</CardContent>
+      <CardContent className="flex flex-col gap-8">{children}</CardContent>
     </Card>
   );
 };
