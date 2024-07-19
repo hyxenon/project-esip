@@ -16,16 +16,23 @@ import Image from "next/image";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type School = {
-  id: string;
-  name: string;
   email: string;
-
-  image: string;
+  schoolName: string;
+  streetAddress: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  image: string | null;
+  contactNumber: string;
+  updatedAt: Date;
+  createdAt: Date;
+  id: string;
+  status: string;
 };
 
 export const columns: ColumnDef<School>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "schoolName",
     header: ({ column }) => {
       return (
         <Button
@@ -43,13 +50,17 @@ export const columns: ColumnDef<School>[] = [
       return (
         <div className="flex items-center gap-2">
           <Image
-            src={school.image}
+            src={
+              school.image === null
+                ? "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
+                : school.image
+            }
             alt="logo"
             width={40}
             height={40}
-            className="w-7 h-7"
+            className="w-7 h-7 rounded-full"
           />
-          <p>{school.name}</p>
+          <p>{school.schoolName}</p>
         </div>
       );
     },
@@ -90,11 +101,15 @@ export const columns: ColumnDef<School>[] = [
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(school.email)}
             >
-              Copy Email Address
+              View School Details
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem className="text-red-500">
+              Unsubscribe
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-red-500">
+              Delete School
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

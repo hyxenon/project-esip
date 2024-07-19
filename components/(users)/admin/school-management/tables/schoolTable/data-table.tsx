@@ -34,8 +34,14 @@ import {
 
 import { useState, useEffect } from "react";
 import PaginationTable from "../paginationTable";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -69,22 +75,22 @@ export function DataTable<TData, TValue>({
   });
 
   const [nameFilterValue, setNameFilterValue] = useState<any>(
-    table.getColumn("name")?.getFilterValue() ?? ""
+    table.getColumn("schoolName")?.getFilterValue() ?? ""
   );
   const [emailFilterValue, setEmailFilterValue] = useState<any>(
     table.getColumn("email")?.getFilterValue() ?? ""
   );
 
   useEffect(() => {
-    setNameFilterValue(table.getColumn("name")?.getFilterValue() ?? "");
+    setNameFilterValue(table.getColumn("schoolName")?.getFilterValue() ?? "");
     setEmailFilterValue(table.getColumn("email")?.getFilterValue() ?? "");
   }, [table]);
 
   const handleInputChange = (value: string) => {
     if (filterType === "name") {
       setNameFilterValue(value);
-      table.getColumn("name")?.setFilterValue(value);
-      setColumnFilters([{ id: "name", value }]);
+      table.getColumn("schoolName")?.setFilterValue(value);
+      setColumnFilters([{ id: "schoolName", value }]);
     } else if (filterType === "email") {
       setEmailFilterValue(value);
       table.getColumn("email")?.setFilterValue(value);
@@ -97,18 +103,22 @@ export function DataTable<TData, TValue>({
 
     if (type === "name") {
       setEmailFilterValue("");
-      setColumnFilters([{ id: "name", value: nameFilterValue }]);
+      setColumnFilters([{ id: "schoolName", value: nameFilterValue }]);
     } else if (type === "email") {
       setNameFilterValue("");
       setColumnFilters([{ id: "email", value: emailFilterValue }]);
     }
   };
 
+  const handleSelectChange = (value: "name" | "email") => {
+    handleFilterTypeChange(value);
+  };
+
   return (
     <>
       {/* Filter and Radio Group */}
       <div className="flex items-center py-4">
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           {filterType === "name" ? (
             <Input
               placeholder="Filter name..."
@@ -125,24 +135,15 @@ export function DataTable<TData, TValue>({
             />
           )}
 
-          <RadioGroup defaultValue="option-one" className="flex ml-4 w-full">
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem
-                value="option-one"
-                id="option-one"
-                onClick={() => handleFilterTypeChange("name")}
-              />
-              <Label htmlFor="option-one">Name</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem
-                value="option-two"
-                id="option-two"
-                onClick={() => handleFilterTypeChange("email")}
-              />
-              <Label htmlFor="option-two">Email</Label>
-            </div>
-          </RadioGroup>
+          <Select onValueChange={handleSelectChange}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Name" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="name">Name</SelectItem>
+              <SelectItem value="email">Email</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         {/* Columns Dropdown */}
         <DropdownMenu>

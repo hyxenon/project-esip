@@ -65,7 +65,7 @@ export const AddSchoolSchema = z.object({
     message: "Enter a valid 4-digit postal code",
   }),
   image: z.string().min(1, {
-    message: "You need to provide a valid image logo"
+    message: "Please Upload School Logo"
   }),
   contactNumber: z
     .string()

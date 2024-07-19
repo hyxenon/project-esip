@@ -17,7 +17,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ResetSchema } from "@/models/models";
 import { FormSuccess } from "../form-success";
-import { reset } from "@/actions/reset";
+import { reset } from "@/actions/auth/reset";
 import { FormError } from "../form-error";
 import AuthFormWrapper from "./auth-form-wrapper";
 import Link from "next/link";

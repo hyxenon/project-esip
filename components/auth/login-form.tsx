@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { login } from "@/actions/login";
+import { login } from "@/actions/auth/login";
 import { FormError } from "../form-error";
 import { LoginSchema } from "@/models/models";
 import { useSearchParams } from "next/navigation";

@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["scontent.fmnl17-1.fna.fbcdn.net"],
+    domains: [
+      "scontent.fmnl17-5.fna.fbcdn.net",
+      "files.edgestore.dev",
+      "img.freepik.com",
+    ],
   },
 };
 

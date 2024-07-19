@@ -50,7 +50,7 @@ const PaginationTable = ({ table, pageIndex }: PaginationTableProps) => {
         </Button>
 
         {generatePageNumbers().map((pageNumber) => (
-          <PaginationItem className="cursor-pointer">
+          <PaginationItem key={pageNumber} className="cursor-pointer">
             {pageNumber === pageIndex + 1 ? (
               <PaginationLink
                 isActive

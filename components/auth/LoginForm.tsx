@@ -14,7 +14,7 @@ import { LoginSchema } from "@/models/models";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useSearchParams } from "next/navigation";
-import { login } from "@/actions/login";
+import { login } from "@/actions/auth/login";
 import { Input } from "../ui/input";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
