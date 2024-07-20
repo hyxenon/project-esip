@@ -10,7 +10,7 @@ const SideNav = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="flex flex-col items-center px-4 py-2 border-r-2 border-gray-200 shadow-2xl">
+    <div className="hidden lg:flex flex-col items-center px-4 py-2 border-r-2 border-gray-200 shadow-2xl">
       <div className="flex items-center">
         <Image src={logo} alt="logo" className="w-[80px]" />
         <p className="text-xl font-bold">

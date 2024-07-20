@@ -3,7 +3,7 @@ import React from "react";
 
 const NewVerificationPage = () => {
   return (
-    <div className="h-[80%] items-center justify-center flex">
+    <div className="items-center justify-center flex">
       <NewVerificationForm />
     </div>
   );

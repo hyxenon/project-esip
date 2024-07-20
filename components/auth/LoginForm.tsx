@@ -2,19 +2,13 @@
 import React, { useState, useTransition } from "react";
 import Image from "next/image";
 import searchBg from "../../assets/authForm/searchBg.svg";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { useForm } from "react-hook-form";
 import { LoginSchema } from "@/models/models";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useSearchParams } from "next/navigation";
-import { login } from "@/actions/login";
+import { login } from "@/actions/auth/login";
 import { Input } from "../ui/input";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
@@ -59,7 +53,7 @@ const LoginForm = () => {
   return (
     <AuthFormWrapper>
       {/* Login Form */}
-      <div className="min-w-[300px] xl:w-[800px] h-[400px] flex flex-col lg:flex-row gap-0.5 bg-white mt-16 z-50">
+      <div className="min-w-[300px] xl:w-[800px] h-[450px] flex flex-col lg:flex-row gap-0.5 bg-white mt-8 z-50">
         <div className="bg-[#283618] hidden lg:flex items-center justify-center px-12 border border-gray-300 shadow-2xl">
           <Image draggable="false" src={searchBg} alt="" />
         </div>
@@ -80,6 +74,7 @@ const LoginForm = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -88,7 +83,6 @@ const LoginForm = () => {
                           className="border-gray-400"
                         />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -97,6 +91,7 @@ const LoginForm = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Password</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -105,7 +100,6 @@ const LoginForm = () => {
                           className="border-gray-400"
                         />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />

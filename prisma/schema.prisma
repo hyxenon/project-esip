@@ -24,12 +24,14 @@ model User {
   name          String?
   email         String?   @unique
   password      String?
-  role          UserRole  @default(TEACHER)
+  role          UserRole
   emailVerified DateTime?
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
+  school        School?   @relation(fields: [schoolId], references: [id])
+  schoolId      String?
 }
 
 model Account {
@@ -67,4 +69,21 @@ model PasswordResetToken {
   expires DateTime
 
   @@unique([email, token])
+}
+
+// School
+model School {
+  id            String   @id @default(cuid())
+  email         String
+  city          String
+  contactNumber String
+  postalCode    String
+  province      String
+  schoolName    String
+  streetAddress String
+  image         String?
+  status        String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  User          User[]
 }

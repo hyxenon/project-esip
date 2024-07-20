@@ -6,6 +6,7 @@ import { sendVerificationEmail } from "@/lib/mail";
 import { RegisterSchema, registerSchema } from "@/models/models";
 import bcrypt from "bcryptjs";
 import * as z from "zod";
+import { UserRole } from "@prisma/client";
 
 function titleCase(str: string) {
   return str
@@ -21,7 +22,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return { error: "Invalid fields" };
   }
 
-  const { email, password, firstName, lastName } = validatedFields.data;
+  const { email, password, firstName, lastName, schoolId, role } = validatedFields.data;
 
   const existingUser = await getUserByEmail(email);
 
@@ -31,11 +32,15 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
+  const userRole: UserRole = role as UserRole;
+
   const user = await db.user.create({
     data: {
       name: titleCase(`${firstName} ${lastName}`),
       email: email,
       password: hashedPassword,
+      schoolId: schoolId,
+      role: userRole
     },
   });
 

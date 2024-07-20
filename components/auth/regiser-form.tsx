@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { register } from "@/actions/register";
+import { register } from "@/actions/auth/register";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
 
