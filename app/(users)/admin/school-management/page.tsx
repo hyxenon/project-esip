@@ -10,7 +10,7 @@ import TableTabs from "@/components/(users)/admin/school-management/TableTabs";
 
 const SchoolManagement = () => {
   return (
-    <div className="w-full h-screen overflow-y-scroll px-2 py-4">
+    <div className="w-full h-screen overflow-y-scroll px-8 py-4">
       <Sheet>
         <SheetTrigger asChild>
           <Button className="flex lg:hidden" variant="ghost" size={"icon"}>

@@ -11,7 +11,7 @@ type AuthFormWrapperProps = {
 
 const AuthFormWrapper = ({ children }: AuthFormWrapperProps) => {
   return (
-    <div className="min-h-screen h-auto pb-16 relative">
+    <div className="min-h-screen h-auto pb-8 relative w-full ">
       <Image
         draggable="false"
         alt=""
@@ -26,9 +26,9 @@ const AuthFormWrapper = ({ children }: AuthFormWrapperProps) => {
         className="absolute w-[200px] md:w-[300px] lg:w-[400px] xl:w-auto bottom-0 right-0 max-w-[550px]"
       />
       {/* Container */}
-      <div className=" flex">
+      <div className=" flex w-full">
         {/* Form Container*/}
-        <div className="relative px-16  flex justify-center items-center flex-1">
+        <div className="relative px-2 flex justify-center items-center flex-1">
           {children}
         </div>
       </div>

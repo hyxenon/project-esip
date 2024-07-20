@@ -41,6 +41,12 @@ export const RegisterSchema = z.object({
   lastName: z.string().min(1, {
     message: "Last name is required",
   }),
+  schoolId: z.string().min(1, {
+    message: "School is required",
+  }),
+  role: z.string().min(1, {
+    message: "Role is required",
+  }),
 });
 
 

@@ -4,7 +4,7 @@ import { columns } from "./tables/schoolTable/columns";
 import { DataTable } from "./tables/schoolTable/data-table";
 import { getSchool } from "@/actions/schoolManagement";
 
-interface SchoolModel {
+export interface SchoolModel {
   email: string;
   schoolName: string;
   streetAddress: string;
