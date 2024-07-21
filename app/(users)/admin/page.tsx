@@ -43,12 +43,16 @@ const AdminHome = () => {
 
       {/* Charts */}
       <div className="mt-4">
-        <h1 className="font-semibold">Analytics</h1>
-        <div className="grid md:grid-cols-2 gap-8 mt-4">
+        <h1 className="font-semibold">Usage Statistics</h1>
+        <div className="grid grid-cols-1 2xl:grid-cols-2 gap-8 mt-4">
           <TotalVisitors />
           <PopularPapers />
           <MostUsersSchool />
         </div>
+      </div>
+
+      <div className="mt-4">
+        <h1 className="font-semibold">Engagement metrics </h1>
       </div>
     </div>
   );

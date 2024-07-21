@@ -12,26 +12,32 @@ const NewSchools = () => {
       <CardContent className="grid gap-8">
         <div className="flex items-center gap-4">
           <Avatar className="hidden h-9 w-9 sm:flex">
-            <AvatarImage src="/avatars/01.png" alt="Avatar" />
+            <AvatarImage
+              src="https://files.edgestore.dev/i3fk8xebtpfydpdd/publicFiles/_public/b4722228-59d2-45a7-8d83-99b9ff19382c.jfif"
+              alt="Avatar"
+            />
             <AvatarFallback>OM</AvatarFallback>
           </Avatar>
           <div className="grid gap-1">
-            <p className="text-sm font-medium leading-none">Olivia Martin</p>
-            <p className="text-sm text-muted-foreground">
-              olivia.martin@email.com
+            <p className="text-sm font-medium leading-none">
+              Munoz National High School
             </p>
+            <p className="text-sm text-muted-foreground">mnhs@gmail.com</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
           <Avatar className="hidden h-9 w-9 sm:flex">
-            <AvatarImage src="/avatars/02.png" alt="Avatar" />
+            <AvatarImage
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Dr_Jose_Rizal.jpg/220px-Dr_Jose_Rizal.jpg"
+              alt="Avatar"
+            />
             <AvatarFallback>JL</AvatarFallback>
           </Avatar>
           <div className="grid gap-1">
-            <p className="text-sm font-medium leading-none">Jackson Lee</p>
-            <p className="text-sm text-muted-foreground">
-              jackson.lee@email.com
+            <p className="text-sm font-medium leading-none">
+              Jose Rizal High School
             </p>
+            <p className="text-sm text-muted-foreground">joserizal@gmail.com</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -40,9 +46,11 @@ const NewSchools = () => {
             <AvatarFallback>IN</AvatarFallback>
           </Avatar>
           <div className="grid gap-1">
-            <p className="text-sm font-medium leading-none">Isabella Nguyen</p>
+            <p className="text-sm font-medium leading-none">
+              San Jose High School
+            </p>
             <p className="text-sm text-muted-foreground">
-              isabella.nguyen@email.com
+              sanjosehighschool@gmail.com
             </p>
           </div>
         </div>
@@ -52,8 +60,12 @@ const NewSchools = () => {
             <AvatarFallback>WK</AvatarFallback>
           </Avatar>
           <div className="grid gap-1">
-            <p className="text-sm font-medium leading-none">William Kim</p>
-            <p className="text-sm text-muted-foreground">will@email.com</p>
+            <p className="text-sm font-medium leading-none">
+              Cabanatuan High School
+            </p>
+            <p className="text-sm text-muted-foreground">
+              cabanatuan@gmail.com
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -62,10 +74,10 @@ const NewSchools = () => {
             <AvatarFallback>SD</AvatarFallback>
           </Avatar>
           <div className="grid gap-1">
-            <p className="text-sm font-medium leading-none">Sofia Davis</p>
-            <p className="text-sm text-muted-foreground">
-              sofia.davis@email.com
+            <p className="text-sm font-medium leading-none">
+              Talavera High School
             </p>
+            <p className="text-sm text-muted-foreground">talavera@gmail.com</p>
           </div>
         </div>
       </CardContent>

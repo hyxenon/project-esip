@@ -1,6 +1,5 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -9,6 +8,16 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import {
   Card,
@@ -25,22 +34,22 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
+  { paper: "Predictive Healthcare Analytics Platform", likes: 400 },
+  { paper: "Autonomous Drone Navigation System", likes: 305 },
+  { paper: "Blockchain-Based Supply Chain Management", likes: 237 },
+  { paper: "Natural Language Processing for Customer Service", likes: 173 },
+  { paper: "Augmented Reality Museum Guide", likes: 231 },
+  { paper: "Smart Home Energy Management System", likes: 245 },
+  { paper: "Financial Portfolio Optimization Tool", likes: 252 },
+  { paper: "Virtual Reality Training Simulator", likes: 232 },
+  { paper: "E-commerce Personalization Engine", likes: 220 },
+  { paper: "Smart Traffic Management System", likes: 209 },
 ];
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
+  likes: {
+    label: "Likes",
+    color: "#283618",
   },
   label: {
     color: "hsl(var(--background))",
@@ -51,8 +60,23 @@ const PopularPapers = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bar Chart - Custom Label</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Top 10 Popular Public Papers</CardTitle>
+        <div className="flex justify-between">
+          <CardDescription>January - June 2024</CardDescription>
+          <Select>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Last 6 Months" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="days">Last 30 Days</SelectItem>
+                <SelectItem value="3months">Last 3 Months</SelectItem>
+                <SelectItem value="6months">Last 6 Months</SelectItem>
+                <SelectItem value="1year">Last 1 Year</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -66,7 +90,7 @@ const PopularPapers = () => {
           >
             <CartesianGrid horizontal={false} />
             <YAxis
-              dataKey="month"
+              dataKey="paper"
               type="category"
               tickLine={false}
               tickMargin={10}
@@ -74,26 +98,26 @@ const PopularPapers = () => {
               tickFormatter={(value) => value.slice(0, 3)}
               hide
             />
-            <XAxis dataKey="desktop" type="number" hide />
+            <XAxis dataKey="likes" type="number" hide />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
             <Bar
-              dataKey="desktop"
+              dataKey="likes"
               layout="vertical"
-              fill="var(--color-desktop)"
+              fill="var(--color-likes)"
               radius={4}
             >
               <LabelList
-                dataKey="month"
+                dataKey="paper"
                 position="insideLeft"
                 offset={8}
                 className="fill-[--color-label]"
                 fontSize={12}
               />
               <LabelList
-                dataKey="desktop"
+                dataKey="likes"
                 position="right"
                 offset={8}
                 className="fill-foreground"
@@ -104,11 +128,8 @@ const PopularPapers = () => {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Showing 10 popular public papers for the last 6 months
         </div>
       </CardFooter>
     </Card>

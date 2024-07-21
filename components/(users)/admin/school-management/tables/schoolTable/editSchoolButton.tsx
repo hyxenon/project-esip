@@ -33,47 +33,48 @@ import { AddSchoolSchema } from "@/models/models";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useEdgeStore } from "@/lib/edgestore";
 import { SingleImageDropzone } from "../../SingleImageDropzone";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { addSchool } from "@/actions/schoolManagement";
+import { addSchool, editSchool, getSchool } from "@/actions/schoolManagement";
+import Image from "next/image";
+import { SchoolModel } from "../../SchoolForm";
 
-export function AddSchoolButton() {
-  const [open, setOpen] = useState(false);
+interface EditSchoolButtonProps {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  schoolId: string;
+}
+
+export function EditSchoolButton({
+  isOpen,
+  setIsOpen,
+  schoolId,
+}: EditSchoolButtonProps) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button className="bg-[#606C38] hover:bg-[#283618]" variant="default">
-            Add School
-          </Button>
-        </DialogTrigger>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-[600px] overflow-y-scroll max-h-screen">
           <DialogHeader>
-            <DialogTitle>Add School</DialogTitle>
+            <DialogTitle>Edit School</DialogTitle>
           </DialogHeader>
-          <ProfileForm />
+          <ProfileForm schoolId={schoolId} />
         </DialogContent>
       </Dialog>
     );
   }
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button className="bg-[#606C38]" variant="default">
-          Add School
-        </Button>
-      </DrawerTrigger>
+    <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>Add School</DrawerTitle>
+          <DrawerTitle>Edit School</DrawerTitle>
         </DrawerHeader>
-        <ProfileForm />
+        <ProfileForm schoolId={schoolId} />
 
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
@@ -85,7 +86,14 @@ export function AddSchoolButton() {
   );
 }
 
-function ProfileForm() {
+interface ProfileFormProps {
+  schoolId: string;
+}
+
+function ProfileForm({ schoolId }: ProfileFormProps) {
+  const [schoolData, setSchoolData] = useState<SchoolModel>();
+  const [formInitialized, setFormInitialized] = useState(false);
+
   const form = useForm<z.infer<typeof AddSchoolSchema>>({
     resolver: zodResolver(AddSchoolSchema),
     defaultValues: {
@@ -97,8 +105,37 @@ function ProfileForm() {
       schoolName: "",
       streetAddress: "",
       image: "",
+      status: "",
     },
   });
+
+  useEffect(() => {
+    const fetchSchoolData = async () => {
+      const res = await getSchool(schoolId);
+      if (res && res.message) {
+        setSchoolData(res.message);
+        // Manually set form values once schoolData is fetched
+        form.setValue("schoolName", res.message.schoolName);
+        form.setValue("email", res.message.email);
+        form.setValue("streetAddress", res.message.streetAddress);
+        form.setValue("city", res.message.city);
+        form.setValue("province", res.message.province);
+        form.setValue("postalCode", res.message.postalCode);
+        form.setValue("contactNumber", res.message.contactNumber);
+        form.setValue("image", res.message.image ? res.message.image : "");
+        form.setValue("status", res.message.status);
+      }
+    };
+
+    fetchSchoolData();
+  }, [schoolId, form]);
+
+  useEffect(() => {
+    if (schoolData) {
+      setFormInitialized(true);
+    }
+  }, [schoolData]);
+
   const [file, setFile] = useState<File>();
   const { edgestore } = useEdgeStore();
   const [progress, setProgress] = useState<number>(0);
@@ -106,13 +143,13 @@ function ProfileForm() {
 
   const onSubmit = async (values: z.infer<typeof AddSchoolSchema>) => {
     try {
-      const res = await addSchool(values);
+      const res = await editSchool(schoolId, values);
       toast({
         variant: "success",
-        title: "School Added Successfully",
-        description: `${res.success}`,
+        title: "School Updated Successfully",
+        description: `Updated changes to ${res.message}`,
       });
-      form.reset();
+
       setFile(undefined);
       setProgress(0);
     } catch (err: any) {
@@ -123,6 +160,10 @@ function ProfileForm() {
       });
     }
   };
+
+  if (!formInitialized) {
+    return <p>Loading...</p>; // Placeholder until schoolData is fetched
+  }
 
   return (
     <Form {...form}>
@@ -268,7 +309,7 @@ function ProfileForm() {
                         <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-4">
                           Logo Image
                         </p>
-                        <div className="flex flex-col justify-center items-center ">
+                        {/* <div className="flex flex-col justify-center items-center ">
                           <SingleImageDropzone
                             width={100}
                             height={100}
@@ -302,7 +343,18 @@ function ProfileForm() {
                           >
                             Upload
                           </Button>
-                        </div>
+                        </div> */}
+                        <Image
+                          src={
+                            schoolData?.image
+                              ? schoolData.image
+                              : "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
+                          }
+                          alt="logo"
+                          width={100}
+                          height={100}
+                        />
+                        <Button type="button">Change Logo</Button>
                       </div>
                     </div>
                   </FormControl>
@@ -317,7 +369,7 @@ function ProfileForm() {
               className="bg-[#606C38] hover:bg-[#283618] w-full"
               type="submit"
             >
-              Add School
+              Edit School
             </Button>
           </div>
         </div>

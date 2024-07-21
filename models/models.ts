@@ -80,5 +80,5 @@ export const AddSchoolSchema = z.object({
     })
     .min(11, { message: "Phone number must be 11 digits long" })
     .max(11, { message: "Phone number must be 11 digits long" }),
-    
+  status: z.string()
 });
