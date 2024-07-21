@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { columns } from "./tables/schoolTable/columns";
 import { DataTable } from "./tables/schoolTable/data-table";
-import { getSchool } from "@/actions/schoolManagement";
+import { getSchools } from "@/actions/schoolManagement";
 
 export interface SchoolModel {
   email: string;
@@ -357,7 +357,7 @@ const SchoolForm = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getSchool();
+      const res = await getSchools();
       setSchoolsData(res.message);
     };
 

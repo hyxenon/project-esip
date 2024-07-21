@@ -118,7 +118,7 @@ export function DataTable<TData, TValue>({
     <>
       {/* Filter and Radio Group */}
       <div className="flex items-center py-4">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 mr-2">
           {filterType === "name" ? (
             <Input
               placeholder="Filter name..."
@@ -136,7 +136,7 @@ export function DataTable<TData, TValue>({
           )}
 
           <Select onValueChange={handleSelectChange}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[100px]">
               <SelectValue placeholder="Name" />
             </SelectTrigger>
             <SelectContent>

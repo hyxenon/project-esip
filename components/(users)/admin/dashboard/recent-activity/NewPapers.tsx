@@ -42,17 +42,19 @@ const NewPapers = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Customer</TableHead>
+              <TableHead>Public Papers</TableHead>
               <TableHead className="hidden xl:table-column">Type</TableHead>
               <TableHead className="hidden xl:table-column">Status</TableHead>
               <TableHead className="hidden xl:table-column">Date</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+              <TableHead className="text-right">School</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow>
               <TableCell>
-                <div className="font-medium">Liam Johnson</div>
+                <div className="font-medium">
+                  Predictive Healthcare Analytics Platform
+                </div>
                 <div className="hidden text-sm text-muted-foreground md:inline">
                   liam@example.com
                 </div>
@@ -66,11 +68,15 @@ const NewPapers = () => {
               <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
                 2023-06-23
               </TableCell>
-              <TableCell className="text-right">$250.00</TableCell>
+              <TableCell className="text-right">
+                Munoz National High School
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>
-                <div className="font-medium">Olivia Smith</div>
+                <div className="font-medium">
+                  Autonomous Drone Navigation System
+                </div>
                 <div className="hidden text-sm text-muted-foreground md:inline">
                   olivia@example.com
                 </div>
@@ -84,11 +90,15 @@ const NewPapers = () => {
               <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
                 2023-06-24
               </TableCell>
-              <TableCell className="text-right">$150.00</TableCell>
+              <TableCell className="text-right">
+                Jose Rizal High School
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>
-                <div className="font-medium">Noah Williams</div>
+                <div className="font-medium">
+                  Blockchain-Based Supply Chain Management
+                </div>
                 <div className="hidden text-sm text-muted-foreground md:inline">
                   noah@example.com
                 </div>
@@ -104,11 +114,15 @@ const NewPapers = () => {
               <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
                 2023-06-25
               </TableCell>
-              <TableCell className="text-right">$350.00</TableCell>
+              <TableCell className="text-right">
+                Jose Rizal High School
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>
-                <div className="font-medium">Emma Brown</div>
+                <div className="font-medium">
+                  Natural Language Processing for Customer Service
+                </div>
                 <div className="hidden text-sm text-muted-foreground md:inline">
                   emma@example.com
                 </div>
@@ -122,11 +136,15 @@ const NewPapers = () => {
               <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
                 2023-06-26
               </TableCell>
-              <TableCell className="text-right">$450.00</TableCell>
+              <TableCell className="text-right">
+                Munoz National High School
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>
-                <div className="font-medium">Liam Johnson</div>
+                <div className="font-medium">
+                  Augmented Reality Museum Guide
+                </div>
                 <div className="hidden text-sm text-muted-foreground md:inline">
                   liam@example.com
                 </div>
@@ -140,7 +158,9 @@ const NewPapers = () => {
               <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
                 2023-06-27
               </TableCell>
-              <TableCell className="text-right">$550.00</TableCell>
+              <TableCell className="text-right">
+                Munoz National High School
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
