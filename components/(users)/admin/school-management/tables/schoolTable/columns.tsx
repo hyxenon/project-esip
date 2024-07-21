@@ -103,6 +103,7 @@ export const columns: ColumnDef<School>[] = [
             >
               View School Details
             </DropdownMenuItem>
+            <DropdownMenuItem>Edit School</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-500">
               Unsubscribe
