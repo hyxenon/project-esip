@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SchoolTable from "./SchoolTable";
-import { AddSchoolButton } from "./tables/schoolTable/addSchoolButton";
+
 import SchoolForm from "./SchoolForm";
 import PendingForm from "./PendingForm";
 
@@ -13,10 +13,6 @@ const TableTabs = () => {
       </TabsList>
       <TabsContent value="schools">
         <SchoolTable cardTitle="">
-          <div className="flex justify-end">
-            <AddSchoolButton />
-          </div>
-
           <SchoolForm />
         </SchoolTable>
       </TabsContent>

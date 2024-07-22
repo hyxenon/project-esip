@@ -34,7 +34,7 @@ import {
   CommandList,
 } from "../ui/command";
 
-import { getSchool } from "@/actions/schoolManagement";
+import { getSchools } from "@/actions/schoolManagement";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
 const jacques = Jacques_Francois({
@@ -85,7 +85,7 @@ const RegisterForm = () => {
   useEffect(() => {
     const fetchSchool = async () => {
       try {
-        const res = await getSchool();
+        const res = await getSchools();
         const formattedSchools = res.message.map((school) => ({
           label: school.schoolName,
           value: school.id,
@@ -282,7 +282,7 @@ const RegisterForm = () => {
                               className="h-9"
                             />
                             <CommandList>
-                              <CommandEmpty>No framework found.</CommandEmpty>
+                              <CommandEmpty>No schools found.</CommandEmpty>
                               <CommandGroup>
                                 {schools?.map((school) => (
                                   <CommandItem

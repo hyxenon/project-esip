@@ -6,17 +6,14 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
@@ -38,9 +35,10 @@ import { useEdgeStore } from "@/lib/edgestore";
 import { SingleImageDropzone } from "../../SingleImageDropzone";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { addSchool, editSchool, getSchool } from "@/actions/schoolManagement";
+import { editSchool, getSchool } from "@/actions/schoolManagement";
 import Image from "next/image";
 import { SchoolModel } from "../../SchoolForm";
+import { useSchoolContext } from "@/context/SchoolContext";
 
 interface EditSchoolButtonProps {
   isOpen: boolean;
@@ -91,6 +89,7 @@ interface ProfileFormProps {
 }
 
 function ProfileForm({ schoolId }: ProfileFormProps) {
+  const { dispatch } = useSchoolContext();
   const [schoolData, setSchoolData] = useState<SchoolModel>();
   const [formInitialized, setFormInitialized] = useState(false);
 
@@ -105,7 +104,6 @@ function ProfileForm({ schoolId }: ProfileFormProps) {
       schoolName: "",
       streetAddress: "",
       image: "",
-      status: "",
     },
   });
 
@@ -123,7 +121,6 @@ function ProfileForm({ schoolId }: ProfileFormProps) {
         form.setValue("postalCode", res.message.postalCode);
         form.setValue("contactNumber", res.message.contactNumber);
         form.setValue("image", res.message.image ? res.message.image : "");
-        form.setValue("status", res.message.status);
       }
     };
 
@@ -149,6 +146,23 @@ function ProfileForm({ schoolId }: ProfileFormProps) {
         title: "School Updated Successfully",
         description: `Updated changes to ${res.message}`,
       });
+
+      const updatedSchool: SchoolModel = {
+        id: schoolId,
+        email: values.email,
+        schoolName: values.schoolName,
+        streetAddress: values.streetAddress,
+        city: values.city,
+        province: values.province,
+        postalCode: values.postalCode,
+        image: values.image,
+        contactNumber: values.contactNumber,
+        createdAt: new Date(schoolData!.createdAt),
+        updatedAt: new Date(),
+        status: schoolData!.status,
+      };
+
+      dispatch({ type: "EDIT_SCHOOL", payload: updatedSchool });
 
       setFile(undefined);
       setProgress(0);
