@@ -15,6 +15,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { EditSchoolButton } from "./editSchoolButton";
 import DeleteSchoolButton from "./deleteSchoolButton";
+import StatusChange from "./statusChange";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -92,6 +93,7 @@ export const columns: ColumnDef<School>[] = [
       const school = row.original;
       const [isEditOpen, setIsEditOpen] = useState(false);
       const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+      const [isStatusChangeOpen, setStatusChangeOpen] = useState(false);
 
       return (
         <>
@@ -103,6 +105,15 @@ export const columns: ColumnDef<School>[] = [
           <DeleteSchoolButton
             isOpen={isDeleteOpen}
             setIsOpen={setIsDeleteOpen}
+            schoolId={school.id}
+            schoolName={school.schoolName}
+          />
+          <StatusChange
+            isOpen={isStatusChangeOpen}
+            setIsOpen={setStatusChangeOpen}
+            schoolId={school.id}
+            schoolName={school.schoolName}
+            status={school.status}
           />
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
@@ -122,8 +133,13 @@ export const columns: ColumnDef<School>[] = [
                 Edit School
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-red-500">
-                Unsubscribe
+              <DropdownMenuItem
+                onClick={() => setStatusChangeOpen(true)}
+                className={
+                  school.status === "Active" ? "text-red-500" : "text-green-500"
+                }
+              >
+                {school.status === "Active" ? "Unsubscribe" : "Subscribe"}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => setIsDeleteOpen(true)}

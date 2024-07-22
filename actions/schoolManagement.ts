@@ -33,7 +33,7 @@ export const addSchool = async (values: z.infer<typeof AddSchoolSchema>) => {
     });
 
     if (existingSchool) {
-        throw new Error("School name already exists");
+        return { message: "School name already exists"}
     }
 
     try {
@@ -50,10 +50,10 @@ export const addSchool = async (values: z.infer<typeof AddSchoolSchema>) => {
             }
         });
 
-        return { success: school.schoolName }; // Assuming 'school' represents the created school object
+        return { success: school.schoolName, data: school }; // Assuming 'school' represents the created school object
     } catch (error) {
-        console.error("Error adding school:", error);
-        throw error; // Propagate the error for handling at a higher level
+        return {message: "Something went wrong." }
+        
     }
 };
 
@@ -115,5 +115,34 @@ export const editSchool = async (
       return { message: updatedSchool.schoolName }; // Return success message or updated school data
     } catch (error: any) {
       return { message: "Error updating school" + error.message}
+    }
+  };
+
+
+  export const deleteSchool = async (schoolId: string) => {
+
+    try {
+      const deletedSchool = await db.school.delete({
+        where: { id: schoolId },
+      });
+
+      return {message: 'School deleted successfully', data: deletedSchool, success: true };
+    } catch (error) {
+      
+      return { message: 'Failed to delete school', success: false };
+    }
+  };
+
+
+  export const statusChange = async (schoolId: string, newStatus: string) => {
+    try {
+      const updatedSchool = await db.school.update({
+        where: { id: schoolId },
+        data: { status: newStatus },
+      });
+      return { success: true, message: updatedSchool };
+    } catch (error: any) {
+      console.error('Error updating school status:', error);
+      return { success: false, message: error.message };
     }
   };

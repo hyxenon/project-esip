@@ -10,8 +10,8 @@ const SideNav = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="hidden lg:flex flex-col items-center px-4 py-2 border-r-2 border-gray-200 shadow-2xl">
-      <div className="flex items-center">
+    <div className="hidden lg:flex flex-col items-center px-2 py-2 border-r-2 border-gray-200 shadow-2xl">
+      <div className="flex items-center mb-6">
         <Image src={logo} alt="logo" className="w-[80px]" />
         <p className="text-xl font-bold">
           <span className="text-[#293618]">PROJECT</span>{" "}
@@ -19,7 +19,7 @@ const SideNav = () => {
         </p>
       </div>
       {/* Nav Links */}
-      <div className="flex flex-col w-full mt-4 h-full">
+      <div className="flex flex-col w-full h-full">
         {/* Links */}
         <div className="space-y-2 flex-1">
           <NavLink
@@ -56,32 +56,43 @@ const SideNav = () => {
           </NavLink>
         </div>
         {/* Footer */}
-        <div className="mt-auto space-y-2">
-          <div className="flex items-center gap-2 hover:bg-gray-200 cursor-pointer py-1 px-4 rounded-md transition-all">
+        <div className="mt-auto space-y-2 w-full">
+          <div
+            className="flex items-center gap-2 hover:bg-gray-200 cursor-pointer py-1 px-4 rounded-md transition-all"
+            onClick={() => signOut()}
+          >
             <DashboardIcon />
-            <p
-              onClick={() => signOut()}
-              className="font-semibold text-[#283618]"
-            >
-              Log out
-            </p>
+            <p className="font-semibold text-[#283618]">Log out</p>
           </div>
-          <div className="flex items-center gap-2 px-4 py-1 rounded-md transition-all">
-            <Avatar className="px-0 w-8 h-8">
-              <AvatarImage
-                className=""
-                src="https://github.com/shadcn.png"
-                alt="@shadcn"
-              />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col">
-              <p>{session?.user?.name}</p>
-              <p>{session?.user?.email}</p>
-              <p>{session?.user?.role}</p>
-            </div>
-          </div>
+          <UserInformation />
         </div>
+      </div>
+    </div>
+  );
+};
+
+const UserInformation = () => {
+  const { data: session } = useSession();
+
+  return (
+    <div className="flex items-center gap-3 p-2 rounded-md transition-all hover:bg-gray-200 cursor-pointer">
+      <Avatar className="w-10 h-10">
+        <AvatarImage
+          src={session?.user?.image || "https://github.com/shadcn.png"}
+          alt={session?.user?.name || "User Avatar"}
+        />
+        <AvatarFallback>{session?.user?.name?.charAt(0) || "U"}</AvatarFallback>
+      </Avatar>
+      <div className="flex flex-col">
+        <p className="text-sm font-semibold text-[#283618]">
+          {session?.user?.name}
+        </p>
+        <p className="text-xs text-gray-600">{session?.user?.email}</p>
+        <p className="text-xs text-gray-500">
+          {session?.user?.role
+            ?.toLowerCase()
+            .replace(/^\w/, (c) => c.toUpperCase())}
+        </p>
       </div>
     </div>
   );

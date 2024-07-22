@@ -11,7 +11,7 @@ const UserManagement = () => {
       {" "}
       <Sheet>
         <SheetTrigger asChild>
-          <Button className="flex lg:hidden" variant="ghost" size={"icon"}>
+          <Button className="flex lg:hidden mb-4" variant="ghost" size={"icon"}>
             <FaAlignLeft />
           </Button>
         </SheetTrigger>

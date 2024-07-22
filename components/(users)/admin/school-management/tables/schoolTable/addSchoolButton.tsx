@@ -12,7 +12,6 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -39,10 +38,18 @@ import { SingleImageDropzone } from "../../SingleImageDropzone";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { addSchool } from "@/actions/schoolManagement";
+import { useSchoolContext } from "@/context/SchoolContext";
+import { SchoolModel } from "../../SchoolForm";
 
 export function AddSchoolButton() {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  const { dispatch } = useSchoolContext();
+
+  const handleSchoolAdded = (school: SchoolModel) => {
+    dispatch({ type: "ADD_SCHOOL", payload: school });
+  };
 
   if (isDesktop) {
     return (
@@ -56,7 +63,7 @@ export function AddSchoolButton() {
           <DialogHeader>
             <DialogTitle>Add School</DialogTitle>
           </DialogHeader>
-          <ProfileForm />
+          <ProfileForm onSchoolAdded={handleSchoolAdded} />
         </DialogContent>
       </Dialog>
     );
@@ -73,7 +80,7 @@ export function AddSchoolButton() {
         <DrawerHeader className="text-left">
           <DrawerTitle>Add School</DrawerTitle>
         </DrawerHeader>
-        <ProfileForm />
+        <ProfileForm onSchoolAdded={handleSchoolAdded} />
 
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
@@ -85,7 +92,11 @@ export function AddSchoolButton() {
   );
 }
 
-function ProfileForm() {
+interface ProfileFormProps {
+  onSchoolAdded: (school: any) => void;
+}
+
+function ProfileForm({ onSchoolAdded }: ProfileFormProps) {
   const form = useForm<z.infer<typeof AddSchoolSchema>>({
     resolver: zodResolver(AddSchoolSchema),
     defaultValues: {
@@ -115,6 +126,8 @@ function ProfileForm() {
       form.reset();
       setFile(undefined);
       setProgress(0);
+
+      onSchoolAdded(res.data);
     } catch (err: any) {
       toast({
         variant: "destructive",

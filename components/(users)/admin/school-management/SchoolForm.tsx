@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { columns } from "./tables/schoolTable/columns";
 import { DataTable } from "./tables/schoolTable/data-table";
 import { getSchools } from "@/actions/schoolManagement";
+import { AddSchoolButton } from "./tables/schoolTable/addSchoolButton";
+import { useSchoolContext } from "@/context/SchoolContext";
 
 export interface SchoolModel {
   email: string;
@@ -20,7 +22,7 @@ export interface SchoolModel {
 }
 
 const SchoolForm = () => {
-  const [schoolsData, setSchoolsData] = useState<SchoolModel[]>([]);
+  const { state, dispatch } = useSchoolContext();
 
   // const schoolsDatas = [
   //   {
@@ -358,16 +360,24 @@ const SchoolForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await getSchools();
-      setSchoolsData(res.message);
+      dispatch({ type: "SET_SCHOOLS", payload: res.message });
     };
 
     fetchData();
-  }, []);
+  }, [dispatch]);
+
+  const handleSchoolAdded = (newSchool: SchoolModel) => {
+    dispatch({ type: "ADD_SCHOOL", payload: newSchool });
+  };
+
   return (
     <section className="w-full">
+      <div className="flex justify-end">
+        <AddSchoolButton />
+      </div>
       <div className="">
-        {schoolsData != undefined ? (
-          <DataTable columns={columns} data={schoolsData} />
+        {state.schools.length > 0 ? (
+          <DataTable columns={columns} data={state.schools} />
         ) : (
           <p>No Data</p>
         )}
