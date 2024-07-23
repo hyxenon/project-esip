@@ -22,21 +22,21 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Image from "next/image";
-import { CheckIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { getSchools } from "@/actions/schoolManagement";
-import { CaretSortIcon } from "@radix-ui/react-icons";
 
 interface SchoolModel {
   label: string;
   value: string;
   image: string | null;
+  id: string;
 }
 
 const UserManagement = () => {
   const [schools, setSchools] = useState<SchoolModel[]>([]);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [selectedSchool, setSelectedSchool] = useState<SchoolModel | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchSchool = async () => {
@@ -44,10 +44,14 @@ const UserManagement = () => {
         const res = await getSchools();
         const formattedSchools = res.message.map((school) => ({
           label: school.schoolName,
-          value: school.id,
+          value: school.schoolName,
           image: school.image,
+          id: school.id,
         }));
-        setSchools(formattedSchools);
+        setSchools([
+          { label: "All School", value: "All", image: null, id: "all" },
+          ...formattedSchools,
+        ]);
       } catch (error) {
         console.error("Error fetching schools:", error);
         // Handle error state if needed
@@ -74,33 +78,60 @@ const UserManagement = () => {
         <TotalStudents />
       </div>
 
-      {schools && (
+      <div className="flex items-center space-x-4 mt-4">
+        <p className="text-sm text-muted-foreground">School</p>
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              role="combobox"
-              aria-expanded={open}
-              className="justify-between"
-            >
-              {value
-                ? schools.find((school) => school.value === value)?.label
-                : "Select school..."}
-              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <Button variant="outline" className="justify-start">
+              {selectedSchool ? (
+                <>
+                  <div className="flex gap-1">
+                    <Image
+                      src={
+                        selectedSchool.image === null
+                          ? "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
+                          : selectedSchool.image
+                      }
+                      alt="logo"
+                      width={20}
+                      height={10}
+                    />{" "}
+                    {selectedSchool.label}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex gap-1">
+                    <Image
+                      src={
+                        "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
+                      }
+                      alt="logo"
+                      width={20}
+                      height={10}
+                    />{" "}
+                    All School
+                  </div>
+                </>
+              )}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className=" p-0">
+          <PopoverContent className="p-0" side="right" align="start">
             <Command>
+              <CommandInput placeholder="Find School..." />
               <CommandList>
-                <CommandInput placeholder="Search school..." className="h-9" />
-                <CommandEmpty>No school found.</CommandEmpty>
+                <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup>
                   {schools.map((school) => (
                     <CommandItem
                       key={school.value}
                       value={school.value}
-                      onSelect={(currentValue) => {
-                        setValue(currentValue === value ? "" : currentValue);
+                      onSelect={(value) => {
+                        setSelectedSchool(
+                          schools.find(
+                            (priority) => priority.value === value
+                          ) || null
+                        );
                         setOpen(false);
                       }}
                     >
@@ -117,12 +148,6 @@ const UserManagement = () => {
                         />
                         {school.label}
                       </div>
-                      <CheckIcon
-                        className={cn(
-                          "ml-auto h-4 w-4",
-                          value === school.value ? "opacity-100" : "opacity-0"
-                        )}
-                      />
                     </CommandItem>
                   ))}
                 </CommandGroup>
@@ -130,7 +155,7 @@ const UserManagement = () => {
             </Command>
           </PopoverContent>
         </Popover>
-      )}
+      </div>
 
       {/* Tabs */}
       <div className="flex gap-8 mt-8">
