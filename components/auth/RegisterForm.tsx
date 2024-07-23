@@ -278,7 +278,7 @@ const RegisterForm = () => {
                         <PopoverContent className=" p-0">
                           <Command>
                             <CommandInput
-                              placeholder="Search framework..."
+                              placeholder="Search School..."
                               className="h-9"
                             />
                             <CommandList>
