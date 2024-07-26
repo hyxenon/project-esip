@@ -36,6 +36,7 @@ import {
 
 import { getSchools } from "@/actions/schoolManagement";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { PasswordInput } from "../ui/password-input";
 
 const jacques = Jacques_Francois({
   weight: "400",
@@ -45,7 +46,9 @@ const jacques = Jacques_Francois({
 const formSchema = z
   .object({
     email: z.string().email({ message: "Email is required." }),
-    password: z.string().min(1, { message: "Password is required." }),
+    password: z.string().min(6, {
+      message: "Minimum 6 characters required",
+    }),
     confirmPassword: z.string(),
     firstName: z.string().min(1, { message: "First name is required." }),
     lastName: z.string().min(1, { message: "Last name is required." }),
@@ -187,13 +190,14 @@ const RegisterForm = () => {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input
+                        <PasswordInput
                           {...field}
                           type="password"
                           placeholder="Password"
                           className="border-gray-400"
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -204,10 +208,10 @@ const RegisterForm = () => {
                     <FormItem>
                       <FormLabel>Confirm password</FormLabel>
                       <FormControl>
-                        <Input
+                        <PasswordInput
                           {...field}
                           type="password"
-                          placeholder="Confirm Password"
+                          placeholder="Confirm password"
                           className="border-gray-400"
                         />
                       </FormControl>
@@ -266,11 +270,31 @@ const RegisterForm = () => {
                                 !field.value && "text-muted-foreground"
                               )}
                             >
-                              {field.value
-                                ? schools?.find(
-                                    (school) => school.value === field.value
-                                  )?.label
-                                : "Select School"}
+                              {field.value ? (
+                                <>
+                                  <div className="flex gap-1">
+                                    <Image
+                                      src={
+                                        schools?.find(
+                                          (school) =>
+                                            school.value === field.value
+                                        )?.image ||
+                                        "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
+                                      }
+                                      alt="logo"
+                                      width={20}
+                                      height={10}
+                                    />{" "}
+                                    {
+                                      schools?.find(
+                                        (school) => school.value === field.value
+                                      )?.label
+                                    }
+                                  </div>
+                                </>
+                              ) : (
+                                <>Select School</>
+                              )}
                               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>

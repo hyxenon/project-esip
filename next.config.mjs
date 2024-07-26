@@ -6,6 +6,7 @@ const nextConfig = {
       "files.edgestore.dev",
       "img.freepik.com",
       "upload.wikimedia.org",
+      "github.com",
     ],
   },
 };

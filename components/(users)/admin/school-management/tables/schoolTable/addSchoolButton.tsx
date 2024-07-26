@@ -41,7 +41,11 @@ import { addSchool } from "@/actions/schoolManagement";
 import { useSchoolContext } from "@/context/SchoolContext";
 import { SchoolModel } from "../../SchoolForm";
 
-export function AddSchoolButton() {
+interface AddSchoolButtonProps {
+  onSchoolAdded: (newSchool: SchoolModel) => void;
+}
+
+export function AddSchoolButton({ onSchoolAdded }: AddSchoolButtonProps) {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
