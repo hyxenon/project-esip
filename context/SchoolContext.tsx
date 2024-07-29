@@ -1,12 +1,15 @@
+// SchoolContext.tsx
 "use client";
-import { SchoolModel } from "@/components/(users)/admin/school-management/SchoolForm";
-import React, {
+import {
   createContext,
   useReducer,
   useContext,
   ReactNode,
   Dispatch,
+  useEffect,
 } from "react";
+import { getSchools } from "@/actions/schoolManagement";
+import { SchoolModel } from "@/components/(users)/admin/school-management/SchoolForm";
 
 type State = {
   schools: SchoolModel[];
@@ -51,6 +54,16 @@ const schoolReducer = (state: State, action: Action): State => {
 
 export const SchoolProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(schoolReducer, initialState);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getSchools();
+      dispatch({ type: "SET_SCHOOLS", payload: res.message });
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <SchoolContext.Provider value={{ state, dispatch }}>
       {children}

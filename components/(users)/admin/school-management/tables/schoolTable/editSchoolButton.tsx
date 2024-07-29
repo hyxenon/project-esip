@@ -32,8 +32,6 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { useEdgeStore } from "@/lib/edgestore";
-import { SingleImageDropzone } from "../../SingleImageDropzone";
-import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { editSchool, getSchool } from "@/actions/schoolManagement";
 import Image from "next/image";

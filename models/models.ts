@@ -47,7 +47,31 @@ export const RegisterSchema = z.object({
   role: z.string().min(1, {
     message: "Role is required",
   }),
+  image: z.string().optional(),
 });
+
+
+export const AddUserTeacherSchema = z.object({
+  
+})
+
+
+export const UserEditSchema = z.object({
+  email: z.string().email({
+    message: "Email is required",
+  }),
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+  schoolId: z.string().min(1, {
+    message: "School is required",
+  }),
+  role: z.string().min(1, {
+    message: "Role is required",
+  }),
+  image: z.string().optional(),
+  password: z.string().optional()
+})
 
 
 

@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/popover";
 import Image from "next/image";
 import { getSchools } from "@/actions/schoolManagement";
+import { useUserManagementContext } from "@/context/UserManagementContext";
+import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 
 interface SchoolModel {
   label: string;
@@ -32,11 +34,13 @@ interface SchoolModel {
 }
 
 const UserManagement = () => {
+  const { state, dispatch } = useUserManagementContext();
   const [schools, setSchools] = useState<SchoolModel[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedSchool, setSelectedSchool] = useState<SchoolModel | null>(
     null
   );
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   useEffect(() => {
     const fetchSchool = async () => {
@@ -49,7 +53,7 @@ const UserManagement = () => {
           id: school.id,
         }));
         setSchools([
-          { label: "All School", value: "All", image: null, id: "all" },
+          { label: "All School", value: "All School", image: null, id: "all" },
           ...formattedSchools,
         ]);
       } catch (error) {
@@ -60,6 +64,12 @@ const UserManagement = () => {
 
     fetchSchool();
   }, []);
+
+  useEffect(() => {
+    if (selectedSchool) {
+      dispatch({ type: "SET_SELECTED_SCHOOL", payload: selectedSchool.id });
+    }
+  }, [selectedSchool, dispatch]);
 
   return (
     <div className="w-full h-screen px-4 md:px-8 py-4">
@@ -116,7 +126,11 @@ const UserManagement = () => {
               )}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="p-0" side="right" align="start">
+          <PopoverContent
+            side={isDesktop ? "right" : "bottom"}
+            className="p-0"
+            align="start"
+          >
             <Command>
               <CommandInput placeholder="Find School..." />
               <CommandList>
@@ -159,7 +173,7 @@ const UserManagement = () => {
 
       {/* Tabs */}
       <div className="flex gap-8 mt-8">
-        <UserTabs />
+        <UserTabs selectedSchool={selectedSchool} />
       </div>
     </div>
   );

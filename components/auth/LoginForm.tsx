@@ -16,6 +16,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import AuthFormWrapper from "./auth-form-wrapper";
 import { Jacques_Francois } from "next/font/google";
+import { PasswordInput } from "../ui/password-input";
 
 const jacques = Jacques_Francois({
   weight: "400",
@@ -93,7 +94,7 @@ const LoginForm = () => {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input
+                        <PasswordInput
                           {...field}
                           type="password"
                           placeholder="Password"

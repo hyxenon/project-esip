@@ -2,6 +2,7 @@
 import SideNav from "@/components/(users)/admin/sidenav";
 import type { Metadata } from "next";
 import { SchoolProvider } from "@/context/SchoolContext"; // Adjust the path based on your context location
+import { UserManagementProvider } from "@/context/UserManagementContext";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -15,10 +16,12 @@ export default function AdminLayout({
 }) {
   return (
     <SchoolProvider>
-      <div className="flex h-full">
-        <SideNav />
-        <div className="flex-1 overflow-y-auto">{children}</div>
-      </div>
+      <UserManagementProvider>
+        <div className="flex h-full">
+          <SideNav />
+          <div className="flex-1 overflow-y-auto">{children}</div>
+        </div>
+      </UserManagementProvider>
     </SchoolProvider>
   );
 }
