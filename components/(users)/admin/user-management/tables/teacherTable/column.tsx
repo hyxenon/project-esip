@@ -17,8 +17,6 @@ import { useState } from "react";
 import DeleteUserButton from "../DeleteUserButton";
 import EditUserButton from "../EditUserButton";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 export type User = {
   id: string;
   name: string | null;
@@ -28,7 +26,7 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
   schoolId: string | null;
-  school: SchoolModel | null;
+  school?: SchoolModel | null;
 };
 
 export const columns: ColumnDef<User>[] = [

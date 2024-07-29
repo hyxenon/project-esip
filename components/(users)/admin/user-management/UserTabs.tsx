@@ -21,10 +21,10 @@ const UserTabs = ({ selectedSchool }: UserTabsProps) => {
         <TabsTrigger value="students">Students</TabsTrigger>
       </TabsList>
       <TabsContent value="teachers">
-        <TeacherTable selectedSchool={selectedSchool} />
+        <TeacherTable selectedSchool={selectedSchool} role="TEACHER" />
       </TabsContent>
       <TabsContent value="students">
-        <div>test</div>
+        <TeacherTable selectedSchool={selectedSchool} role="STUDENT" />
       </TabsContent>
     </Tabs>
   );

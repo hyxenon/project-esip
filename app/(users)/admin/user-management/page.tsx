@@ -53,7 +53,7 @@ const UserManagement = () => {
           id: school.id,
         }));
         setSchools([
-          { label: "All School", value: "All", image: null, id: "all" },
+          { label: "All School", value: "All School", image: null, id: "all" },
           ...formattedSchools,
         ]);
       } catch (error) {

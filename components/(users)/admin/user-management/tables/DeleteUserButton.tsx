@@ -1,3 +1,4 @@
+import { deleteUser } from "@/actions/userManagement";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -7,10 +8,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { useSchoolContext } from "@/context/SchoolContext";
+import { useUserManagementContext } from "@/context/UserManagementContext";
 
 interface DeleteUserButtonProps {
   isOpen: boolean;
@@ -25,9 +26,30 @@ const DeleteUserButton = ({
   id,
 }: DeleteUserButtonProps) => {
   const { toast } = useToast();
-  const { dispatch } = useSchoolContext();
+  const { dispatch } = useUserManagementContext();
 
-  const handleDeleteSchool = async () => {};
+  const handleDeleteUser = async () => {
+    const response = await deleteUser(id);
+
+    if (response.success) {
+      toast({
+        variant: "success",
+        title: "Success",
+        description: "User deleted successfully.",
+      });
+
+      // Update the context to remove the deleted user
+      dispatch({ type: "DELETE_USER", payload: id });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: response.error || "Failed to delete user.",
+      });
+    }
+
+    setIsOpen(false); // Close the dialog
+  };
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
@@ -44,7 +66,7 @@ const DeleteUserButton = ({
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             className="bg-destructive hover:bg-destructive"
-            onClick={handleDeleteSchool}
+            onClick={handleDeleteUser}
           >
             Delete
           </AlertDialogAction>

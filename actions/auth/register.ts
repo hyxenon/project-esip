@@ -42,10 +42,13 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
       schoolId: schoolId,
       role: userRole
     },
+    include: {
+      school: true
+    }
   });
 
   const verificationToken = await generateVerificationToken(email);
   await sendVerificationEmail(verificationToken.email, verificationToken.token, password);
 
-  return { success: "Confirmation email sent!" };
+  return { success: "Confirmation email sent!", user: user };
 };

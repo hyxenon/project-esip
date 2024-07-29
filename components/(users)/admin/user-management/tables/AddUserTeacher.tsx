@@ -30,7 +30,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import { startTransition, useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useEdgeStore } from "@/lib/edgestore";
 
 import { useToast } from "@/components/ui/use-toast";
@@ -40,6 +40,10 @@ import Image from "next/image";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { register } from "@/actions/auth/register";
+import {
+  UserModel,
+  useUserManagementContext,
+} from "@/context/UserManagementContext";
 
 interface SchoolModel {
   label: string;
@@ -76,6 +80,11 @@ export function AddUserTeacher({ selectedSchool }: AddUserTeacherProps) {
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button className="bg-[#606C38] hover:bg-[#283618]" variant="default">
+          Add Teacher
+        </Button>
+      </DialogTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle>Add Teacher</DrawerTitle>
@@ -96,26 +105,27 @@ interface ProfileFormProps {
   selectedSchool: SchoolModel | null;
 }
 
-const formSchema = z
-  .object({
-    email: z.string().email({ message: "Email is required." }),
-    password: z.string().min(6, {
-      message: "Minimum 6 characters required",
-    }),
-    confirmPassword: z.string(),
-    firstName: z.string().min(1, { message: "First name is required." }),
-    lastName: z.string().min(1, { message: "Last name is required." }),
-    role: z.string().min(1, { message: "Role is required." }),
-    schoolId: z.string({
-      required_error: "Please select your school.",
-    }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
 function ProfileForm({ selectedSchool }: ProfileFormProps) {
+  const { dispatch } = useUserManagementContext();
+  const formSchema = z
+    .object({
+      email: z.string().email({ message: "Email is required." }),
+      password: z.string().min(6, {
+        message: "Minimum 6 characters required",
+      }),
+      confirmPassword: z.string(),
+      firstName: z.string().min(1, { message: "First name is required." }),
+      lastName: z.string().min(1, { message: "Last name is required." }),
+      role: z.string().min(1, { message: "Role is required." }),
+      schoolId: z.string({
+        required_error: "Please select your school.",
+      }),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -156,9 +166,24 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
     setSuccess("");
     startTransition(() => {
       register(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
-        form.reset();
+        if (data.success) {
+          const newUser: UserModel = {
+            id: data.user.id,
+            name: data.user.name,
+            email: data.user.email,
+            role: data.user.role,
+            image: data.user.image || undefined,
+            createdAt: new Date(data.user.createdAt),
+            updatedAt: new Date(data.user.updatedAt),
+            schoolId: data.user.schoolId,
+            school: data.user.school || null, // Adjust if `school` can be missing
+          };
+          dispatch({ type: "ADD_USER", payload: newUser });
+          setSuccess(data.success);
+          form.reset();
+        } else {
+          setError(data.error);
+        }
       });
     });
   };
