@@ -45,6 +45,7 @@ import {
   useUserManagementContext,
 } from "@/context/UserManagementContext";
 import { User } from "./teacherTable/column";
+import { PasswordField } from "@/components/ui/password-field";
 
 interface SchoolModel {
   label: string;
@@ -248,44 +249,10 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-x-2">
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <PasswordInput
-                      {...field}
-                      type="password"
-                      placeholder="Password"
-                      className="border-gray-400"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <div className="grid grid-cols-2 gap-x-4">
+            <PasswordField name="password" title="Password" />
+            <PasswordField name="confirmPassword" title="Confirm Password" />
 
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirm password</FormLabel>
-                  <FormControl>
-                    <PasswordInput
-                      {...field}
-                      type="password"
-                      placeholder="Confirm password"
-                      className="border-gray-400"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <Button
               className="w-[9rem] mt-4"
               type="button"
