@@ -79,7 +79,6 @@ const Navbar = ({ session }: { session: any }) => {
         ))}
       </div>
       <div className="ml-auto flex items-center space-x-4">
-        <ModeToggle />
         {session == null ? (
           <Link href={"/login"}>
             <Button>Login</Button>

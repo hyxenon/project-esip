@@ -18,7 +18,11 @@ import logo from "../../../assets/authForm/authLogo.svg";
 import React from "react";
 import Image from "next/image";
 
-const MobileMenu = () => {
+interface MobileMenuProps {
+  role?: string;
+}
+
+const MobileMenu = ({ role }: MobileMenuProps) => {
   const { data: session } = useSession();
   return (
     <SheetContent side={"left"}>
@@ -35,44 +39,98 @@ const MobileMenu = () => {
         <SheetDescription className="h-full ">
           <div className="flex flex-col w-full mt-4 h-full">
             {/* Links */}
-            <div className="space-y-2 flex-1">
-              <NavLink
-                href="/admin"
-                className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
-                activeClassName="bg-gray-200"
-              >
-                <DashboardIcon />
-                <p className="font-semibold text-[#283618]">Dashboard</p>
-              </NavLink>
-              <NavLink
-                href="/admin/school-management"
-                className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
-                activeClassName="bg-gray-200"
-              >
-                <DashboardIcon />
-                <p className="font-semibold text-[#283618]">
-                  School Management
-                </p>
-              </NavLink>
-              <NavLink
-                href="/admin/user-management"
-                className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
-                activeClassName="bg-gray-200"
-              >
-                <DashboardIcon />
-                <p className="font-semibold text-[#283618]">User Management</p>
-              </NavLink>
-              <NavLink
-                href="/admin/research-management"
-                className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
-                activeClassName="bg-gray-200"
-              >
-                <DashboardIcon />
-                <p className="font-semibold text-[#283618]">
-                  Research Management
-                </p>
-              </NavLink>
-            </div>
+            {/* TEACHER Links */}
+            {role === "TEACHER" ? (
+              <div className="space-y-2 flex-1">
+                <NavLink
+                  href="/teacher"
+                  className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+                  activeClassName="bg-gray-200"
+                >
+                  <DashboardIcon />
+                  <p className="font-semibold text-[#283618]">Dashboard</p>
+                </NavLink>
+                <NavLink
+                  href=""
+                  className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+                  activeClassName="bg-gray-200"
+                >
+                  <DashboardIcon />
+                  <p className="font-semibold text-[#283618]">
+                    User Management
+                  </p>
+                </NavLink>
+                <NavLink
+                  href=""
+                  className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+                  activeClassName="bg-gray-200"
+                >
+                  <DashboardIcon />
+                  <p className="font-semibold text-[#283618]">
+                    Paper Management
+                  </p>
+                </NavLink>
+                <NavLink
+                  href=""
+                  className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+                  activeClassName="bg-gray-200"
+                >
+                  <DashboardIcon />
+                  <p className="font-semibold text-[#283618]">Messenger</p>
+                </NavLink>
+                <NavLink
+                  href=""
+                  className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+                  activeClassName="bg-gray-200"
+                >
+                  <DashboardIcon />
+                  <p className="font-semibold text-[#283618]">Search Paper</p>
+                </NavLink>
+              </div>
+            ) : (
+              // Admin Links
+              <div className="space-y-2 flex-1">
+                <NavLink
+                  href="/admin"
+                  className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+                  activeClassName="bg-gray-200"
+                >
+                  <DashboardIcon />
+                  <p className="font-semibold text-[#283618]">Dashboard</p>
+                </NavLink>
+                <NavLink
+                  href="/admin/school-management"
+                  className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+                  activeClassName="bg-gray-200"
+                >
+                  <DashboardIcon />
+                  <p className="font-semibold text-[#283618]">
+                    School Management
+                  </p>
+                </NavLink>
+                <NavLink
+                  href="/admin/user-management"
+                  className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+                  activeClassName="bg-gray-200"
+                >
+                  <DashboardIcon />
+                  <p className="font-semibold text-[#283618]">
+                    User Management
+                  </p>
+                </NavLink>
+                <NavLink
+                  href="/admin/research-management"
+                  className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+                  activeClassName="bg-gray-200"
+                >
+                  <DashboardIcon />
+                  <p className="font-semibold text-[#283618]">
+                    Research Management
+                  </p>
+                </NavLink>
+              </div>
+            )}
+
             {/* Footer */}
             <div className="mt-auto space-y-2">
               <div className="flex items-center gap-2 hover:bg-gray-200 cursor-pointer py-1 px-4 rounded-md transition-all">
@@ -93,7 +151,7 @@ const MobileMenu = () => {
                   />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col">
+                <div className="flex flex-col items-start">
                   <p>{session?.user?.name}</p>
                   <p>{session?.user?.email}</p>
                   <p>{session?.user?.role}</p>

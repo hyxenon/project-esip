@@ -1,7 +1,7 @@
 import React from "react";
 
 const TeacherHome = () => {
-  return <div>TeacherHome</div>;
+  return <div className="">Teacher Dashboard</div>;
 };
 
 export default TeacherHome;

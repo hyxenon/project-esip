@@ -1,6 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TeacherTable from "./TeacherTable";
-import { Button } from "@/components/ui/button";
 
 interface SchoolModel {
   label: string;

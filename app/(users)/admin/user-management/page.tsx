@@ -58,7 +58,6 @@ const UserManagement = () => {
         ]);
       } catch (error) {
         console.error("Error fetching schools:", error);
-        // Handle error state if needed
       }
     };
 

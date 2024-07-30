@@ -6,9 +6,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import NavLink from "@/components/navbar/NavLink";
 import { signOut, useSession } from "next-auth/react";
 
-const SideNav = () => {
-  const { data: session } = useSession();
+interface SideNavProps {
+  role?: string;
+}
 
+const SideNav = ({ role }: SideNavProps) => {
   return (
     <div className="hidden lg:flex flex-col items-center px-2 py-2 border-r-2 border-gray-200 shadow-2xl">
       <div className="flex items-center mb-6">
@@ -21,40 +23,92 @@ const SideNav = () => {
       {/* Nav Links */}
       <div className="flex flex-col w-full h-full">
         {/* Links */}
-        <div className="space-y-2 flex-1">
-          <NavLink
-            href="/admin"
-            className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
-            activeClassName="bg-gray-200"
-          >
-            <DashboardIcon />
-            <p className="font-semibold text-[#283618]">Dashboard</p>
-          </NavLink>
-          <NavLink
-            href="/admin/school-management"
-            className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
-            activeClassName="bg-gray-200"
-          >
-            <DashboardIcon />
-            <p className="font-semibold text-[#283618]">School Management</p>
-          </NavLink>
-          <NavLink
-            href="/admin/user-management"
-            className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
-            activeClassName="bg-gray-200"
-          >
-            <DashboardIcon />
-            <p className="font-semibold text-[#283618]">User Management</p>
-          </NavLink>
-          <NavLink
-            href="/admin/research-management"
-            className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
-            activeClassName="bg-gray-200"
-          >
-            <DashboardIcon />
-            <p className="font-semibold text-[#283618]">Research Management</p>
-          </NavLink>
-        </div>
+
+        {/* ADMIN LINKS */}
+        {role === "ADMIN" && (
+          <div className="space-y-2 flex-1">
+            <NavLink
+              href="/admin"
+              className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+              activeClassName="bg-gray-200"
+            >
+              <DashboardIcon />
+              <p className="font-semibold text-[#283618]">Dashboard</p>
+            </NavLink>
+            <NavLink
+              href="/admin/school-management"
+              className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+              activeClassName="bg-gray-200"
+            >
+              <DashboardIcon />
+              <p className="font-semibold text-[#283618]">School Management</p>
+            </NavLink>
+            <NavLink
+              href="/admin/user-management"
+              className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+              activeClassName="bg-gray-200"
+            >
+              <DashboardIcon />
+              <p className="font-semibold text-[#283618]">User Management</p>
+            </NavLink>
+            <NavLink
+              href="/admin/research-management"
+              className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+              activeClassName="bg-gray-200"
+            >
+              <DashboardIcon />
+              <p className="font-semibold text-[#283618]">
+                Research Management
+              </p>
+            </NavLink>
+          </div>
+        )}
+
+        {role === "TEACHER" && (
+          <div className="space-y-2 flex-1">
+            <NavLink
+              href="/teacher"
+              className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+              activeClassName="bg-gray-200"
+            >
+              <DashboardIcon />
+              <p className="font-semibold text-[#283618]">Dashboard</p>
+            </NavLink>
+            <NavLink
+              href="/teacher/user-management"
+              className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+              activeClassName="bg-gray-200"
+            >
+              <DashboardIcon />
+              <p className="font-semibold text-[#283618]">User Management</p>
+            </NavLink>
+            <NavLink
+              href="/teacher/paper-management"
+              className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+              activeClassName="bg-gray-200"
+            >
+              <DashboardIcon />
+              <p className="font-semibold text-[#283618]">Paper Management</p>
+            </NavLink>
+            <NavLink
+              href="/teacher/messenger"
+              className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+              activeClassName="bg-gray-200"
+            >
+              <DashboardIcon />
+              <p className="font-semibold text-[#283618]">Messenger</p>
+            </NavLink>
+            <NavLink
+              href=""
+              className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+              activeClassName="bg-gray-200"
+            >
+              <DashboardIcon />
+              <p className="font-semibold text-[#283618]">Search Paper</p>
+            </NavLink>
+          </div>
+        )}
+
         {/* Footer */}
         <div className="mt-auto space-y-2 w-full">
           <div
@@ -71,7 +125,7 @@ const SideNav = () => {
   );
 };
 
-const UserInformation = () => {
+export const UserInformation = () => {
   const { data: session } = useSession();
 
   return (
