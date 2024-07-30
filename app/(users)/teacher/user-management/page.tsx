@@ -17,12 +17,20 @@ interface SchoolModel {
 
 const UserManagement = () => {
   const { state, dispatch } = useUserManagementContext();
-  const [schools, setSchools] = useState<SchoolModel[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const { data: session } = useSession();
 
   useEffect(() => {
-    const fetchSchool = async () => {};
-  });
+    if (session?.user?.schoolId) {
+      dispatch({
+        type: "SET_SELECTED_SCHOOL",
+        payload: session.user?.schoolId,
+      });
+      setIsLoading(false);
+    }
+  }, [session]);
+
   return (
     <div className="flex flex-col px-3 lg:py-4 lg:px-16">
       <h4 className="scroll-m-20 text-xl font-semibold tracking-tight lg:mt-4">
@@ -36,7 +44,13 @@ const UserManagement = () => {
         </div>
       </div>
       {/* Tables */}
-      <div className="mt-4"></div>
+      <div className="mt-4">
+        <Tablist isLoading={isLoading} filter="TEACHER" />
+      </div>
+
+      <div className="mt-4">
+        <Tablist isLoading={isLoading} filter="STUDENT" />
+      </div>
     </div>
   );
 };

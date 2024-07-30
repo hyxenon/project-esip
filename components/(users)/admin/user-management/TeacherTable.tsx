@@ -14,7 +14,7 @@ interface SchoolModel {
 }
 
 type TeacherTableProps = {
-  selectedSchool: SchoolModel | null;
+  selectedSchool?: SchoolModel | null;
   role: string;
 };
 

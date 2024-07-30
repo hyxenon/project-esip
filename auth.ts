@@ -8,12 +8,14 @@ import { getUserById } from "./data/user";
 declare module "@auth/core/types" {
   interface User {
     role: "ADMIN" | "TEACHER" | "STUDENT";
+    schoolId: string | null;
   }
 }
 
 declare module "@auth/core/jwt" {
   interface JWT {
     role: "ADMIN" | "TEACHER" | "STUDENT";
+    schoolId: string | null;
   }
 }
 
@@ -48,7 +50,7 @@ export const {
         // Prevent sign in without email verification
         if (!existingUser?.emailVerified) return false;
 
-        // TODOF: Add 2FA check
+        // TODO: Add 2FA check
 
         return true;
       }
@@ -64,6 +66,10 @@ export const {
         session.user.role = token.role;
       }
 
+      if (token.schoolId && session.user) {
+        session.user.schoolId = token.schoolId;
+      }
+
       return session;
     },
     async jwt({ token }) {
@@ -74,6 +80,7 @@ export const {
       if (!existingUser) return token;
 
       token.role = existingUser.role;
+      token.schoolId = existingUser.schoolId;
 
       return token;
     },
