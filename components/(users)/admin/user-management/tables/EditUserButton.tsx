@@ -59,6 +59,7 @@ import {
   UserModel,
   useUserManagementContext,
 } from "@/context/UserManagementContext";
+import { User } from "./teacherTable/column";
 
 interface EditUserButtonProps {
   isOpen: boolean;
@@ -162,7 +163,7 @@ function ProfileForm({ id }: ProfileFormProps) {
         title: "User Updated Successfully",
         description: `Updated changes to ${userData?.name}`,
       });
-      const updatedUser: UserModel = {
+      const updatedUser: User = {
         id: user.id,
         email: values.email,
         image: values.image,
@@ -173,7 +174,7 @@ function ProfileForm({ id }: ProfileFormProps) {
         school: user.school,
         schoolId: values.schoolId,
       };
-      dispatch({ type: "EDIT_USER", payload: updatedUser }); // Update user in the global context
+      dispatch({ type: "EDIT_USER", payload: updatedUser });
     } else {
       toast({
         variant: "destructive",

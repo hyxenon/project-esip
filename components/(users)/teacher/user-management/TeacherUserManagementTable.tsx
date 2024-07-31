@@ -1,10 +1,10 @@
 "use client";
 import { Card, CardContent } from "@/components/ui/card";
-import { DataTable } from "./tables/teacherTable/data-table";
-import { columns } from "./tables/teacherTable/column";
-import { useUserManagementContext } from "@/context/UserManagementContext";
-import AddUserTeacher from "./tables/AddUserTeacher";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import AddUserTeacher from "../../admin/user-management/tables/AddUserTeacher";
+import { DataTable } from "../../admin/user-management/tables/teacherTable/data-table";
+import { columns } from "../../admin/user-management/tables/teacherTable/column";
+import { useTeacherUserManagementContext } from "@/context/TeacherUserManagementContext";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface SchoolModel {
@@ -19,14 +19,22 @@ type TeacherTableProps = {
   role: string;
 };
 
-const TeacherTable = ({ selectedSchool, role }: TeacherTableProps) => {
-  const { state, dispatch } = useUserManagementContext();
+const TeacherUserManagementTable = ({
+  selectedSchool,
+  role,
+}: TeacherTableProps) => {
+  const { state, dispatch } = useTeacherUserManagementContext();
+  const [isLoading, setIsLoading] = useState(true);
 
+  const studentUsers = state.studentUsers;
+  const teacherUsers = state.teacherUsers;
   useEffect(() => {
     dispatch({ type: "SET_ROLE", payload: role });
-  }, [role, dispatch]);
 
-  const users = state.users;
+    if (!state.isLoading) {
+      setIsLoading(false);
+    }
+  }, [studentUsers, teacherUsers, dispatch]);
 
   return (
     <Card className="w-full">
@@ -40,7 +48,7 @@ const TeacherTable = ({ selectedSchool, role }: TeacherTableProps) => {
         </div>
         <section className="w-full">
           <div className="">
-            {state.isLoading ? (
+            {isLoading ? (
               <div className="flex items-center space-x-4">
                 <Skeleton className="h-12 w-12 rounded-full" />
                 <div className="space-y-2">
@@ -50,7 +58,12 @@ const TeacherTable = ({ selectedSchool, role }: TeacherTableProps) => {
               </div>
             ) : (
               <div>
-                <DataTable columns={columns} data={users} />
+                {role === "TEACHER" && (
+                  <DataTable columns={columns} data={teacherUsers} />
+                )}
+                {role === "STUDENT" && (
+                  <DataTable columns={columns} data={studentUsers} />
+                )}
               </div>
             )}
           </div>
@@ -60,4 +73,4 @@ const TeacherTable = ({ selectedSchool, role }: TeacherTableProps) => {
   );
 };
 
-export default TeacherTable;
+export default TeacherUserManagementTable;

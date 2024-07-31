@@ -1,10 +1,9 @@
 "use client";
-import { getSchool } from "@/actions/schoolManagement";
 import TotalStudents from "@/components/(users)/teacher/user-management/cards/totalStudents";
 import TotalTeachers from "@/components/(users)/teacher/user-management/cards/totalTeachers";
 import TotalUsers from "@/components/(users)/teacher/user-management/cards/totalUsers";
 import Tablist from "@/components/(users)/teacher/user-management/Tablist";
-import { useUserManagementContext } from "@/context/UserManagementContext";
+import { useTeacherUserManagementContext } from "@/context/TeacherUserManagementContext";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
@@ -16,8 +15,7 @@ interface SchoolModel {
 }
 
 const UserManagement = () => {
-  const { state, dispatch } = useUserManagementContext();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { state, dispatch } = useTeacherUserManagementContext();
 
   const { data: session } = useSession();
 
@@ -27,7 +25,6 @@ const UserManagement = () => {
         type: "SET_SELECTED_SCHOOL",
         payload: session.user?.schoolId,
       });
-      setIsLoading(false);
     }
   }, [session]);
 
@@ -44,12 +41,17 @@ const UserManagement = () => {
         </div>
       </div>
       {/* Tables */}
+      <h4 className="scroll-m-20 text-xl font-semibold tracking-tight lg:mt-8">
+        Teacher Management
+      </h4>
       <div className="mt-4">
-        <Tablist isLoading={isLoading} filter="TEACHER" />
+        <Tablist filter="TEACHER" />
       </div>
-
+      <h4 className="scroll-m-20 text-xl font-semibold tracking-tight lg:mt-8">
+        Student Management
+      </h4>
       <div className="mt-4">
-        <Tablist isLoading={isLoading} filter="STUDENT" />
+        <Tablist filter="STUDENT" />
       </div>
     </div>
   );

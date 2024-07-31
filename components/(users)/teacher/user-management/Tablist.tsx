@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React from "react";
 import TeacherTable from "../../admin/user-management/TeacherTable";
 import { Skeleton } from "@/components/ui/skeleton";
+import TeacherUserManagementTable from "./TeacherUserManagementTable";
 
 interface SchoolModel {
   label: string;
@@ -11,11 +12,10 @@ interface SchoolModel {
 }
 
 type TablistProps = {
-  isLoading: boolean;
   filter: string;
 };
 
-const Tablist = ({ isLoading, filter }: TablistProps) => {
+const Tablist = ({ filter }: TablistProps) => {
   return (
     <div>
       {filter === "TEACHER" ? (
@@ -25,17 +25,7 @@ const Tablist = ({ isLoading, filter }: TablistProps) => {
             <TabsTrigger value="pendingTeachers">Pending Teachers</TabsTrigger>
           </TabsList>
           <TabsContent value="allTeachers">
-            {isLoading ? (
-              <div className="flex items-center space-x-4">
-                <Skeleton className="h-12 w-12 rounded-full" />
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-[250px]" />
-                  <Skeleton className="h-4 w-[200px]" />
-                </div>
-              </div>
-            ) : (
-              <TeacherTable role="TEACHER" />
-            )}
+            <TeacherUserManagementTable role="TEACHER" />
           </TabsContent>
           <TabsContent value="pendingTeachers">
             <p>Pending of teacher table</p>
@@ -48,17 +38,7 @@ const Tablist = ({ isLoading, filter }: TablistProps) => {
             <TabsTrigger value="pendingStudents">Pending Students</TabsTrigger>
           </TabsList>
           <TabsContent value="allStudents">
-            {isLoading ? (
-              <div className="flex items-center space-x-4">
-                <Skeleton className="h-12 w-12 rounded-full" />
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-[250px]" />
-                  <Skeleton className="h-4 w-[200px]" />
-                </div>
-              </div>
-            ) : (
-              <TeacherTable role="STUDENT" />
-            )}
+            <TeacherUserManagementTable role="STUDENT" />
           </TabsContent>
           <TabsContent value="pendingStudents">
             <p>Pending of teacher table</p>

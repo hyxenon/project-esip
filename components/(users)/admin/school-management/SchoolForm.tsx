@@ -4,6 +4,7 @@ import { columns } from "./tables/schoolTable/columns";
 import { DataTable } from "./tables/schoolTable/data-table";
 import { AddSchoolButton } from "./tables/schoolTable/addSchoolButton";
 import { useSchoolContext } from "@/context/SchoolContext";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export interface SchoolModel {
   email: string;
@@ -33,10 +34,18 @@ const SchoolForm = () => {
         <AddSchoolButton onSchoolAdded={handleSchoolAdded} />
       </div>
       <div className="">
-        {state.schools.length > 0 ? (
-          <DataTable columns={columns} data={state.schools} />
+        {state.isLoading ? (
+          <div className="flex items-center space-x-4">
+            <Skeleton className="h-12 w-12 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-[250px]" />
+              <Skeleton className="h-4 w-[200px]" />
+            </div>
+          </div>
         ) : (
-          <p>No Data</p>
+          <div>
+            <DataTable columns={columns} data={state.schools} />
+          </div>
         )}
       </div>
     </section>

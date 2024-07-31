@@ -28,14 +28,16 @@ export type UserModel = {
 };
 
 type State = {
-  users: User[];
   selectedSchool: string;
   role: string;
+  teacherUsers: User[];
+  studentUsers: User[];
   isLoading: boolean;
 };
 
 type Action =
-  | { type: "SET_USERS"; payload: User[] }
+  | { type: "SET_TEACHER_USERS"; payload: User[] }
+  | { type: "SET_STUDENT_USERS"; payload: User[] }
   | { type: "ADD_USER"; payload: User }
   | { type: "DELETE_USER"; payload: string }
   | { type: "EDIT_USER"; payload: User }
@@ -44,37 +46,58 @@ type Action =
   | { type: "SET_LOADING"; payload: boolean };
 
 const initialState: State = {
-  users: [],
-  selectedSchool: "all",
+  teacherUsers: [],
+  studentUsers: [],
+  selectedSchool: "",
   role: "",
   isLoading: true,
 };
 
-const UserManagementContext = createContext<
+const TeacherUserManagementContext = createContext<
   { state: State; dispatch: Dispatch<Action> } | undefined
 >(undefined);
 
 const userManagementReducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "SET_USERS":
-      return { ...state, users: action.payload };
+    case "SET_TEACHER_USERS":
+      return { ...state, teacherUsers: action.payload };
+    case "SET_STUDENT_USERS":
+      return { ...state, studentUsers: action.payload };
     case "ADD_USER":
       return {
         ...state,
-        users: [
-          ...state.users,
-          { ...action.payload, school: action.payload.school || null },
-        ],
+        teacherUsers:
+          action.payload.role === "TEACHER"
+            ? [
+                ...state.teacherUsers,
+                { ...action.payload, school: action.payload.school || null },
+              ]
+            : state.teacherUsers,
+        studentUsers:
+          action.payload.role === "STUDENT"
+            ? [
+                ...state.studentUsers,
+                { ...action.payload, school: action.payload.school || null },
+              ]
+            : state.studentUsers,
       };
     case "DELETE_USER":
       return {
         ...state,
-        users: state.users.filter((user) => user.id !== action.payload),
+        teacherUsers: state.teacherUsers.filter(
+          (user) => user.id !== action.payload
+        ),
+        studentUsers: state.studentUsers.filter(
+          (user) => user.id !== action.payload
+        ),
       };
     case "EDIT_USER":
       return {
         ...state,
-        users: state.users.map((user) =>
+        teacherUsers: state.teacherUsers.map((user) =>
+          user.id === action.payload.id ? action.payload : user
+        ),
+        studentUsers: state.studentUsers.map((user) =>
           user.id === action.payload.id ? action.payload : user
         ),
       };
@@ -89,7 +112,7 @@ const userManagementReducer = (state: State, action: Action): State => {
   }
 };
 
-export const UserManagementProvider = ({
+export const TeacherUserManagementProvider = ({
   children,
 }: {
   children: ReactNode;
@@ -98,40 +121,33 @@ export const UserManagementProvider = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      let users: User[] = []; // Initialize as an empty array
-
       try {
-        if (state.role === "TEACHER") {
-          users = await getAllUsersByTeacher(state.selectedSchool);
-          console.log(state.selectedSchool);
-        } else if (state.role === "STUDENT") {
-          users = await getAllUsersByStudent(state.selectedSchool);
-        }
-
-        dispatch({ type: "SET_USERS", payload: users });
+        const teacherUsers = await getAllUsersByTeacher(state.selectedSchool);
+        const studentUsers = await getAllUsersByStudent(state.selectedSchool);
+        dispatch({ type: "SET_TEACHER_USERS", payload: teacherUsers });
+        dispatch({ type: "SET_STUDENT_USERS", payload: studentUsers });
       } catch (error) {
         console.error("Error fetching users:", error);
         // Optionally, you might want to dispatch an error action here
       }
-
-      dispatch({ type: "SET_LOADING", payload: false });
     };
-
-    fetchData();
+    fetchData().then(() => {
+      dispatch({ type: "SET_LOADING", payload: false });
+    });
   }, [state.selectedSchool, state.role]);
 
   return (
-    <UserManagementContext.Provider value={{ state, dispatch }}>
+    <TeacherUserManagementContext.Provider value={{ state, dispatch }}>
       {children}
-    </UserManagementContext.Provider>
+    </TeacherUserManagementContext.Provider>
   );
 };
 
-export const useUserManagementContext = () => {
-  const context = useContext(UserManagementContext);
+export const useTeacherUserManagementContext = () => {
+  const context = useContext(TeacherUserManagementContext);
   if (context === undefined) {
     throw new Error(
-      "useUserManagementContext must be used within a UserManagementProvider"
+      "useTeacherUserManagementContext must be used within a TeacherUserManagementProvider"
     );
   }
   return context;
