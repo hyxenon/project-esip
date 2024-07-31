@@ -11,7 +11,9 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { useSchoolContext } from "@/context/SchoolContext";
+import { useTeacherUserManagementContext } from "@/context/TeacherUserManagementContext";
 import { useUserManagementContext } from "@/context/UserManagementContext";
+import { useSession } from "next-auth/react";
 
 interface DeleteUserButtonProps {
   isOpen: boolean;
@@ -27,6 +29,8 @@ const DeleteUserButton = ({
 }: DeleteUserButtonProps) => {
   const { toast } = useToast();
   const { dispatch } = useUserManagementContext();
+  const { dispatch: teacherDispatch } = useTeacherUserManagementContext();
+  const { data: session } = useSession();
 
   const handleDeleteUser = async () => {
     const response = await deleteUser(id);
@@ -38,8 +42,11 @@ const DeleteUserButton = ({
         description: "User deleted successfully.",
       });
 
-      // Update the context to remove the deleted user
-      dispatch({ type: "DELETE_USER", payload: id });
+      if (session?.user?.role === "ADMIN") {
+        dispatch({ type: "DELETE_USER", payload: id });
+      } else if (session?.user?.role === "TEACHER") {
+        teacherDispatch({ type: "DELETE_USER", payload: id });
+      }
     } else {
       toast({
         variant: "destructive",

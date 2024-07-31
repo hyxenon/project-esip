@@ -60,6 +60,8 @@ import {
   useUserManagementContext,
 } from "@/context/UserManagementContext";
 import { User } from "./teacherTable/column";
+import { useSession } from "next-auth/react";
+import { useTeacherUserManagementContext } from "@/context/TeacherUserManagementContext";
 
 interface EditUserButtonProps {
   isOpen: boolean;
@@ -116,6 +118,8 @@ type UserEditModel = {
 function ProfileForm({ id }: ProfileFormProps) {
   const { state: schoolState } = useSchoolContext();
   const { state: userState, dispatch } = useUserManagementContext();
+  const { dispatch: teacherDispatch } = useTeacherUserManagementContext();
+  const { data: session } = useSession();
 
   const { schools } = schoolState;
   const { users } = userState;
@@ -174,7 +178,12 @@ function ProfileForm({ id }: ProfileFormProps) {
         school: user.school,
         schoolId: values.schoolId,
       };
-      dispatch({ type: "EDIT_USER", payload: updatedUser });
+
+      if (session?.user?.role === "ADMIN") {
+        dispatch({ type: "EDIT_USER", payload: updatedUser });
+      } else if (session?.user?.role === "TEACHER") {
+        teacherDispatch({ type: "EDIT_USER", payload: updatedUser });
+      }
     } else {
       toast({
         variant: "destructive",
