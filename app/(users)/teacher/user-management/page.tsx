@@ -1,18 +1,12 @@
 "use client";
+import TotalPendingUser from "@/components/(users)/teacher/user-management/cards/totalPendingUser";
 import TotalStudents from "@/components/(users)/teacher/user-management/cards/totalStudents";
 import TotalTeachers from "@/components/(users)/teacher/user-management/cards/totalTeachers";
 import TotalUsers from "@/components/(users)/teacher/user-management/cards/totalUsers";
-import Tablist from "@/components/(users)/teacher/user-management/Tablist";
+import TeacherUserTabList from "@/components/(users)/teacher/user-management/TeacherUserTabList";
 import { useTeacherUserManagementContext } from "@/context/TeacherUserManagementContext";
 import { useSession } from "next-auth/react";
-import React, { useEffect, useState } from "react";
-
-interface SchoolModel {
-  label: string;
-  value: string;
-  image: string | null;
-  id: string;
-}
+import React, { useEffect } from "react";
 
 const UserManagement = () => {
   const { state, dispatch } = useTeacherUserManagementContext();
@@ -33,26 +27,18 @@ const UserManagement = () => {
       <h4 className="scroll-m-20 text-xl font-semibold tracking-tight lg:mt-4">
         User Management
       </h4>
-      <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 lg:gap-x-12 mt-2">
+      <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-x-12 mt-2">
         <TotalUsers />
         <TotalTeachers />
-        <div className="col-span-2 lg:col-span-1">
+        <TotalStudents />
+        <TotalPendingUser />
+        {/* <div className="col-span-2 lg:col-span-1">
           <TotalStudents />
-        </div>
+        </div> */}
       </div>
+
       {/* Tables */}
-      <h4 className="scroll-m-20 text-xl font-semibold tracking-tight lg:mt-8">
-        Teacher Management
-      </h4>
-      <div className="mt-4">
-        <Tablist filter="TEACHER" />
-      </div>
-      <h4 className="scroll-m-20 text-xl font-semibold tracking-tight lg:mt-8">
-        Student Management
-      </h4>
-      <div className="mt-4">
-        <Tablist filter="STUDENT" />
-      </div>
+      <TeacherUserTabList />
     </div>
   );
 };

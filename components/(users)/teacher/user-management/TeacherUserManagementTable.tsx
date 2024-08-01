@@ -6,6 +6,7 @@ import { DataTable } from "../../admin/user-management/tables/teacherTable/data-
 import { columns } from "../../admin/user-management/tables/teacherTable/column";
 import { useTeacherUserManagementContext } from "@/context/TeacherUserManagementContext";
 import { Skeleton } from "@/components/ui/skeleton";
+import { pendingColumn } from "./pending-column";
 
 interface SchoolModel {
   label: string;
@@ -28,6 +29,7 @@ const TeacherUserManagementTable = ({
 
   const studentUsers = state.studentUsers;
   const teacherUsers = state.teacherUsers;
+  const pendingUsers = state.pendingUsers;
   useEffect(() => {
     dispatch({ type: "SET_ROLE", payload: role });
 
@@ -63,6 +65,9 @@ const TeacherUserManagementTable = ({
                 )}
                 {role === "STUDENT" && (
                   <DataTable columns={columns} data={studentUsers} />
+                )}
+                {role === "PENDING" && (
+                  <DataTable columns={pendingColumn} data={pendingUsers} />
                 )}
               </div>
             )}

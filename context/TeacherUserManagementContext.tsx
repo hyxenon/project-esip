@@ -11,6 +11,7 @@ import React, {
 import {
   getAllUsersByStudent,
   getAllUsersByTeacher,
+  getPendingUsers,
 } from "@/actions/userManagement";
 import { SchoolModel } from "@/components/(users)/admin/school-management/SchoolForm";
 import { User } from "@/components/(users)/admin/user-management/tables/teacherTable/column";
@@ -27,11 +28,25 @@ export type UserModel = {
   school?: SchoolModel | null;
 };
 
+export type PendingUserModel = {
+  id: string;
+  name: string | null;
+  email: string | null;
+  role: string;
+  image?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  schoolId: string | null;
+  school?: SchoolModel | null;
+  isPending?: boolean;
+};
+
 type State = {
   selectedSchool: string;
   role: string;
   teacherUsers: User[];
   studentUsers: User[];
+  pendingUsers: PendingUserModel[];
   isLoading: boolean;
 };
 
@@ -43,11 +58,15 @@ type Action =
   | { type: "EDIT_USER"; payload: User }
   | { type: "SET_SELECTED_SCHOOL"; payload: string }
   | { type: "SET_ROLE"; payload: string }
-  | { type: "SET_LOADING"; payload: boolean };
+  | { type: "SET_LOADING"; payload: boolean }
+  | { type: "SET_PENDING_USERS"; payload: PendingUserModel[] }
+  | { type: "ADD_PENDING_USERS"; payload: PendingUserModel }
+  | { type: "DELETE_PENDING_USER"; payload: string };
 
 const initialState: State = {
   teacherUsers: [],
   studentUsers: [],
+  pendingUsers: [],
   selectedSchool: "",
   role: "",
   isLoading: true,
@@ -63,6 +82,8 @@ const userManagementReducer = (state: State, action: Action): State => {
       return { ...state, teacherUsers: action.payload };
     case "SET_STUDENT_USERS":
       return { ...state, studentUsers: action.payload };
+    case "SET_SELECTED_SCHOOL":
+      return { ...state, selectedSchool: action.payload };
     case "ADD_USER":
       return {
         ...state,
@@ -81,6 +102,14 @@ const userManagementReducer = (state: State, action: Action): State => {
               ]
             : state.studentUsers,
       };
+    case "ADD_PENDING_USERS":
+      return {
+        ...state,
+        pendingUsers: [
+          ...state.pendingUsers,
+          { ...action.payload, school: action.payload.school || null },
+        ],
+      };
     case "DELETE_USER":
       return {
         ...state,
@@ -88,6 +117,13 @@ const userManagementReducer = (state: State, action: Action): State => {
           (user) => user.id !== action.payload
         ),
         studentUsers: state.studentUsers.filter(
+          (user) => user.id !== action.payload
+        ),
+      };
+    case "DELETE_PENDING_USER":
+      return {
+        ...state,
+        pendingUsers: state.pendingUsers.filter(
           (user) => user.id !== action.payload
         ),
       };
@@ -101,12 +137,12 @@ const userManagementReducer = (state: State, action: Action): State => {
           user.id === action.payload.id ? action.payload : user
         ),
       };
-    case "SET_SELECTED_SCHOOL":
-      return { ...state, selectedSchool: action.payload };
     case "SET_ROLE":
       return { ...state, role: action.payload };
     case "SET_LOADING":
       return { ...state, isLoading: action.payload };
+    case "SET_PENDING_USERS":
+      return { ...state, pendingUsers: action.payload };
     default:
       return state;
   }
@@ -124,11 +160,13 @@ export const TeacherUserManagementProvider = ({
       try {
         const teacherUsers = await getAllUsersByTeacher(state.selectedSchool);
         const studentUsers = await getAllUsersByStudent(state.selectedSchool);
+        const pendingUsers = await getPendingUsers(state.selectedSchool);
+
         dispatch({ type: "SET_TEACHER_USERS", payload: teacherUsers });
         dispatch({ type: "SET_STUDENT_USERS", payload: studentUsers });
+        dispatch({ type: "SET_PENDING_USERS", payload: pendingUsers });
       } catch (error) {
         console.error("Error fetching users:", error);
-        // Optionally, you might want to dispatch an error action here
       }
     };
     fetchData().then(() => {
