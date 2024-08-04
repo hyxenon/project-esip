@@ -9,8 +9,13 @@ import { Sheet, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { FaAlignLeft } from "react-icons/fa6";
 import MobileMenu from "./admin/mobileMenu";
+import { StudentNavbarMenu } from "./studentNavbarMenu";
 
-const Navbar = () => {
+type NavbarProps = {
+  role: string;
+};
+
+const Navbar = ({ role }: NavbarProps) => {
   const { data: session } = useSession();
 
   return (
@@ -31,7 +36,8 @@ const Navbar = () => {
         </p>
       </div>
       <div className="hidden lg:flex flex-1">
-        <TeacherNavbarMenu />
+        {role == "TEACHER" ? <TeacherNavbarMenu /> : <StudentNavbarMenu />}
+
         <ProfileIcon />
       </div>
     </div>

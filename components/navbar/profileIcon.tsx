@@ -9,13 +9,14 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { CiLogout } from "react-icons/ci";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 type ProfileIconProps = {
   profileImg?: string;
 };
 
 const ProfileIcon = ({ profileImg }: ProfileIconProps) => {
+  const { data: session } = useSession();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="ml-auto">
@@ -29,6 +30,10 @@ const ProfileIcon = ({ profileImg }: ProfileIconProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-xs text-gray-600">
+          <p>{session?.user?.name}</p>
+          <p>{session?.user?.email}</p>
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>Profile</DropdownMenuItem>
         <DropdownMenuItem>
