@@ -52,7 +52,7 @@ export function TeacherNavbarMenu() {
                 Real-time chat functionality for users to communicate within the
                 app.
               </ListItem>
-              <ListItem href="" title="Grammar Checker">
+              <ListItem href="/grammar-checker" title="Grammar Checker">
                 Automatically check and correct grammar errors for your
                 research.
               </ListItem>

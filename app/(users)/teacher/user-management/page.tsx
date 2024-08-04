@@ -23,18 +23,16 @@ const UserManagement = () => {
   }, [session]);
 
   return (
-    <div className="flex flex-col px-3 lg:py-4 lg:px-16">
+    <div className="flex flex-col px-3 md:px-8 lg:py-4 lg:px-16 xl:px-28">
       <h4 className="scroll-m-20 text-xl font-semibold tracking-tight lg:mt-4">
         User Management
       </h4>
-      <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-x-12 mt-2">
+      <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 mt-2">
         <TotalUsers />
         <TotalTeachers />
-        <TotalStudents />
-        <TotalPendingUser />
-        {/* <div className="col-span-2 lg:col-span-1">
+        <div className="col-span-2 lg:col-span-1">
           <TotalStudents />
-        </div> */}
+        </div>
       </div>
 
       {/* Tables */}

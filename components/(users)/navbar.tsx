@@ -12,8 +12,9 @@ import MobileMenu from "./admin/mobileMenu";
 
 const Navbar = () => {
   const { data: session } = useSession();
+
   return (
-    <div className="lg:px-16 flex items-center gap-x-8 lg:shadow lg:py-4">
+    <div className={`lg:px-16 flex items-center gap-x-8 lg:shadow lg:py-4`}>
       <Sheet>
         <SheetTrigger asChild>
           <Button className="flex lg:hidden mb-4" variant="ghost" size={"icon"}>

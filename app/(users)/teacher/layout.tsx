@@ -1,5 +1,3 @@
-// admin/layout.tsx
-
 import type { Metadata } from "next";
 
 import Navbar from "@/components/(users)/navbar";
@@ -21,7 +19,7 @@ export default function TeacherLayout({
     <SchoolProvider>
       <UserManagementProvider>
         <TeacherUserManagementProvider>
-          <div className="flex flex-col">
+          <div className="flex flex-col py-4">
             <Navbar />
             <div className="flex-1">{children}</div>
           </div>
