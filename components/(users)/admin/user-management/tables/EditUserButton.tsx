@@ -59,6 +59,9 @@ import {
   UserModel,
   useUserManagementContext,
 } from "@/context/UserManagementContext";
+import { User } from "./teacherTable/column";
+import { useSession } from "next-auth/react";
+import { useTeacherUserManagementContext } from "@/context/TeacherUserManagementContext";
 
 interface EditUserButtonProps {
   isOpen: boolean;
@@ -115,6 +118,8 @@ type UserEditModel = {
 function ProfileForm({ id }: ProfileFormProps) {
   const { state: schoolState } = useSchoolContext();
   const { state: userState, dispatch } = useUserManagementContext();
+  const { dispatch: teacherDispatch } = useTeacherUserManagementContext();
+  const { data: session } = useSession();
 
   const { schools } = schoolState;
   const { users } = userState;
@@ -162,7 +167,7 @@ function ProfileForm({ id }: ProfileFormProps) {
         title: "User Updated Successfully",
         description: `Updated changes to ${userData?.name}`,
       });
-      const updatedUser: UserModel = {
+      const updatedUser: User = {
         id: user.id,
         email: values.email,
         image: values.image,
@@ -173,7 +178,12 @@ function ProfileForm({ id }: ProfileFormProps) {
         school: user.school,
         schoolId: values.schoolId,
       };
-      dispatch({ type: "EDIT_USER", payload: updatedUser }); // Update user in the global context
+
+      if (session?.user?.role === "ADMIN") {
+        dispatch({ type: "EDIT_USER", payload: updatedUser });
+      } else if (session?.user?.role === "TEACHER") {
+        teacherDispatch({ type: "EDIT_USER", payload: updatedUser });
+      }
     } else {
       toast({
         variant: "destructive",
@@ -203,9 +213,11 @@ function ProfileForm({ id }: ProfileFormProps) {
               height={70}
               className="rounded-full"
             />
-            <Button type="button" size={"sm"} className="mt-2 mb-4">
-              Change Profile Picture
-            </Button>
+            {session?.user?.role === "ADMIN" && (
+              <Button type="button" size={"sm"} className="mt-2 mb-4">
+                Change Profile Picture
+              </Button>
+            )}
           </div>
           <div className="grid grid-cols-2 gap-x-4">
             <FormField
@@ -320,47 +332,49 @@ function ProfileForm({ id }: ProfileFormProps) {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent side="left" className=" p-0">
-                      <Command>
-                        <CommandList>
-                          <CommandEmpty>No schools found.</CommandEmpty>
-                          <CommandGroup>
-                            {schools?.map((school) => (
-                              <CommandItem
-                                value={school.schoolName}
-                                key={school.id}
-                                onSelect={() => {
-                                  form.setValue("schoolId", school.id);
-                                }}
-                              >
-                                <div className="flex gap-4">
-                                  <Image
-                                    alt="logo"
-                                    src={
-                                      school.image === null
-                                        ? "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
-                                        : school.image
-                                    }
-                                    width={20}
-                                    height={10}
-                                  />
-                                  {school.schoolName}
-                                </div>
+                    {session?.user?.role === "ADMIN" && (
+                      <PopoverContent side="left" className=" p-0">
+                        <Command>
+                          <CommandList>
+                            <CommandEmpty>No schools found.</CommandEmpty>
+                            <CommandGroup>
+                              {schools?.map((school) => (
+                                <CommandItem
+                                  value={school.schoolName}
+                                  key={school.id}
+                                  onSelect={() => {
+                                    form.setValue("schoolId", school.id);
+                                  }}
+                                >
+                                  <div className="flex gap-4">
+                                    <Image
+                                      alt="logo"
+                                      src={
+                                        school.image === null
+                                          ? "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
+                                          : school.image
+                                      }
+                                      width={20}
+                                      height={10}
+                                    />
+                                    {school.schoolName}
+                                  </div>
 
-                                <CheckIcon
-                                  className={cn(
-                                    "ml-auto h-4 w-4",
-                                    school.id === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
+                                  <CheckIcon
+                                    className={cn(
+                                      "ml-auto h-4 w-4",
+                                      school.id === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    )}
                   </Popover>
                   <FormMessage />
                 </FormItem>

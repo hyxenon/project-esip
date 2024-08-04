@@ -13,6 +13,7 @@ export const getAllUsersByTeacher = async (filter: string): Promise<User[]> => {
       users = await db.user.findMany({
         where: {
           role: 'TEACHER',
+          isPending: false
         },
         select: {
           id: true,
@@ -31,6 +32,7 @@ export const getAllUsersByTeacher = async (filter: string): Promise<User[]> => {
         where: {
           role: 'TEACHER',
           schoolId: filter,
+          isPending: false
         },
         select: {
           id: true,
@@ -46,16 +48,16 @@ export const getAllUsersByTeacher = async (filter: string): Promise<User[]> => {
       });
     }
 
-    // Ensure all users conform to the UserModel type
+
     return users.map(user => ({
       ...user,
       name: user.name || "",
-      email: user.email || "", // Ensure email is always a string
+      email: user.email || "", 
       schoolId: user.schoolId || null,
     })) as User[];
   } catch (error) {
     console.error('Error fetching users:', error);
-    throw error; // Handle error appropriately in your application
+    throw error; 
   }
 };
 
@@ -68,6 +70,7 @@ export const getAllUsersByStudent = async (filter: string): Promise<User[]> => {
       users = await db.user.findMany({
         where: {
           role: 'STUDENT',
+          isPending: false
         },
         select: {
           id: true,
@@ -86,6 +89,7 @@ export const getAllUsersByStudent = async (filter: string): Promise<User[]> => {
         where: {
           role: 'STUDENT',
           schoolId: filter,
+          isPending: false
         },
         select: {
           id: true,
@@ -110,6 +114,38 @@ export const getAllUsersByStudent = async (filter: string): Promise<User[]> => {
   } catch (error) {
     console.error('Error fetching students:', error);
     return []; // Return an empty array in case of error
+  }
+};
+
+export const getPendingUsers = async (schoolId: string): Promise<User[]> => {
+  try {
+    const users = await db.user.findMany({
+      where: {
+        schoolId: schoolId,
+        isPending: true,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        image: true,
+        createdAt: true,
+        updatedAt: true,
+        school: true,
+        schoolId: true,
+      },
+    });
+
+    return users.map(user => ({
+      ...user,
+      name: user.name || "",
+      email: user.email || "",
+      schoolId: user.schoolId || null,
+    })) as User[];
+  } catch (error) {
+    console.error('Error fetching pending users:', error);
+    throw error;
   }
 };
 
@@ -171,6 +207,29 @@ export const updateUser = async (id: string, values: z.infer<typeof UserEditSche
   }
 };
 
+export const acceptPendingUser = async (userId: string) => {
+  try {
+
+    const existingUser = await db.user.findUnique({
+      where: { id: userId }
+    });
+
+    if (!existingUser) {
+      throw new Error('User not found');
+    }
+
+    const updatedUser = await db.user.update({
+      where: {id: userId} , data : { isPending: false} ,include: {school: true}
+    })
+
+    return { success: true}
+  
+  } catch ( error) {
+    console.error("Error updating user: ", error)
+    return { success: false, error: "Failed to remove user request."}
+  }
+}
+
 
 export const deleteUser = async (userId: string) => {
   try {
@@ -183,6 +242,21 @@ export const deleteUser = async (userId: string) => {
     return { success: false, error: "Failed to delete user." };
   }
 }
+
+
+export const deletePendingUser = async (userId: string) => {
+  try{
+    await db.user.delete({
+      where: {id: userId}
+    })
+    return { success: true}
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return { success: false, error: "Failed to delete user." };
+  }
+}
+
+
 
 
 

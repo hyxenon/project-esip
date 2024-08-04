@@ -1,4 +1,4 @@
-import { deleteUser } from "@/actions/userManagement";
+import { acceptPendingUser, deletePendingUser } from "@/actions/userManagement";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,72 +10,64 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
-import { useSchoolContext } from "@/context/SchoolContext";
 import { useTeacherUserManagementContext } from "@/context/TeacherUserManagementContext";
-import { useUserManagementContext } from "@/context/UserManagementContext";
-import { useSession } from "next-auth/react";
-
-interface DeleteUserButtonProps {
+interface AcceptPendingProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   name: string | null;
   id: string;
 }
-const DeleteUserButton = ({
+const AcceptPendingUser = ({
   isOpen,
   setIsOpen,
   name,
   id,
-}: DeleteUserButtonProps) => {
+}: AcceptPendingProps) => {
   const { toast } = useToast();
-  const { dispatch } = useUserManagementContext();
+
   const { dispatch: teacherDispatch } = useTeacherUserManagementContext();
-  const { data: session } = useSession();
 
   const handleDeleteUser = async () => {
-    const response = await deleteUser(id);
+    const res = await acceptPendingUser(id);
 
-    if (response.success) {
+    if (res.success) {
       toast({
         variant: "success",
         title: "Success",
-        description: "User deleted successfully.",
+        description: "User request accepted.",
       });
 
-      if (session?.user?.role === "ADMIN") {
-        dispatch({ type: "DELETE_USER", payload: id });
-      } else if (session?.user?.role === "TEACHER") {
-        teacherDispatch({ type: "DELETE_USER", payload: id });
-      }
+      teacherDispatch({ type: "DELETE_PENDING_USER", payload: id });
     } else {
       toast({
         variant: "destructive",
         title: "Error",
-        description: response.error || "Failed to delete user.",
+        description: res.error || "Failed to accept user.",
       });
     }
-
-    setIsOpen(false); // Close the dialog
+    setIsOpen(false);
   };
+
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you absolutely sure you want to delete {name}?
+            Are you absolutely sure you want to accept {name} request?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the user
-            account and remove this data from our servers.
+            This action can be undone. The user's pending request will be
+            removed from your school. This user can now access the website and
+            if this is a mistake you can delete them in the user specific tab.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            className="bg-destructive hover:bg-destructive"
+            className="bg-[#606C38] hover:bg-[#606C38]"
             onClick={handleDeleteUser}
           >
-            Delete
+            Accept Request
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -83,4 +75,4 @@ const DeleteUserButton = ({
   );
 };
 
-export default DeleteUserButton;
+export default AcceptPendingUser;

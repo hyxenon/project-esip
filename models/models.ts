@@ -7,6 +7,22 @@ export type registerSchema = {
   password: string;
 };
 
+export type PaperItemModel = {
+  title: string
+  id: string
+  date: Date
+  category: string
+}
+
+export type ResearchPaperModel = {
+  title: string
+  id: string
+  date: Date
+  category: string
+  adviser: string
+  type: string
+}
+
 export const LoginSchema = z.object({
   email: z.string().email({
     message: "Email is required",

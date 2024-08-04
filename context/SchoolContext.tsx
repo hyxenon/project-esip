@@ -13,16 +13,19 @@ import { SchoolModel } from "@/components/(users)/admin/school-management/School
 
 type State = {
   schools: SchoolModel[];
+  isLoading: boolean;
 };
 
 type Action =
   | { type: "SET_SCHOOLS"; payload: SchoolModel[] }
   | { type: "ADD_SCHOOL"; payload: SchoolModel }
   | { type: "DELETE_SCHOOL"; payload: string }
-  | { type: "EDIT_SCHOOL"; payload: SchoolModel };
+  | { type: "EDIT_SCHOOL"; payload: SchoolModel }
+  | { type: "SET_LOADING"; payload: boolean };
 
 const initialState: State = {
   schools: [],
+  isLoading: true,
 };
 
 const SchoolContext = createContext<
@@ -47,6 +50,8 @@ const schoolReducer = (state: State, action: Action): State => {
           school.id === action.payload.id ? action.payload : school
         ),
       };
+    case "SET_LOADING":
+      return { ...state, isLoading: action.payload };
     default:
       return state;
   }
@@ -61,7 +66,9 @@ export const SchoolProvider = ({ children }: { children: ReactNode }) => {
       dispatch({ type: "SET_SCHOOLS", payload: res.message });
     };
 
-    fetchData();
+    fetchData().then(() => {
+      dispatch({ type: "SET_LOADING", payload: false });
+    });
   }, []);
 
   return (

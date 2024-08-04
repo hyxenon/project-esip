@@ -31,6 +31,7 @@ type State = {
   users: User[];
   selectedSchool: string;
   role: string;
+  isLoading: boolean;
 };
 
 type Action =
@@ -39,12 +40,14 @@ type Action =
   | { type: "DELETE_USER"; payload: string }
   | { type: "EDIT_USER"; payload: User }
   | { type: "SET_SELECTED_SCHOOL"; payload: string }
-  | { type: "SET_ROLE"; payload: string };
+  | { type: "SET_ROLE"; payload: string }
+  | { type: "SET_LOADING"; payload: boolean };
 
 const initialState: State = {
   users: [],
   selectedSchool: "all",
   role: "",
+  isLoading: true,
 };
 
 const UserManagementContext = createContext<
@@ -79,6 +82,8 @@ const userManagementReducer = (state: State, action: Action): State => {
       return { ...state, selectedSchool: action.payload };
     case "SET_ROLE":
       return { ...state, role: action.payload };
+    case "SET_LOADING":
+      return { ...state, isLoading: action.payload };
     default:
       return state;
   }
@@ -98,6 +103,7 @@ export const UserManagementProvider = ({
       try {
         if (state.role === "TEACHER") {
           users = await getAllUsersByTeacher(state.selectedSchool);
+          console.log(state.selectedSchool);
         } else if (state.role === "STUDENT") {
           users = await getAllUsersByStudent(state.selectedSchool);
         }
@@ -107,6 +113,8 @@ export const UserManagementProvider = ({
         console.error("Error fetching users:", error);
         // Optionally, you might want to dispatch an error action here
       }
+
+      dispatch({ type: "SET_LOADING", payload: false });
     };
 
     fetchData();

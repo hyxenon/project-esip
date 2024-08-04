@@ -12,25 +12,14 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
-import { SchoolModel } from "../../../school-management/SchoolForm";
+
 import { useState } from "react";
-import DeleteUserButton from "../DeleteUserButton";
-import EditUserButton from "../EditUserButton";
-import { Badge } from "@/components/ui/badge";
 
-export type User = {
-  id: string;
-  name: string | null;
-  email: string;
-  role: string;
-  image?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  schoolId: string | null;
-  school?: SchoolModel | null;
-};
+import { PendingUserModel } from "@/context/TeacherUserManagementContext";
+import DeletePendingUser from "./delete-pending-user";
+import AcceptPendingUser from "./accept-pending-user";
 
-export const columns: ColumnDef<User>[] = [
+export const pendingColumn: ColumnDef<PendingUserModel>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -107,31 +96,42 @@ export const columns: ColumnDef<User>[] = [
 
   {
     accessorKey: "role",
-    header: "Role",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Role
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const user = row.original;
-      return <Badge className="bg-[#283618]">{user.role}</Badge>;
+      return <p className="">{user.role}</p>;
     },
   },
   {
     id: "actions",
     cell: ({ row }) => {
       const user = row.original;
-      const [isEditOpen, setIsEditOpen] = useState(false);
+      const [isAcceptOpen, setIsAcceptOpen] = useState(false);
       const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
       return (
         <>
-          <DeleteUserButton
+          <DeletePendingUser
+            id={user.id}
             isOpen={isDeleteOpen}
-            setIsOpen={setIsDeleteOpen}
             name={user.name}
-            id={user.id}
+            setIsOpen={setIsDeleteOpen}
           />
-          <EditUserButton
-            isOpen={isEditOpen}
-            setIsOpen={setIsEditOpen}
+          <AcceptPendingUser
             id={user.id}
+            isOpen={isAcceptOpen}
+            setIsOpen={setIsAcceptOpen}
+            name={user.name}
           />
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
@@ -142,16 +142,15 @@ export const columns: ColumnDef<User>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem>View User</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
-                Edit User
+              <DropdownMenuItem onClick={() => setIsAcceptOpen(true)}>
+                Accept
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="text-red-500"
                 onClick={() => setIsDeleteOpen(true)}
               >
-                Delete User
+                Decline
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

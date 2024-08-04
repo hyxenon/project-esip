@@ -40,7 +40,8 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
       email: email,
       password: hashedPassword,
       schoolId: schoolId,
-      role: userRole
+      role: userRole,
+      isPending: true
     },
     include: {
       school: true

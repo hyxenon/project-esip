@@ -5,6 +5,7 @@ import { columns } from "./tables/teacherTable/column";
 import { useUserManagementContext } from "@/context/UserManagementContext";
 import AddUserTeacher from "./tables/AddUserTeacher";
 import { useEffect } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface SchoolModel {
   label: string;
@@ -14,7 +15,7 @@ interface SchoolModel {
 }
 
 type TeacherTableProps = {
-  selectedSchool: SchoolModel | null;
+  selectedSchool?: SchoolModel | null;
   role: string;
 };
 
@@ -39,7 +40,19 @@ const TeacherTable = ({ selectedSchool, role }: TeacherTableProps) => {
         </div>
         <section className="w-full">
           <div className="">
-            <DataTable columns={columns} data={users} />
+            {state.isLoading ? (
+              <div className="flex items-center space-x-4">
+                <Skeleton className="h-12 w-12 rounded-full" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-[250px]" />
+                  <Skeleton className="h-4 w-[200px]" />
+                </div>
+              </div>
+            ) : (
+              <div>
+                <DataTable columns={columns} data={users} />
+              </div>
+            )}
           </div>
         </section>
       </CardContent>

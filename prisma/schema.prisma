@@ -32,6 +32,7 @@ model User {
   accounts      Account[]
   school        School?   @relation(fields: [schoolId], references: [id])
   schoolId      String?
+  isPending     Boolean?
 }
 
 model Account {

@@ -12,13 +12,13 @@ import { CiLogout } from "react-icons/ci";
 import { signOut } from "next-auth/react";
 
 type ProfileIconProps = {
-  profileImg: string;
+  profileImg?: string;
 };
 
 const ProfileIcon = ({ profileImg }: ProfileIconProps) => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className="ml-auto">
         <Avatar>
           <AvatarImage
             src={profileImg ? profileImg : "https://github.com/shadcn.png"}
@@ -34,7 +34,7 @@ const ProfileIcon = ({ profileImg }: ProfileIconProps) => {
         <DropdownMenuItem>
           <div
             onClick={() => signOut()}
-            className="flex items-center justify-between w-full"
+            className="flex items-center justify-between w-full cursor-pointer"
           >
             Log Out <CiLogout color="red" />
           </div>
