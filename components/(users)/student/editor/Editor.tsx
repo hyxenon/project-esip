@@ -56,16 +56,16 @@ export function Editor({
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <div className="editor-container size-full">
+      <div className="size-full ">
         <div className="toolbar-wrapper flex min-w-full justify-between">
           <ToolbarPlugin />
           {currentUserType === "editor" && <DeleteModal roomId={roomId} />}
         </div>
-        <div className="editor-wrapper flex flex-col items-center justify-start">
+        <div className="editor-wrapper flex flex-col items-center justify-start bg-gray-100">
           {status === "not-loaded" || status === "loading" ? (
             <Loader />
           ) : (
-            <div className="editor-inner min-h-[1100px] relative mb-5 h-fit w-full max-w-[800px] border shadow-md lg:mb-10">
+            <div className="min-h-[1100px] relative mb-5 h-fit w-full max-w-[800px] shadow-lg border bg-white lg:mb-10">
               <RichTextPlugin
                 contentEditable={
                   <ContentEditable className="editor-input h-full" />

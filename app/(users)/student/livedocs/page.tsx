@@ -2,6 +2,7 @@ import { getDocuments } from "@/actions/room.action";
 import { auth } from "@/auth";
 import AddDocumentBtn from "@/components/(users)/student/AddDocumentBtn";
 import { DeleteModal } from "@/components/(users)/student/DeleteModal";
+import { Card } from "@/components/ui/card";
 
 import { dateConverter } from "@/lib/utils";
 
@@ -16,19 +17,22 @@ const LiveDocs = async () => {
 
   const roomDocuments = await getDocuments(session.user?.email || "");
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center mt-4">
       {roomDocuments.data.length > 0 ? (
         <div className="document-list-container">
           <div className="document-list-title">
-            <h3 className="text-28-semibold">All documents</h3>
+            <h3 className="text-xl">All documents</h3>
             <AddDocumentBtn
               userId={session.user?.id || ""}
               email={session.user?.email || ""}
             />
           </div>
-          <ul className="document-ul">
+          <Card className="document-ul">
             {roomDocuments.data.map(({ id, metadata, createdAt }: any) => (
-              <li className="document-list-item" key={id}>
+              <li
+                className="document-list-item hover:bg-slate-100 border"
+                key={id}
+              >
                 <Link
                   href={`/student/livedocs/${id}`}
                   className="flex flex-1 items-center gap-4"
@@ -42,7 +46,7 @@ const LiveDocs = async () => {
                     />
                     <div className="space-y-1">
                       <p className="line-clamp-1 text-lg">{metadata.title}</p>
-                      <p className="text-sm font-light text-blue-400">
+                      <p className="text-sm text-blue-500">
                         Created about {dateConverter(createdAt)}
                       </p>
                     </div>
@@ -51,7 +55,7 @@ const LiveDocs = async () => {
                 <DeleteModal roomId={id} />
               </li>
             ))}
-          </ul>
+          </Card>
         </div>
       ) : (
         <div className="document-list-empty">

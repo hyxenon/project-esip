@@ -4,11 +4,13 @@ import { createDocument } from "@/actions/room.action";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 
 const AddDocumentBtn = ({ userId, email }: AddDocumentBtnProps) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const addDocumentHandler = async () => {
+    setLoading(true);
     try {
       const room = await createDocument({ userId, email });
 
@@ -21,10 +23,13 @@ const AddDocumentBtn = ({ userId, email }: AddDocumentBtnProps) => {
     <Button
       type="submit"
       onClick={addDocumentHandler}
-      className="gradient-blue flex gap-1 shadow-md"
+      className="bg-[#283618] hover:bg-[#606C38] flex gap-1 shadow-md"
+      disabled={loading}
     >
       <Image src={"/assets/icons/add.svg"} alt="add" width={24} height={24} />
-      <p className="hidden sm:block">Start a blank document</p>
+      <p className="hidden sm:block">
+        {loading ? "loading..." : "Start a blank document"}
+      </p>
     </Button>
   );
 };
