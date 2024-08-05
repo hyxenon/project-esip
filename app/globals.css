@@ -2,9 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "@liveblocks/react-ui/styles.css";
+@import "@liveblocks/react-lexical/styles.css";
+
+@import "../styles/light-theme.css";
+
 html,
 body,
-:root{
+:root {
   height: 100%;
 }
 
@@ -15,63 +20,63 @@ body,
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
- 
+
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
- 
+
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
- 
+
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
- 
+
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
- 
+
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
- 
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
- 
+
     --radius: 0.5rem;
   }
- 
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
- 
+
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
- 
+
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
- 
+
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
- 
+
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
- 
+
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
- 
+
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
- 
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
- 
+
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
 }
- 
+
 @layer base {
   * {
     @apply border-border;
@@ -80,3 +85,191 @@ body,
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .bg-dark-100 {
+    background-color: #060d18;
+  }
+  .bg-dark-200 {
+    background-color: #0f1c34;
+  }
+  .bg-dark-300 {
+    background-color: #1b2840;
+  }
+  .bg-dark-350 {
+    background-color: #0b1527;
+  } 
+  .border-dark-400 {
+    border-color: #1a202c; /* Use your desired border color */
+  }
+  
+  .text-28-semibold {
+    @apply text-[28px] font-semibold;
+  }
+  .text-10-regular {
+    @apply text-[10px] font-normal;
+  }
+
+  .gradient-blue {
+    @apply bg-gradient-to-t from-blue-500 to-blue-400;
+  }
+  .gradient-red {
+    @apply bg-gradient-to-t from-red-500 to-red-400;
+  }
+
+  .shad-dialog {
+    @apply w-full max-w-[400px] rounded-xl border-none px-5 py-7 shadow-xl sm:min-w-[500px] !important;
+  }
+
+  .shad-dialog button {
+    @apply focus:ring-0 focus:ring-offset-0 focus-visible:border-none focus-visible:outline-none focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
+  }
+
+  .shad-select {
+    @apply w-fit border-none bg-transparent text-blue-100 !important;
+  }
+
+  .shad-select svg {
+    @apply ml-1 mt-1;
+  }
+
+  .shad-select-item {
+    @apply cursor-pointer bg-dark-200 text-blue-100 focus:bg-dark-300 hover:bg-dark-300 focus:text-blue-100 !important;
+  }
+
+  .shad-popover {
+    @apply w-[460px] shadow-lg !important;
+  }
+
+  .floating-toolbar {
+    @apply flex w-full min-w-max items-center justify-center gap-2 rounded-lg bg-gray-200 border p-1.5 shadow-md;
+  }
+
+  .floating-toolbar-btn {
+    @apply relative inline-flex size-8 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .toolbar-wrapper {
+    @apply z-50 w-screen overflow-auto border-y  pl-3 pr-4 shadow-sm;
+  }
+
+  .editor-wrapper {
+    @apply  h-[calc(100vh-140px)] gap-5 overflow-auto px-5 pt-5 lg:flex-row lg:items-start lg:justify-center xl:gap-10 xl:pt-10;
+  }
+
+  .header {
+    @apply min-h-[92px] min-w-full flex-nowrap text-black flex w-full items-center justify-between gap-2 px-4;
+  }
+
+  .document-list-container {
+    @apply flex flex-col items-center mb-10 w-full gap-10 px-5;
+  }
+
+  .document-list-title {
+    @apply max-w-[730px] items-end flex w-full justify-between;
+  }
+
+  .document-list-item {
+    @apply flex items-center justify-between gap-4 rounded-lg p-5;
+  }
+
+  .document-list-empty {
+    @apply flex w-full max-w-[730px] flex-col items-center justify-center gap-5 rounded-lg bg-dark-200 px-10 py-8;
+  }
+
+  .document-title-input {
+    @apply min-w-[78px] border-none bg-transparent px-0 text-left text-base font-semibold leading-[24px] focus-visible:ring-0 focus-visible:ring-offset-0 disabled:text-black sm:text-xl md:text-center !important;
+  }
+
+  .document-title {
+    @apply line-clamp-1 border-dark-400 text-base font-semibold leading-[24px] sm:pl-0 sm:text-xl;
+  }
+
+  .view-only-tag {
+    @apply rounded-md bg-green-500 px-2 py-0.5 text-xs text-blue-100/50;
+  }
+
+  .collaborators-list {
+    @apply hidden items-center justify-end -space-x-3 overflow-hidden sm:flex;
+  }
+
+  .share-input {
+    @apply h-11 flex-1 border focus-visible:ring-0 focus-visible:ring-offset-0 !important;
+  }
+
+  .remove-btn {
+    @apply rounded-lg bg-transparent px-0 text-red-500 hover:bg-transparent;
+  }
+
+  .comments-container {
+    @apply mb-10 space-y-4 lg:w-fit flex w-full flex-col items-center justify-center;
+  }
+
+  .comment-composer {
+    @apply w-full max-w-[800px] border shadow-sm lg:w-[350px];
+  }
+
+  .comment-thread {
+    @apply w-full max-w-[800px] border  shadow-sm lg:w-[350px] transition-all;
+  }
+
+  .loader {
+    @apply flex size-full h-screen items-center justify-center gap-3 text-white;
+  }
+
+  /* ======================== Auth Pages */
+  .auth-page {
+    @apply flex h-screen w-full flex-col items-center justify-center gap-10;
+  }
+
+  /* ======================== Home Page */
+  .home-container {
+    @apply relative flex min-h-screen w-full flex-col items-center gap-5 sm:gap-10;
+  }
+
+  .document-ul {
+    @apply flex w-full max-w-[730px] flex-col;
+  }
+
+  /* ======================== CollaborativeRoom */
+  .collaborative-room {
+    @apply flex size-full max-h-screen flex-1 flex-col items-center overflow-hidden;
+  }
+}
+
+/* ======================== Clerk Override */
+.cl-avatarBox {
+  width: 36px;
+  height: 36px;
+}
+
+.cl-userButtonTrigger {
+  height: fit-content !important;
+}
+
+.cl-cardBox,
+.cl-signIn-start,
+.cl-signUp-start,
+.cl-footer {
+  background: #060d18;
+  box-shadow: none;
+  padding: 20px;
+}
+
+.cl-socialButtonsBlockButton,
+.cl-socialButtonsBlockButton:hover {
+  height: 40px;
+  background-color: #3371ff;
+  color: #fff;
+}
+
+.cl-internal-2gzuzc {
+  filter: brightness(1000%);
+}
+
+.cl-logoBox {
+  height: 52px;
+}
+
+/* ======================== Liveblocks Override */
+

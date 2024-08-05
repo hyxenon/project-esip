@@ -9,8 +9,14 @@ import { Sheet, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { FaAlignLeft } from "react-icons/fa6";
 import MobileMenu from "./admin/mobileMenu";
+import { StudentNavbarMenu } from "./studentNavbarMenu";
+import Notifications from "./student/Notifications";
 
-const Navbar = () => {
+type NavbarProps = {
+  role: string;
+};
+
+const Navbar = ({ role }: NavbarProps) => {
   const { data: session } = useSession();
 
   return (
@@ -31,8 +37,11 @@ const Navbar = () => {
         </p>
       </div>
       <div className="hidden lg:flex flex-1">
-        <TeacherNavbarMenu />
-        <ProfileIcon />
+        {role == "TEACHER" ? <TeacherNavbarMenu /> : <StudentNavbarMenu />}
+        <div className="ml-auto flex gap-1">
+          <Notifications />
+          <ProfileIcon />
+        </div>
       </div>
     </div>
   );
