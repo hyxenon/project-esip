@@ -10,6 +10,7 @@ import { Button } from "../ui/button";
 import { FaAlignLeft } from "react-icons/fa6";
 import MobileMenu from "./admin/mobileMenu";
 import { StudentNavbarMenu } from "./studentNavbarMenu";
+import Notifications from "./student/Notifications";
 
 type NavbarProps = {
   role: string;
@@ -37,8 +38,10 @@ const Navbar = ({ role }: NavbarProps) => {
       </div>
       <div className="hidden lg:flex flex-1">
         {role == "TEACHER" ? <TeacherNavbarMenu /> : <StudentNavbarMenu />}
-
-        <ProfileIcon />
+        <div className="ml-auto flex gap-1">
+          <Notifications />
+          <ProfileIcon />
+        </div>
       </div>
     </div>
   );

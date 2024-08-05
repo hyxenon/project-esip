@@ -1,6 +1,7 @@
 import { getDocuments } from "@/actions/room.action";
 import { auth } from "@/auth";
 import AddDocumentBtn from "@/components/(users)/student/AddDocumentBtn";
+import { DeleteModal } from "@/components/(users)/student/DeleteModal";
 
 import { dateConverter } from "@/lib/utils";
 
@@ -47,7 +48,7 @@ const LiveDocs = async () => {
                     </div>
                   </div>
                 </Link>
-                {/* TODO: DELETE BUTTON */}
+                <DeleteModal roomId={id} />
               </li>
             ))}
           </ul>

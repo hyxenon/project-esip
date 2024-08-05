@@ -3,6 +3,7 @@ import { liveblocks } from "@/lib/liveblocks";
 import { getAccessType, parseStringify } from "@/lib/utils";
 import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export const createDocument = async ({
   userId,
@@ -101,6 +102,7 @@ export const updateDocumentAccess = async ({
     }
 
     revalidatePath(`/student/livedocs/${roomId}`);
+    return parseStringify(room);
   } catch (error) {
     console.log(`Error happened while updating a room access: ${error}`);
   }
@@ -130,5 +132,15 @@ export const removeCollaborator = async ({
     return parseStringify(updatedRoom);
   } catch (error) {
     console.log(`Error happended while removing a collaborator: ${error}`);
+  }
+};
+
+export const deleteDocument = async (roomId: string) => {
+  try {
+    await liveblocks.deleteRoom(roomId);
+    revalidatePath("/student/livedocs");
+    redirect("/student/livedocs");
+  } catch (error) {
+    console.log(`Error while deleting a room ${error}`);
   }
 };

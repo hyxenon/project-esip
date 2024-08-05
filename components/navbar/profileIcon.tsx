@@ -19,7 +19,7 @@ const ProfileIcon = ({ profileImg }: ProfileIconProps) => {
   const { data: session } = useSession();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="ml-auto">
+      <DropdownMenuTrigger>
         <Avatar>
           <AvatarImage
             src={profileImg ? profileImg : "https://github.com/shadcn.png"}
