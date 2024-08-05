@@ -7,10 +7,31 @@
 
 @import "../styles/light-theme.css";
 
+
+
+@import '~stream-chat-react/dist/css/v2/index.css';
+
 html,
 body,
 :root {
   height: 100%;
+}
+
+
+.str-chat {
+  --str-chat__primary-color: theme(colors.blue.500);
+  --str-chat__active-primary-color: theme(colors.blue.600);
+  --str-chat__disabled-color: theme(colors.gray.200);
+  --str-chat__cta-button-border-radius: theme(borderRadius.DEFAULT)
+}
+
+
+.str-chat * {
+  font-family: inherit !important;
+}
+
+.str-chat__channel-search.str-chat__channel-search--with--results.str-chat__channel-search--inline {
+  height: fit-content;
 }
 
 @layer base {
