@@ -1,6 +1,7 @@
 import { ComponentPropsWithoutRef } from "react";
 import ChatButton from "./chatButton";
 import { LoadingIndicator } from "stream-chat-react";
+import { Button } from "@/components/ui/button";
 
 interface LoadingButtonProps extends ComponentPropsWithoutRef<"button"> {
   loading: boolean;
@@ -8,9 +9,9 @@ interface LoadingButtonProps extends ComponentPropsWithoutRef<"button"> {
 
 const LoadingButton = ({ loading, ...props }: LoadingButtonProps) => {
   return (
-    <ChatButton {...props} disabled={loading}>
+    <Button {...props} disabled={loading}>
       {loading ? <LoadingIndicator /> : props.children}
-    </ChatButton>
+    </Button>
   );
 };
 
