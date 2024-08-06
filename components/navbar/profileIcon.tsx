@@ -11,18 +11,19 @@ import {
 import { CiLogout } from "react-icons/ci";
 import { signOut, useSession } from "next-auth/react";
 
-type ProfileIconProps = {
-  profileImg?: string;
-};
-
-const ProfileIcon = ({ profileImg }: ProfileIconProps) => {
+const ProfileIcon = () => {
   const { data: session } = useSession();
+  console.log(session?.user?.image);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
           <AvatarImage
-            src={profileImg ? profileImg : "https://github.com/shadcn.png"}
+            src={
+              session?.user?.image
+                ? session.user.image
+                : "https://github.com/shadcn.png"
+            }
             alt="@shadcn"
           />
           <AvatarFallback>CN</AvatarFallback>

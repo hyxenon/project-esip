@@ -39,7 +39,6 @@ const Navbar = ({ role }: NavbarProps) => {
       <div className="hidden lg:flex flex-1">
         {role == "TEACHER" ? <TeacherNavbarMenu /> : <StudentNavbarMenu />}
         <div className="ml-auto flex gap-1">
-          <Notifications />
           <ProfileIcon />
         </div>
       </div>

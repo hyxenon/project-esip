@@ -28,6 +28,8 @@ const useInitializeChatClient = () => {
           process.env.NEXT_PUBLIC_STREAM_KEY || ""
         );
 
+        console.log(session.user.image);
+
         client.connectUser(
           {
             id: session.user.id,
