@@ -58,7 +58,7 @@ const LiveDocs = async () => {
           </Card>
         </div>
       ) : (
-        <div className="document-list-empty">
+        <Card className="document-list-empty">
           <Image
             src={"/assets/icons/doc.svg"}
             alt="Document"
@@ -70,7 +70,7 @@ const LiveDocs = async () => {
             userId={session.user?.id || ""}
             email={session.user?.email || ""}
           />
-        </div>
+        </Card>
       )}
     </div>
   );
