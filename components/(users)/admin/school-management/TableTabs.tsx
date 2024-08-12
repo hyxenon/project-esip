@@ -6,7 +6,7 @@ import PendingForm from "./PendingForm";
 
 const TableTabs = () => {
   return (
-    <Tabs defaultValue="schools" className="w-full">
+    <Tabs defaultValue="schools" className="w-full mb-16">
       <TabsList className="grid md:w-[400px] grid-cols-2 shadow-2xl">
         <TabsTrigger value="schools">All Schools</TabsTrigger>
         <TabsTrigger value="pending">Pending Schools</TabsTrigger>

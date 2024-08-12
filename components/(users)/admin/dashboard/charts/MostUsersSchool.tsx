@@ -58,7 +58,7 @@ const chartConfig = {
 
 const MostUsersSchool = () => {
   return (
-    <Card>
+    <Card className="">
       <CardHeader>
         <CardTitle>Most User Count by School</CardTitle>
         <div className="flex justify-between">
