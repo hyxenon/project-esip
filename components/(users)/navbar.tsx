@@ -20,10 +20,12 @@ const Navbar = ({ role }: NavbarProps) => {
   const { data: session } = useSession();
 
   return (
-    <div className={`lg:px-16 flex items-center gap-x-8 lg:shadow lg:py-4`}>
+    <div
+      className={`lg:px-16 flex items-center gap-x-8 lg:shadow lg:py-4 bg-[#606C38]`}
+    >
       <Sheet>
         <SheetTrigger asChild>
-          <Button className="flex lg:hidden mb-4" variant="ghost" size={"icon"}>
+          <Button className="flex lg:hidden" variant="ghost" size={"icon"}>
             <FaAlignLeft />
           </Button>
         </SheetTrigger>

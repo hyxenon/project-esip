@@ -39,7 +39,7 @@ const TeacherUserManagementTable = ({
   }, [studentUsers, teacherUsers, dispatch]);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full border-[#606C38]">
       <CardContent className="flex flex-col">
         <div className="flex justify-end mt-8">
           {selectedSchool?.value !== undefined &&
