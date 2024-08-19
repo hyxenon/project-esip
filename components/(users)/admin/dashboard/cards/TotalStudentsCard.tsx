@@ -3,7 +3,7 @@ import { Users } from "lucide-react";
 import { PiStudentFill } from "react-icons/pi";
 const TotalStudentsCard = () => {
   return (
-    <Card className="flex-1 border-[#A0A0A0]">
+    <Card className="flex-1 border-[#B0B0B0]">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">Total Students</CardTitle>
         <PiStudentFill className="h-6 w-6 text-[#283618]" />

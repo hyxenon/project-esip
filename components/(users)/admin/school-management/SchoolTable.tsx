@@ -9,7 +9,7 @@ interface SchoolTableProps {
 
 const SchoolTable = ({ children, cardTitle }: SchoolTableProps) => {
   return (
-    <Card className="w-full border-[#A0A0A0]">
+    <Card className="w-full border-[#B0B0B0]">
       <CardHeader className="font-bold text-xl">{cardTitle}</CardHeader>
       <CardContent className="flex flex-col">{children}</CardContent>
     </Card>

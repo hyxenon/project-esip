@@ -35,7 +35,7 @@ const SideNav = ({ role }: SideNavProps) => {
               className="flex items-center gap-2 py-1 px-2 rounded-md transition-all cursor-pointer hover:underline"
               activeClassName="bg-[#FEFAE0] text-[#283618]"
             >
-              <MdDashboard className="text-lg" />
+              <MdDashboard className="" />
               <p className="font-semibold ">Dashboard</p>
             </NavLink>
             <NavLink
@@ -43,7 +43,7 @@ const SideNav = ({ role }: SideNavProps) => {
               className="flex items-center gap-2 py-1 px-2 rounded-md cursor-pointer hover:underline transition-all"
               activeClassName="bg-[#FEFAE0] text-[#283618]"
             >
-              <FaSchool className="text-lg" />
+              <FaSchool className="" />
               <p className="font-semibold">School Management</p>
             </NavLink>
             <NavLink
@@ -51,7 +51,7 @@ const SideNav = ({ role }: SideNavProps) => {
               className="flex items-center gap-2 py-1 px-2 rounded-md transition-all cursor-pointer hover:underline"
               activeClassName="bg-[#FEFAE0] text-[#283618]"
             >
-              <FaUser className="text-lg" />
+              <FaUser className="" />
               <p className="font-semibold">User Management</p>
             </NavLink>
             <NavLink
@@ -59,7 +59,7 @@ const SideNav = ({ role }: SideNavProps) => {
               className="flex items-center gap-2 py-1 px-2 rounded-md transition-all cursor-pointer hover:underline"
               activeClassName="bg-[#FEFAE0] text-[#283618]"
             >
-              <GiArchiveResearch className="text-lg" />
+              <GiArchiveResearch className="" />
               <p className="font-semibold">Research Management</p>
             </NavLink>
           </div>
@@ -85,7 +85,7 @@ export const UserInformation = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="flex items-center gap-3 p-2 rounded-md transition-all hover:bg-gray-200 cursor-pointer">
+    <div className="flex items-center gap-3 p-2 rounded-md">
       <Avatar className="w-10 h-10">
         <AvatarImage
           src={session?.user?.image || "https://github.com/shadcn.png"}

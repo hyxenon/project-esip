@@ -2,7 +2,14 @@
 import React, { useState, useTransition } from "react";
 import Image from "next/image";
 import searchBg from "../../assets/authForm/searchBg.svg";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import { useForm } from "react-hook-form";
 import { LoginSchema } from "@/models/models";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -84,6 +91,7 @@ const LoginForm = () => {
                           className="border-gray-400"
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -101,6 +109,7 @@ const LoginForm = () => {
                           className="border-gray-400"
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />

@@ -23,7 +23,7 @@ const AddDocumentBtn = ({ userId, email }: AddDocumentBtnProps) => {
     <Button
       type="submit"
       onClick={addDocumentHandler}
-      className="bg-[#283618] hover:bg-[#606C38] flex gap-1 shadow-md"
+      className="bg-[#606C38] hover:bg-[#283618] flex gap-1 shadow-md"
       disabled={loading}
     >
       <Image src={"/assets/icons/add.svg"} alt="add" width={24} height={24} />
