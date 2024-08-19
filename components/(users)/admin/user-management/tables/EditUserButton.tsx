@@ -384,7 +384,7 @@ function ProfileForm({ id }: ProfileFormProps) {
 
           <div className="flex items-center justify-center w-full ">
             <Button
-              className="bg-[#606C38] hover:bg-[#283618] w-full mt-8"
+              className="bg-[#BC6C25] hover:bg-[#A85A1D] w-full mt-8 text-[#FEFAE0]"
               type="submit"
             >
               Edit User

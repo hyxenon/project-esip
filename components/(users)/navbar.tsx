@@ -21,7 +21,7 @@ const Navbar = ({ role }: NavbarProps) => {
 
   return (
     <div
-      className={`lg:px-16 flex items-center gap-x-8 lg:shadow lg:py-4 bg-[#606C38]`}
+      className={`lg:px-16 flex items-center gap-x-8 lg:shadow lg:py-4 bg-[#283618]`}
     >
       <Sheet>
         <SheetTrigger asChild>
@@ -32,10 +32,10 @@ const Navbar = ({ role }: NavbarProps) => {
         <MobileMenu role="TEACHER" />
       </Sheet>
       <div className="lg:flex items-center hidden">
-        <Image src={logo} alt="logo" className="w-[50px]" />
+        {/* <Image src={logo} alt="logo" className="w-[0px]" /> */}
         <p className="text-xl font-bold">
-          <span className="text-[#293618]">PROJECT</span>{" "}
-          <span className="text-[#BC6C25]">E-SIP</span>
+          <span className="text-[#FEFAE0]">PROJECT</span>{" "}
+          <span className="text-[#DDA15E]">E-SIP</span>
         </p>
       </div>
       <div className="hidden lg:flex flex-1">

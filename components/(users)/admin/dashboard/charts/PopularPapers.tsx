@@ -58,7 +58,7 @@ const chartConfig = {
 
 const PopularPapers = () => {
   return (
-    <Card className="">
+    <Card className="border-[#A0A0A0]">
       <CardHeader>
         <CardTitle>Top 10 Popular Public Papers</CardTitle>
         <div className="flex justify-between">

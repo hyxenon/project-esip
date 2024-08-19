@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const NewUsers = () => {
   return (
-    <Card className="">
+    <Card className="border-[#A0A0A0]">
       <CardHeader>
         <CardTitle>Recent Users</CardTitle>
       </CardHeader>

@@ -3,7 +3,7 @@ import { RiSchoolLine } from "react-icons/ri";
 
 const TotalSchoolCard = () => {
   return (
-    <Card className="flex-1">
+    <Card className="flex-1 border-[#A0A0A0]">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">Total Schools</CardTitle>
         <RiSchoolLine className="h-6 w-6 text-[#283618]" />

@@ -29,7 +29,7 @@ const TeacherTable = ({ selectedSchool, role }: TeacherTableProps) => {
   const users = state.users;
 
   return (
-    <Card className="w-full">
+    <Card className="w-full border-[#A0A0A0]">
       <CardContent className="flex flex-col">
         <div className="flex justify-end mt-8">
           {selectedSchool?.value !== undefined &&

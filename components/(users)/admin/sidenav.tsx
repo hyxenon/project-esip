@@ -15,12 +15,12 @@ interface SideNavProps {
 
 const SideNav = ({ role }: SideNavProps) => {
   return (
-    <div className="hidden lg:flex flex-col items-center px-4 bg-[#606C38] py-2">
-      <div className="flex items-center mb-6">
-        <Image src={logo} alt="logo" className="w-[80px]" />
+    <div className="hidden lg:flex flex-col items-center px-4 bg-[#283618] py-2">
+      <div className="flex items-center mb-6 mt-6">
+        {/* <Image src={logo} alt="logo" className="w-[80px]" /> */}
         <p className="text-xl font-bold">
-          <span className="text-[#293618]">PROJECT</span>{" "}
-          <span className="text-[#BC6C25]">E-SIP</span>
+          <span className="text-[#FEFAE0]">PROJECT</span>{" "}
+          <span className="text-[#DDA15E]">E-SIP</span>
         </p>
       </div>
       {/* Nav Links */}
