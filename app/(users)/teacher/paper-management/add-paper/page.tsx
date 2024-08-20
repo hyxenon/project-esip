@@ -1,3 +1,4 @@
+"use client";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,7 +19,23 @@ import { Input } from "@/components/ui/input";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
+import { CalendarDatePicker } from "@/components/ui/calendar-picker";
+import { Textarea } from "@/components/ui/textarea";
+
 const AddPaper = () => {
+  const [selectedDateRange, setSelectedDateRange] = useState({
+    from: new Date(new Date().getFullYear(), 0, 1),
+    to: new Date(),
+  });
   return (
     <div className="flex flex-col gap-8 px-3 md:px-8 lg:py-4 lg:px-16 xl:px-28">
       {/* Breadcrumb */}
@@ -37,7 +54,7 @@ const AddPaper = () => {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <Card>
+      <Card className="md:container">
         <Tabs defaultValue="proposal" className="">
           <CardHeader>
             <CardTitle>
@@ -49,30 +66,96 @@ const AddPaper = () => {
           </CardHeader>
           <CardContent className="">
             <TabsContent value="proposal">
-              <div className="grid grid-cols-3 gap-8">
-                <Card className="w-full">
-                  <CardHeader>
-                    <CardDescription>
-                      Add Authors to this paper.
-                    </CardDescription>
-                    <CardTitle className="flex gap-4 justify-between">
-                      <Input type="text" placeholder="Justine Santos" />
-                      <Button>Add Author</Button>
-                    </CardTitle>
-                  </CardHeader>
-                </Card>
+              <div className="flex flex-col gap-6">
+                <div>
+                  <Label htmlFor="title">Title</Label>
+                  <Input id="title" placeholder="Research Title" />
+                </div>
 
-                <Card className="col-span-2">
-                  <CardHeader>
-                    <CardTitle>Introduction</CardTitle>
-                    <CardDescription>
-                      Introduction of the paper.
-                    </CardDescription>
-                  </CardHeader>
+                <div className="w-full grid md:grid-cols-2 gap-4">
+                  <Card>
+                    <CardHeader>
+                      <CardDescription>Add Authors</CardDescription>
+                      <CardTitle className="flex gap-4 justify-between">
+                        <Input type="text" placeholder="Justine Santos" />
+                        <Button size={"sm"} className="w-[160px] text-sm">
+                          Add Author
+                        </Button>
+                      </CardTitle>
+                    </CardHeader>
+                  </Card>
+
+                  <div className="flex flex-col gap-4">
+                    <Card>
+                      <CardHeader>
+                        <CardDescription>Research Teacher</CardDescription>
+                        <CardTitle className="flex gap-4 justify-between">
+                          <Input type="text" placeholder="Justine Santos" />
+                        </CardTitle>
+                      </CardHeader>
+                    </Card>
+                    <Card>
+                      <CardHeader>
+                        <CardDescription>Research Consultant</CardDescription>
+                        <CardTitle className="flex gap-4 justify-between">
+                          <Input type="text" placeholder="Justine Santos" />
+                        </CardTitle>
+                      </CardHeader>
+                    </Card>
+                  </div>
+                </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div>
+                    <Label htmlFor="category">Research Category</Label>
+                    <Select>
+                      <SelectTrigger id="category" className="">
+                        <SelectValue placeholder="Category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="apple">Life Science</SelectItem>
+                        <SelectItem value="banana">Physical Science</SelectItem>
+                        <SelectItem value="blueberry">
+                          Science Innovation Expo
+                        </SelectItem>
+                        <SelectItem value="grapes">Robotics</SelectItem>
+                        <SelectItem value="pineapple">
+                          Mathematical and Computational
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="date">Date</Label>
+                    <CalendarDatePicker
+                      date={selectedDateRange}
+                      onDateSelect={setSelectedDateRange}
+                      variant="outline"
+                      numberOfMonths={1}
+                      className="w-full"
+                      id="date"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid w-full gap-1.5">
+                  <Label htmlFor="message">Introduction</Label>
+                  <Textarea
+                    placeholder="Type introduction paper here."
+                    id="message"
+                  />
+                </div>
+
+                <Card>
+                  <CardHeader></CardHeader>
+                  <CardContent>
+                    <div className="justify-end flex">
+                      <Button>Add Reference</Button>
+                    </div>
+                  </CardContent>
                 </Card>
               </div>
             </TabsContent>
-            <TabsContent value="paper">Change your password here.</TabsContent>
+            <TabsContent value="paper">Reserach Paper </TabsContent>
           </CardContent>
         </Tabs>
       </Card>

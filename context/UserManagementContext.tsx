@@ -103,7 +103,6 @@ export const UserManagementProvider = ({
       try {
         if (state.role === "TEACHER") {
           users = await getAllUsersByTeacher(state.selectedSchool);
-          console.log(state.selectedSchool);
         } else if (state.role === "STUDENT") {
           users = await getAllUsersByStudent(state.selectedSchool);
         }

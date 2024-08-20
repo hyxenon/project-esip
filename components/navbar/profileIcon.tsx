@@ -13,7 +13,7 @@ import { signOut, useSession } from "next-auth/react";
 
 const ProfileIcon = () => {
   const { data: session } = useSession();
-  console.log(session?.user?.image);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>

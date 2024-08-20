@@ -19,11 +19,9 @@ export default function AdminLayout({
     <SchoolProvider>
       <UserManagementProvider>
         <TeacherUserManagementProvider>
-          <div className="flex h-full bg-[#606C38]">
+          <div className="flex h-full ">
             <SideNav role="ADMIN" />
-            <div className="flex-1 overflow-y-auto bg-[#fffef8]">
-              {children}
-            </div>
+            <div className="flex-1 overflow-y-auto ">{children}</div>
           </div>
         </TeacherUserManagementProvider>
       </UserManagementProvider>

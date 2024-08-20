@@ -49,9 +49,7 @@ const NewSchools = () => {
             <p className="text-sm font-medium leading-none">
               San Jose High School
             </p>
-            <p className="text-sm text-muted-foreground">
-              sanjosehighschool@gmail.com
-            </p>
+            <p className="text-sm text-muted-foreground">sjc@gmail.com</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
