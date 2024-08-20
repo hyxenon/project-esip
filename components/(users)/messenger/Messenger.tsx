@@ -37,7 +37,7 @@ const Messenger = () => {
   }
 
   return (
-    <div className="h-screen bg-gray-100 xl:px-20 xl:py-8">
+    <div className="h-screen bg-[#faf9f6]">
       <div className="max-w-[1600px] min-w-[350px] h-full shadow-sm m-auto flex flex-col">
         <Chat client={chatClient}>
           <div className="border-b border-b-[#DBDDE1] p-2 md:hidden">
