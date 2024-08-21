@@ -16,13 +16,17 @@ function titleCase(str: string) {
     .join(" ");
 }
 
-export const register = async (values: z.infer<typeof RegisterSchema>) => {
+export const register = async (
+  values: z.infer<typeof RegisterSchema>,
+  isAdmin?: boolean
+) => {
   const validatedFields = RegisterSchema.safeParse(values);
   if (!validatedFields.success) {
     return { error: "Invalid fields" };
   }
 
-  const { email, password, firstName, lastName, schoolId, role } = validatedFields.data;
+  const { email, password, firstName, lastName, schoolId, role } =
+    validatedFields.data;
 
   const existingUser = await getUserByEmail(email);
 
@@ -41,15 +45,20 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
       password: hashedPassword,
       schoolId: schoolId,
       role: userRole,
-      isPending: true
+      isPending: isAdmin ? false : true,
     },
     include: {
-      school: true
-    }
+      school: true,
+    },
   });
 
   const verificationToken = await generateVerificationToken(email);
-  await sendVerificationEmail(verificationToken.email, verificationToken.token, password);
+  await sendVerificationEmail(
+    verificationToken.email,
+    verificationToken.token,
+    password,
+    isAdmin
+  );
 
   return { success: "Confirmation email sent!", user: user };
 };

@@ -170,7 +170,7 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
     setError("");
     setSuccess("");
     startTransition(() => {
-      register(values).then((data) => {
+      register(values, true).then((data) => {
         if (data.success) {
           const newUser: User = {
             id: data.user.id,
