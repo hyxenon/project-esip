@@ -54,11 +54,11 @@ const AddPaper = () => {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <Card className="md:container">
+      <div className="md:container">
         <Tabs defaultValue="proposal" className="">
           <CardHeader>
             <CardTitle>
-              <TabsList>
+              <TabsList className="shadow-2xl bg-[#D9D9D9] bg-opacity-70">
                 <TabsTrigger value="proposal">Research Proposal</TabsTrigger>
                 <TabsTrigger value="paper">Research Paper</TabsTrigger>
               </TabsList>
@@ -69,11 +69,15 @@ const AddPaper = () => {
               <div className="flex flex-col gap-6">
                 <div>
                   <Label htmlFor="title">Title</Label>
-                  <Input id="title" placeholder="Research Title" />
+                  <Input
+                    className="border-[#B0B0B0]"
+                    id="title"
+                    placeholder="Research Title"
+                  />
                 </div>
 
                 <div className="w-full grid md:grid-cols-2 gap-4">
-                  <Card>
+                  <Card className="border-[#B0B0B0]">
                     <CardHeader>
                       <CardDescription>Add Authors</CardDescription>
                       <CardTitle className="flex gap-4 justify-between">
@@ -83,32 +87,46 @@ const AddPaper = () => {
                         </Button>
                       </CardTitle>
                     </CardHeader>
+                    <CardContent>
+                      <h1>These are the content</h1>
+                      <h1>These are the content</h1>
+                      <h1>These are the content</h1>
+                      <h1>These are the content</h1>
+                      <h1>These are the content</h1>
+                      <h1>These are the content</h1>
+                      <h1>These are the content</h1>
+                      <h1>These are the content</h1>
+                      <h1>These are the content</h1>
+                      <h1>These are the content</h1>
+                      <h1>These are the content</h1>
+                      <h1>These are the content</h1>
+                    </CardContent>
                   </Card>
 
-                  <div className="flex flex-col gap-4">
-                    <Card>
+                  <Card className="flex flex-col border-[#B0B0B0]">
+                    <div className="">
                       <CardHeader>
                         <CardDescription>Research Teacher</CardDescription>
                         <CardTitle className="flex gap-4 justify-between">
                           <Input type="text" placeholder="Justine Santos" />
                         </CardTitle>
                       </CardHeader>
-                    </Card>
-                    <Card>
+                    </div>
+                    <div>
                       <CardHeader>
                         <CardDescription>Research Consultant</CardDescription>
                         <CardTitle className="flex gap-4 justify-between">
                           <Input type="text" placeholder="Justine Santos" />
                         </CardTitle>
                       </CardHeader>
-                    </Card>
-                  </div>
+                    </div>
+                  </Card>
                 </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <Label htmlFor="category">Research Category</Label>
                     <Select>
-                      <SelectTrigger id="category" className="">
+                      <SelectTrigger className="border-[#B0B0B0]" id="category">
                         <SelectValue placeholder="Category" />
                       </SelectTrigger>
                       <SelectContent>
@@ -131,7 +149,7 @@ const AddPaper = () => {
                       onDateSelect={setSelectedDateRange}
                       variant="outline"
                       numberOfMonths={1}
-                      className="w-full"
+                      className="w-full border-[#B0B0B0]"
                       id="date"
                     />
                   </div>
@@ -142,10 +160,11 @@ const AddPaper = () => {
                   <Textarea
                     placeholder="Type introduction paper here."
                     id="message"
+                    className="border-[#B0B0B0]"
                   />
                 </div>
 
-                <Card>
+                <Card className="border-[#B0B0B0]">
                   <CardHeader></CardHeader>
                   <CardContent>
                     <div className="justify-end flex">
@@ -158,7 +177,7 @@ const AddPaper = () => {
             <TabsContent value="paper">Reserach Paper </TabsContent>
           </CardContent>
         </Tabs>
-      </Card>
+      </div>
     </div>
   );
 };
