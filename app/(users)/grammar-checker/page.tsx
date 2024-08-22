@@ -10,9 +10,9 @@ const GrammarChecker = () => {
     <div>
       {session?.user?.role === "TEACHER" ||
       session?.user?.role === "STUDENT" ? (
-        <Navbar />
+        <Navbar role="TEACHER" />
       ) : (
-        ""
+        <Navbar role="STUDENT" />
       )}
     </div>
   );

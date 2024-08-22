@@ -20,26 +20,27 @@ const Navbar = ({ role }: NavbarProps) => {
   const { data: session } = useSession();
 
   return (
-    <div className={`lg:px-16 flex items-center gap-x-8 lg:shadow lg:py-4`}>
+    <div
+      className={`lg:px-16 flex items-center gap-x-8 lg:shadow lg:py-4 lg:bg-[#283618]`}
+    >
       <Sheet>
         <SheetTrigger asChild>
-          <Button className="flex lg:hidden mb-4" variant="ghost" size={"icon"}>
+          <Button className="flex lg:hidden" variant="ghost" size={"icon"}>
             <FaAlignLeft />
           </Button>
         </SheetTrigger>
         <MobileMenu role="TEACHER" />
       </Sheet>
       <div className="lg:flex items-center hidden">
-        <Image src={logo} alt="logo" className="w-[50px]" />
+        {/* <Image src={logo} alt="logo" className="w-[0px]" /> */}
         <p className="text-xl font-bold">
-          <span className="text-[#293618]">PROJECT</span>{" "}
-          <span className="text-[#BC6C25]">E-SIP</span>
+          <span className="text-[#FEFAE0]">PROJECT</span>{" "}
+          <span className="text-[#DDA15E]">E-SIP</span>
         </p>
       </div>
       <div className="hidden lg:flex flex-1">
         {role == "TEACHER" ? <TeacherNavbarMenu /> : <StudentNavbarMenu />}
         <div className="ml-auto flex gap-1">
-          <Notifications />
           <ProfileIcon />
         </div>
       </div>

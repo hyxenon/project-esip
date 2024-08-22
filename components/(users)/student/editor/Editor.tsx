@@ -61,7 +61,7 @@ export function Editor({
           <ToolbarPlugin />
           {currentUserType === "editor" && <DeleteModal roomId={roomId} />}
         </div>
-        <div className="editor-wrapper flex flex-col items-center justify-start bg-gray-100">
+        <div className="editor-wrapper flex flex-col items-center justify-start bg-[#C5C1C1] bg-opacity-40">
           {status === "not-loaded" || status === "loading" ? (
             <Loader />
           ) : (

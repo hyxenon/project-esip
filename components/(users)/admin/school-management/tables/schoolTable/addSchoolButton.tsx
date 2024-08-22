@@ -59,7 +59,10 @@ export function AddSchoolButton({ onSchoolAdded }: AddSchoolButtonProps) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button className="bg-[#606C38] hover:bg-[#283618]" variant="default">
+          <Button
+            variant="default"
+            className="bg-[#BC6C25] hover:bg-[#A85A1D] text-[#FEFAE0]"
+          >
             Add School
           </Button>
         </DialogTrigger>
@@ -331,7 +334,7 @@ function ProfileForm({ onSchoolAdded }: ProfileFormProps) {
 
           <div className="flex items-center justify-center w-full">
             <Button
-              className="bg-[#606C38] hover:bg-[#283618] w-full"
+              className="bg-[#BC6C25] hover:bg-[#A85A1D] text-[#FEFAE0] w-full"
               type="submit"
             >
               Add School

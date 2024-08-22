@@ -48,7 +48,7 @@ const ShareModal = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Button
-          className="gradient-blue flex h-9 gap-1 px-4"
+          className="bg-[#606C38] hover:bg-[#283618] flex h-9 gap-1 px-4"
           disabled={currentUserType !== "editor"}
         >
           <Image
@@ -85,7 +85,7 @@ const ShareModal = ({
           <Button
             type="submit"
             onClick={shareDocumentHandler}
-            className="gradient-blue flex h-full gap-1 px-5"
+            className="bg-[#606C38] hover:bg-[#283618] flex h-full gap-1 px-5"
             disabled={loading}
           >
             {loading ? "Sending..." : "Invite"}

@@ -66,7 +66,10 @@ export function AddUserTeacher({ selectedSchool }: AddUserTeacherProps) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button className="bg-[#606C38] hover:bg-[#283618]" variant="default">
+          <Button
+            className="bg-[#BC6C25] hover:bg-[#A85A1D] text-[#FEFAE0]"
+            variant="default"
+          >
             Add Teacher
           </Button>
         </DialogTrigger>
@@ -143,7 +146,7 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
   useEffect(() => {
     form.setValue("role", "TEACHER");
     form.setValue("schoolId", selectedSchool?.id ? selectedSchool.id : "");
-  }, [selectedSchool]);
+  }, [selectedSchool, form]);
 
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
@@ -167,7 +170,7 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
     setError("");
     setSuccess("");
     startTransition(() => {
-      register(values).then((data) => {
+      register(values, true).then((data) => {
         if (data.success) {
           const newUser: User = {
             id: data.user.id,
@@ -294,7 +297,7 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
           <div className="flex items-center justify-center w-full ">
             <Button
               disabled={isPending}
-              className="bg-[#606C38] hover:bg-[#283618] w-full mt-8"
+              className="bg-[#BC6C25] hover:bg-[#A85A1D] text-[#FEFAE0] mt-8 w-full"
               type="submit"
             >
               Add Teacher

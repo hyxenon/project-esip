@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const NewSchools = () => {
   return (
-    <Card>
+    <Card className="border-[#B0B0B0]">
       <CardHeader>
         <CardTitle>Recent Schools</CardTitle>
       </CardHeader>
@@ -40,7 +40,7 @@ const NewSchools = () => {
             <p className="text-sm text-muted-foreground">joserizal@gmail.com</p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ">
           <Avatar className="hidden h-9 w-9 sm:flex">
             <AvatarImage src="/avatars/03.png" alt="Avatar" />
             <AvatarFallback>IN</AvatarFallback>
@@ -49,9 +49,7 @@ const NewSchools = () => {
             <p className="text-sm font-medium leading-none">
               San Jose High School
             </p>
-            <p className="text-sm text-muted-foreground">
-              sanjosehighschool@gmail.com
-            </p>
+            <p className="text-sm text-muted-foreground">sjc@gmail.com</p>
           </div>
         </div>
         <div className="flex items-center gap-4">

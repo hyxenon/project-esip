@@ -17,7 +17,7 @@ const TeacherUserTabList = ({}: TablistProps) => {
   return (
     <div>
       <Tabs defaultValue="allTeachers" className="w-full mt-8">
-        <TabsList className="grid md:w-[400px] grid-cols-3 shadow-2xl">
+        <TabsList className="grid md:w-[400px] grid-cols-3 shadow-2xl bg-[#D9D9D9] bg-opacity-70">
           <TabsTrigger value="allTeachers">Teachers</TabsTrigger>
           <TabsTrigger value="allStudents">Students</TabsTrigger>
           <TabsTrigger value="pendingUsers">Pending Users</TabsTrigger>

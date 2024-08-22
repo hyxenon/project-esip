@@ -28,7 +28,7 @@ export const createDocument = async ({
       defaultAccesses: [],
     });
 
-    revalidatePath("/");
+    revalidatePath("/students/livedocs");
 
     return parseStringify(room);
   } catch (error) {

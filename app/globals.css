@@ -7,10 +7,45 @@
 
 @import "../styles/light-theme.css";
 
+
+
+@import '~stream-chat-react/dist/css/v2/index.css';
+
 html,
 body,
 :root {
   height: 100%;
+}
+
+
+.str-chat {
+  --str-chat__primary-color: #009688;
+  --str-chat__active-primary-color: #004d40;
+  --str-chat__surface-color: #f5f5f5;
+  --str-chat__secondary-surface-color: #fafafa;
+  --str-chat__primary-surface-color: #e0f2f1;
+  --str-chat__primary-surface-color-low-emphasis: #edf7f7;
+  --str-chat__border-radius-circle: 6px;
+}
+
+
+
+.str-chat * {
+  font-family: inherit !important;
+}
+
+.str-chat {
+  --str-chat__primary-color: #009688;
+  --str-chat__active-primary-color: #004d40;
+  --str-chat__surface-color: #f5f5f5;
+  --str-chat__secondary-surface-color: #fafafa;
+  --str-chat__primary-surface-color: #e0f2f1;
+  --str-chat__primary-surface-color-low-emphasis: #edf7f7;
+  --str-chat__border-radius-circle: 6px;
+}
+
+.str-chat__channel-search.str-chat__channel-search--with--results.str-chat__channel-search--inline {
+  height: fit-content;
 }
 
 @layer base {
@@ -174,7 +209,7 @@ body,
   }
 
   .document-list-empty {
-    @apply flex w-full max-w-[730px] flex-col items-center justify-center gap-5 rounded-lg bg-dark-200 px-10 py-8;
+    @apply flex w-full max-w-[730px] flex-col items-center justify-center gap-5 rounded-lg px-10 py-8;
   }
 
   .document-title-input {

@@ -36,10 +36,10 @@ const TeacherUserManagementTable = ({
     if (!state.isLoading) {
       setIsLoading(false);
     }
-  }, [studentUsers, teacherUsers, dispatch]);
+  }, [studentUsers, teacherUsers, dispatch, role, state.isLoading]);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full border-[#B0B0B0]">
       <CardContent className="flex flex-col">
         <div className="flex justify-end mt-8">
           {selectedSchool?.value !== undefined &&

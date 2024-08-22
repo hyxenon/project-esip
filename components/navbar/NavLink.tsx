@@ -22,7 +22,9 @@ const NavLink: React.FC<PropsWithChildren<NavLinkProps>> = ({
     <Link
       href={href}
       {...props}
-      className={`${className} ${isActive ? activeClassName : ""}`}
+      className={`${className} ${
+        isActive ? activeClassName : "text-[#FEFAE0]"
+      }`}
     >
       {children}
     </Link>

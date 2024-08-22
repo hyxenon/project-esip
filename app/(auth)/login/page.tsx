@@ -1,9 +1,12 @@
 import LoginForm from "@/components/auth/LoginForm";
-import AuthFormWrapper from "@/components/auth/auth-form-wrapper";
-import React from "react";
+import React, { Suspense } from "react";
 
 const LoginPage = () => {
-  return <LoginForm />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginForm />
+    </Suspense>
+  );
 };
 
 export default LoginPage;

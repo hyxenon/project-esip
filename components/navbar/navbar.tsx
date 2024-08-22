@@ -84,7 +84,7 @@ const Navbar = ({ session }: { session: any }) => {
             <Button>Login</Button>
           </Link>
         ) : (
-          <ProfileIcon profileImg={session.user.image} />
+          <ProfileIcon />
         )}
       </div>
     </nav>

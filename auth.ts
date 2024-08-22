@@ -9,6 +9,7 @@ declare module "@auth/core/types" {
   interface User {
     role: "ADMIN" | "TEACHER" | "STUDENT";
     schoolId: string | null;
+    image?: string | null;
   }
 }
 
@@ -16,6 +17,7 @@ declare module "@auth/core/jwt" {
   interface JWT {
     role: "ADMIN" | "TEACHER" | "STUDENT";
     schoolId: string | null;
+    image?: string | null;
   }
 }
 
@@ -66,6 +68,10 @@ export const {
         session.user.role = token.role;
       }
 
+      if (token.image && session.user) {
+        session.user.image = token.image;
+      }
+
       if (token.schoolId && session.user) {
         session.user.schoolId = token.schoolId;
       }
@@ -81,6 +87,7 @@ export const {
 
       token.role = existingUser.role;
       token.schoolId = existingUser.schoolId;
+      token.image = existingUser.image;
 
       return token;
     },

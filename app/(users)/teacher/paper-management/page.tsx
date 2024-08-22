@@ -163,9 +163,11 @@ const PaperManagement = () => {
         <Card>
           <CardHeader>
             <div className="flex justify-end">
-              <Button className="bg-[#606C38] hover:bg-[#606C38]">
-                <Link href={"paper-management/add-paper"}>Add Paper</Link>
-              </Button>
+              <Link href={"paper-management/add-paper"}>
+                <Button className="bg-[#606C38] hover:bg-[#606C38]">
+                  Add Paper
+                </Button>
+              </Link>
             </div>
           </CardHeader>
           <CardContent>

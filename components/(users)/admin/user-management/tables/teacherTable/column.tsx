@@ -30,6 +30,54 @@ export type User = {
   school?: SchoolModel | null;
 };
 
+// Props type for the UserActions component
+type UserActionsProps = {
+  user: User;
+};
+
+const UserActions: React.FC<UserActionsProps> = ({ user }) => {
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+  return (
+    <>
+      <DeleteUserButton
+        isOpen={isDeleteOpen}
+        setIsOpen={setIsDeleteOpen}
+        name={user.name}
+        id={user.id}
+      />
+      <EditUserButton
+        isOpen={isEditOpen}
+        setIsOpen={setIsEditOpen}
+        id={user.id}
+      />
+      <DropdownMenu modal={false}>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuItem>View User</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
+            Edit User
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="text-red-500"
+            onClick={() => setIsDeleteOpen(true)}
+          >
+            Delete User
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
+  );
+};
+
 export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
@@ -50,7 +98,7 @@ export const columns: ColumnDef<User>[] = [
       return (
         <div className="flex items-center gap-2">
           <Image
-            src={"https://github.com/shadcn.png"}
+            src={user.image ? user.image : "https://github.com/shadcn.png"}
             alt="logo"
             width={40}
             height={40}
@@ -81,26 +129,23 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const user = row.original;
       return (
-        <>
-          {" "}
-          <div className="flex items-center gap-2 mr-6 md:mr-0">
-            <Image
-              src={
-                user.school
-                  ? user.school.image ||
-                    "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
-                  : "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
-              }
-              alt="logo"
-              width={30}
-              height={30}
-              className="w-7 h-7 rounded-full"
-            />
-            <p className="text-sm">
-              {user.school ? user.school.schoolName : "No School Name"}
-            </p>
-          </div>
-        </>
+        <div className="flex items-center gap-2 mr-6 md:mr-0">
+          <Image
+            src={
+              user.school
+                ? user.school.image ||
+                  "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
+                : "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
+            }
+            alt="logo"
+            width={30}
+            height={30}
+            className="w-7 h-7 rounded-full"
+          />
+          <p className="text-sm">
+            {user.school ? user.school.schoolName : "No School Name"}
+          </p>
+        </div>
       );
     },
   },
@@ -110,53 +155,15 @@ export const columns: ColumnDef<User>[] = [
     header: "Role",
     cell: ({ row }) => {
       const user = row.original;
-      return <Badge className="bg-[#283618]">{user.role}</Badge>;
+      return (
+        <Badge variant={"outline"} className="border-[#606C38]">
+          {user.role}
+        </Badge>
+      );
     },
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const user = row.original;
-      const [isEditOpen, setIsEditOpen] = useState(false);
-      const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-
-      return (
-        <>
-          <DeleteUserButton
-            isOpen={isDeleteOpen}
-            setIsOpen={setIsDeleteOpen}
-            name={user.name}
-            id={user.id}
-          />
-          <EditUserButton
-            isOpen={isEditOpen}
-            setIsOpen={setIsEditOpen}
-            id={user.id}
-          />
-          <DropdownMenu modal={false}>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem>View User</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
-                Edit User
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="text-red-500"
-                onClick={() => setIsDeleteOpen(true)}
-              >
-                Delete User
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </>
-      );
-    },
+    cell: ({ row }) => <UserActions user={row.original} />,
   },
 ];

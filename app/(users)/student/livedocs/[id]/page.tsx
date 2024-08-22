@@ -33,7 +33,7 @@ const Document = async ({ params: { id } }: SearchParamProps) => {
     ? "editor"
     : "viewer";
   return (
-    <div>
+    <div className="">
       <CollaborativeRoom
         roomId={id}
         roomMetadata={room.metadata}

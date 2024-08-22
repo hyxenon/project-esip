@@ -1,11 +1,13 @@
 import NewVerificationForm from "@/components/auth/new-verification-form";
-import React from "react";
+import React, { Suspense } from "react";
 
 const NewVerificationPage = () => {
   return (
-    <div className="items-center justify-center flex">
-      <NewVerificationForm />
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="items-center justify-center flex">
+        <NewVerificationForm />
+      </div>
+    </Suspense>
   );
 };
 
