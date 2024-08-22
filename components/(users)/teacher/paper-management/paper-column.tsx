@@ -26,6 +26,41 @@ const options: Intl.DateTimeFormatOptions = {
   day: "numeric",
 };
 
+// Props type for the ResearchPaperActions component
+type ResearchPaperActionsProps = {
+  data: ResearchPaperModel;
+};
+
+const ResearchPaperActions: React.FC<ResearchPaperActionsProps> = ({
+  data,
+}) => {
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isStatusChangeOpen, setStatusChangeOpen] = useState(false);
+
+  return (
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem>View Details</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => setIsDeleteOpen(true)}>
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
 export const columns: ColumnDef<ResearchPaperModel>[] = [
   {
     accessorKey: "title",
@@ -104,38 +139,12 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
       return formattedDate;
     },
   },
-
   {
     accessorKey: "adviser",
     header: "Adviser",
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const school = row.original;
-      const [isEditOpen, setIsEditOpen] = useState(false);
-      const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-      const [isStatusChangeOpen, setStatusChangeOpen] = useState(false);
-
-      return (
-        <>
-          <DropdownMenu modal={false}>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem>View Details</DropdownMenuItem>
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Delete</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </>
-      );
-    },
+    cell: ({ row }) => <ResearchPaperActions data={row.original} />,
   },
 ];

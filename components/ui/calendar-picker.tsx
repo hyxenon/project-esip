@@ -161,107 +161,121 @@ export const CalendarDatePicker = React.forwardRef<
       setSelectedRange(null);
     };
 
-    const handleMonthChange = (newMonthIndex: number, part: string) => {
-      setSelectedRange(null);
-      if (part === "from") {
-        if (yearFrom !== undefined) {
-          if (newMonthIndex < 0 || newMonthIndex > yearsRange + 1) return;
-          const newMonth = new Date(yearFrom, newMonthIndex, 1);
-          const from =
-            numberOfMonths === 2
-              ? startOfMonth(toDate(newMonth, { timeZone }))
-              : date?.from
-              ? new Date(
-                  date.from.getFullYear(),
-                  newMonth.getMonth(),
-                  date.from.getDate()
-                )
-              : newMonth;
-          const to =
-            numberOfMonths === 2
-              ? date.to
-                ? endOfDay(toDate(date.to, { timeZone }))
-                : endOfMonth(toDate(newMonth, { timeZone }))
-              : from;
-          if (from <= to) {
-            onDateSelect({ from, to });
-            setMonthFrom(newMonth);
-            setMonthTo(date.to);
-          }
-        }
-      } else {
-        if (yearTo !== undefined) {
-          if (newMonthIndex < 0 || newMonthIndex > yearsRange + 1) return;
-          const newMonth = new Date(yearTo, newMonthIndex, 1);
-          const from = date.from
-            ? startOfDay(toDate(date.from, { timeZone }))
-            : startOfMonth(toDate(newMonth, { timeZone }));
-          const to =
-            numberOfMonths === 2
-              ? endOfMonth(toDate(newMonth, { timeZone }))
-              : from;
-          if (from <= to) {
-            onDateSelect({ from, to });
-            setMonthTo(newMonth);
-            setMonthFrom(date.from);
-          }
-        }
-      }
-    };
-
-    const handleYearChange = (newYear: number, part: string) => {
-      setSelectedRange(null);
-      if (part === "from") {
-        if (years.includes(newYear)) {
-          const newMonth = monthFrom
-            ? new Date(newYear, monthFrom ? monthFrom.getMonth() : 0, 1)
-            : new Date(newYear, 0, 1);
-          const from =
-            numberOfMonths === 2
-              ? startOfMonth(toDate(newMonth, { timeZone }))
-              : date.from
-              ? new Date(newYear, newMonth.getMonth(), date.from.getDate())
-              : newMonth;
-          const to =
-            numberOfMonths === 2
-              ? date.to
-                ? endOfDay(toDate(date.to, { timeZone }))
-                : endOfMonth(toDate(newMonth, { timeZone }))
-              : from;
-          if (from <= to) {
-            onDateSelect({ from, to });
-            setYearFrom(newYear);
-            setMonthFrom(newMonth);
-            setYearTo(date.to?.getFullYear());
-            setMonthTo(date.to);
-          }
-        }
-      } else {
-        if (years.includes(newYear)) {
-          const newMonth = monthTo
-            ? new Date(newYear, monthTo.getMonth(), 1)
-            : new Date(newYear, 0, 1);
-          const from = date.from
-            ? startOfDay(toDate(date.from, { timeZone }))
-            : startOfMonth(toDate(newMonth, { timeZone }));
-          const to =
-            numberOfMonths === 2
-              ? endOfMonth(toDate(newMonth, { timeZone }))
-              : from;
-          if (from <= to) {
-            onDateSelect({ from, to });
-            setYearTo(newYear);
-            setMonthTo(newMonth);
-            setYearFrom(date.from?.getFullYear());
-            setMonthFrom(date.from);
-          }
-        }
-      }
-    };
-
     const today = new Date();
 
     const years = Array.from({ length: yearsRange }, (_, i) => 2008 + i);
+
+    const handleMonthChange = React.useCallback(
+      (newMonthIndex: number, part: string) => {
+        setSelectedRange(null);
+        if (part === "from") {
+          if (yearFrom !== undefined) {
+            if (newMonthIndex < 0 || newMonthIndex > yearsRange + 1) return;
+            const newMonth = new Date(yearFrom, newMonthIndex, 1);
+            const from =
+              numberOfMonths === 2
+                ? startOfMonth(toDate(newMonth, { timeZone }))
+                : date?.from
+                ? new Date(
+                    date.from.getFullYear(),
+                    newMonth.getMonth(),
+                    date.from.getDate()
+                  )
+                : newMonth;
+            const to =
+              numberOfMonths === 2
+                ? date.to
+                  ? endOfDay(toDate(date.to, { timeZone }))
+                  : endOfMonth(toDate(newMonth, { timeZone }))
+                : from;
+            if (from <= to) {
+              onDateSelect({ from, to });
+              setMonthFrom(newMonth);
+              setMonthTo(date.to);
+            }
+          }
+        } else {
+          if (yearTo !== undefined) {
+            if (newMonthIndex < 0 || newMonthIndex > yearsRange + 1) return;
+            const newMonth = new Date(yearTo, newMonthIndex, 1);
+            const from = date.from
+              ? startOfDay(toDate(date.from, { timeZone }))
+              : startOfMonth(toDate(newMonth, { timeZone }));
+            const to =
+              numberOfMonths === 2
+                ? endOfMonth(toDate(newMonth, { timeZone }))
+                : from;
+            if (from <= to) {
+              onDateSelect({ from, to });
+              setMonthTo(newMonth);
+              setMonthFrom(date.from);
+            }
+          }
+        }
+      },
+      [
+        yearFrom,
+        yearTo,
+        yearsRange,
+        date,
+        numberOfMonths,
+        onDateSelect,
+        timeZone,
+      ]
+    );
+
+    const handleYearChange = React.useCallback(
+      (newYear: number, part: string) => {
+        setSelectedRange(null);
+        if (part === "from") {
+          if (years.includes(newYear)) {
+            const newMonth = monthFrom
+              ? new Date(newYear, monthFrom ? monthFrom.getMonth() : 0, 1)
+              : new Date(newYear, 0, 1);
+            const from =
+              numberOfMonths === 2
+                ? startOfMonth(toDate(newMonth, { timeZone }))
+                : date.from
+                ? new Date(newYear, newMonth.getMonth(), date.from.getDate())
+                : newMonth;
+            const to =
+              numberOfMonths === 2
+                ? date.to
+                  ? endOfDay(toDate(date.to, { timeZone }))
+                  : endOfMonth(toDate(newMonth, { timeZone }))
+                : from;
+            if (from <= to) {
+              onDateSelect({ from, to });
+              setYearFrom(newYear);
+              setMonthFrom(newMonth);
+              setYearTo(date.to?.getFullYear());
+              setMonthTo(date.to);
+            }
+          }
+        } else {
+          if (years.includes(newYear)) {
+            const newMonth = monthTo
+              ? new Date(newYear, monthTo.getMonth(), 1)
+              : new Date(newYear, 0, 1);
+            const from = date.from
+              ? startOfDay(toDate(date.from, { timeZone }))
+              : startOfMonth(toDate(newMonth, { timeZone }));
+            const to =
+              numberOfMonths === 2
+                ? endOfMonth(toDate(newMonth, { timeZone }))
+                : from;
+            if (from <= to) {
+              onDateSelect({ from, to });
+              setYearTo(newYear);
+              setMonthTo(newMonth);
+              setYearFrom(date.from?.getFullYear());
+              setMonthFrom(date.from);
+            }
+          }
+        }
+      },
+      [years, monthFrom, monthTo, numberOfMonths, date, onDateSelect, timeZone]
+    );
 
     const dateRanges = [
       { label: "Today", start: today, end: today },
@@ -303,46 +317,60 @@ export const CalendarDatePicker = React.forwardRef<
       setHighlightedPart(null);
     };
 
-    const handleWheel = (event: React.WheelEvent, part: string) => {
-      event.preventDefault();
-      setSelectedRange(null);
-      if (highlightedPart === "firstDay") {
-        const newDate = new Date(date.from as Date);
-        const increment = event.deltaY > 0 ? -1 : 1;
-        newDate.setDate(newDate.getDate() + increment);
-        if (newDate <= (date.to as Date)) {
-          numberOfMonths === 2
-            ? onDateSelect({ from: newDate, to: new Date(date.to as Date) })
-            : onDateSelect({ from: newDate, to: newDate });
-          setMonthFrom(newDate);
-        } else if (newDate > (date.to as Date) && numberOfMonths === 1) {
-          onDateSelect({ from: newDate, to: newDate });
-          setMonthFrom(newDate);
+    const handleWheel = React.useCallback(
+      (event: React.WheelEvent, part: string) => {
+        event.preventDefault();
+        setSelectedRange(null);
+        if (highlightedPart === "firstDay") {
+          const newDate = new Date(date.from as Date);
+          const increment = event.deltaY > 0 ? -1 : 1;
+          newDate.setDate(newDate.getDate() + increment);
+          if (newDate <= (date.to as Date)) {
+            numberOfMonths === 2
+              ? onDateSelect({ from: newDate, to: new Date(date.to as Date) })
+              : onDateSelect({ from: newDate, to: newDate });
+            setMonthFrom(newDate);
+          } else if (newDate > (date.to as Date) && numberOfMonths === 1) {
+            onDateSelect({ from: newDate, to: newDate });
+            setMonthFrom(newDate);
+          }
+        } else if (highlightedPart === "firstMonth") {
+          const currentMonth = monthFrom ? monthFrom.getMonth() : 0;
+          const newMonthIndex = currentMonth + (event.deltaY > 0 ? -1 : 1);
+          handleMonthChange(newMonthIndex, "from");
+        } else if (highlightedPart === "firstYear" && yearFrom !== undefined) {
+          const newYear = yearFrom + (event.deltaY > 0 ? -1 : 1);
+          handleYearChange(newYear, "from");
+        } else if (highlightedPart === "secondDay") {
+          const newDate = new Date(date.to as Date);
+          const increment = event.deltaY > 0 ? -1 : 1;
+          newDate.setDate(newDate.getDate() + increment);
+          if (newDate >= (date.from as Date)) {
+            onDateSelect({ from: new Date(date.from as Date), to: newDate });
+            setMonthTo(newDate);
+          }
+        } else if (highlightedPart === "secondMonth") {
+          const currentMonth = monthTo ? monthTo.getMonth() : 0;
+          const newMonthIndex = currentMonth + (event.deltaY > 0 ? -1 : 1);
+          handleMonthChange(newMonthIndex, "to");
+        } else if (highlightedPart === "secondYear" && yearTo !== undefined) {
+          const newYear = yearTo + (event.deltaY > 0 ? -1 : 1);
+          handleYearChange(newYear, "to");
         }
-      } else if (highlightedPart === "firstMonth") {
-        const currentMonth = monthFrom ? monthFrom.getMonth() : 0;
-        const newMonthIndex = currentMonth + (event.deltaY > 0 ? -1 : 1);
-        handleMonthChange(newMonthIndex, "from");
-      } else if (highlightedPart === "firstYear" && yearFrom !== undefined) {
-        const newYear = yearFrom + (event.deltaY > 0 ? -1 : 1);
-        handleYearChange(newYear, "from");
-      } else if (highlightedPart === "secondDay") {
-        const newDate = new Date(date.to as Date);
-        const increment = event.deltaY > 0 ? -1 : 1;
-        newDate.setDate(newDate.getDate() + increment);
-        if (newDate >= (date.from as Date)) {
-          onDateSelect({ from: new Date(date.from as Date), to: newDate });
-          setMonthTo(newDate);
-        }
-      } else if (highlightedPart === "secondMonth") {
-        const currentMonth = monthTo ? monthTo.getMonth() : 0;
-        const newMonthIndex = currentMonth + (event.deltaY > 0 ? -1 : 1);
-        handleMonthChange(newMonthIndex, "to");
-      } else if (highlightedPart === "secondYear" && yearTo !== undefined) {
-        const newYear = yearTo + (event.deltaY > 0 ? -1 : 1);
-        handleYearChange(newYear, "to");
-      }
-    };
+      },
+      [
+        highlightedPart,
+        date,
+        numberOfMonths,
+        onDateSelect,
+        monthFrom,
+        yearFrom,
+        monthTo,
+        yearTo,
+        handleMonthChange,
+        handleYearChange,
+      ]
+    );
 
     React.useEffect(() => {
       const firstDayElement = document.getElementById(`firstDay-${id}`);
@@ -385,7 +413,7 @@ export const CalendarDatePicker = React.forwardRef<
           }
         });
       };
-    }, [highlightedPart, date]);
+    }, [highlightedPart, date, handleWheel, id]);
 
     const formatWithTz = (date: Date, fmt: string) =>
       formatInTimeZone(date, timeZone, fmt);

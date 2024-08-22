@@ -55,7 +55,12 @@ const useInitializeChatClient = () => {
         setChatClient(null);
       }
     };
-  }, [session?.user?.id, chatClient]);
+  }, [
+    session?.user?.id,
+    chatClient,
+    session?.user?.image,
+    session?.user?.name,
+  ]);
 
   return chatClient;
 };

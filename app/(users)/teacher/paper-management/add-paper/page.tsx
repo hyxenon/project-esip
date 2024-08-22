@@ -152,6 +152,7 @@ const AddPaper = () => {
                       className="w-full border-[#B0B0B0]"
                       id="date"
                     />
+                    {/* {selectedDateRange.from.toDateString()} */}
                   </div>
                 </div>
 

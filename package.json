@@ -68,6 +68,7 @@
     "react-spinners": "^0.13.8",
     "recharts": "^2.12.7",
     "resend": "^3.2.0",
+    "sharp": "^0.33.5",
     "stream-chat": "^8.37.0",
     "stream-chat-react": "^11.23.3",
     "tailwind-merge": "^2.4.0",

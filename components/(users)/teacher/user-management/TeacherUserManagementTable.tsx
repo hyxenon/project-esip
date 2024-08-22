@@ -36,7 +36,7 @@ const TeacherUserManagementTable = ({
     if (!state.isLoading) {
       setIsLoading(false);
     }
-  }, [studentUsers, teacherUsers, dispatch]);
+  }, [studentUsers, teacherUsers, dispatch, role, state.isLoading]);
 
   return (
     <Card className="w-full border-[#B0B0B0]">

@@ -20,7 +20,7 @@ export default function TeacherLayout({
       <UserManagementProvider>
         <TeacherUserManagementProvider>
           <Navbar role="TEACHER" />
-          <div className="flex flex-col py-4 lg:min-h-[calc(100vh-79px)] bg-[#fffffd]">
+          <div className="flex flex-col py-4 lg:min-h-[calc(100vh-79px)] ">
             <div className="flex-1">{children}</div>
           </div>
         </TeacherUserManagementProvider>

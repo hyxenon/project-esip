@@ -146,7 +146,7 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
   useEffect(() => {
     form.setValue("role", "TEACHER");
     form.setValue("schoolId", selectedSchool?.id ? selectedSchool.id : "");
-  }, [selectedSchool]);
+  }, [selectedSchool, form]);
 
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");

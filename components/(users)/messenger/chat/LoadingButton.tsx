@@ -1,5 +1,4 @@
 import { ComponentPropsWithoutRef } from "react";
-import ChatButton from "./chatButton";
 import { LoadingIndicator } from "stream-chat-react";
 import { Button } from "@/components/ui/button";
 
