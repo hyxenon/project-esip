@@ -130,6 +130,9 @@ function ProfileForm({ onSchoolAdded }: ProfileFormProps) {
         title: "School Added Successfully",
         description: `${res.success}`,
       });
+      await edgestore.publicFiles.confirmUpload({
+        url: values.image,
+      });
       form.reset();
       setFile(undefined);
       setProgress(0);
@@ -309,6 +312,9 @@ function ProfileForm({ onSchoolAdded }: ProfileFormProps) {
                               if (file) {
                                 const res = await edgestore.publicFiles.upload({
                                   file,
+                                  options: {
+                                    temporary: true,
+                                  },
                                   onProgressChange: (progressData) => {
                                     setProgress(progressData);
                                   },

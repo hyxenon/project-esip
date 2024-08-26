@@ -42,6 +42,8 @@ import {
 } from "@/components/ui/form";
 import { IoMdClose } from "react-icons/io";
 import { v4 as uuidv4 } from "uuid";
+import { useEdgeStore } from "@/lib/edgestore";
+import Link from "next/link";
 
 type AuthorModel = {
   firstName: string;
@@ -64,8 +66,8 @@ const AddPaperForm = () => {
     to: new Date(),
   });
 
-  //   const [firstName, setFirstName] = useState("");
-  //   const [lastName, setLastName] = useState("");
+  const [file, setFile] = useState<File>();
+  const { edgestore } = useEdgeStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -86,6 +88,24 @@ const AddPaperForm = () => {
       },
     ]);
     form.reset();
+  };
+
+  const handleFileUpload = async () => {
+    if (file) {
+      const res = await edgestore.publicFiles.upload({
+        file,
+        options: {
+          temporary: true,
+        },
+        onProgressChange: (progress) => {
+          // you can use this to show a progress bar
+          console.log(progress);
+        },
+      });
+      // you can run some server action or api here
+      // to add the necessary data to your database
+      console.log(res);
+    }
   };
 
   return (
@@ -268,9 +288,25 @@ const AddPaperForm = () => {
                   </CardContent>
                 </Card>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
-                  <Label htmlFor="picture">File</Label>
-                  <Input id="picture" type="file" accept="application/pdf" />
+                  <Label htmlFor="file">File</Label>
+                  <Input
+                    onChange={(e) => {
+                      setFile(e.target.files?.[0]);
+                    }}
+                    id="file"
+                    type="file"
+                    accept="application/pdf"
+                  />
+                  <Button onClick={handleFileUpload}>Upload</Button>
                 </div>
+                <Link
+                  href={
+                    "https://files.edgestore.dev/i3fk8xebtpfydpdd/publicFiles/_public/b79b6f8e-4777-44e0-b89e-91fa88ffdcbb.pdf"
+                  }
+                  target="_blank"
+                >
+                  Check file
+                </Link>
                 <Button className="bg-[#606C38] hover:bg-[#283618]">
                   Add Paper
                 </Button>
