@@ -126,7 +126,7 @@ const ResearchProposalForm = () => {
 
   const handleFileUpload = async () => {
     if (file) {
-      const res = await edgestore.publicFiles.upload({
+      const res = await edgestore.myProtectedFiles.upload({
         file,
         options: {
           temporary: true,
