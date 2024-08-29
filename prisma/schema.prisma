@@ -20,19 +20,21 @@ enum UserRole {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String          @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?         @unique
   password      String?
   role          UserRole
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   accounts      Account[]
-  school        School?   @relation(fields: [schoolId], references: [id])
+  school        School?         @relation(fields: [schoolId], references: [id])
   schoolId      String?
   isPending     Boolean?
+  ResearchPaper ResearchPaper[]
+  Comment       Comment[]
 }
 
 model Account {
@@ -87,4 +89,43 @@ model School {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   User          User[]
+}
+
+model ResearchPaper {
+  id                 String    @id @default(cuid())
+  title              String
+  researchAdviser    String
+  researchConsultant String
+  researchCategory   String
+  researchType       String
+  date               DateTime
+  introduction       String
+  abstract           String?
+  references         String
+  file               String?
+  grade              String?
+  views              Int       @default(0)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  userId             String
+  user               User      @relation(fields: [userId], references: [id])
+  comments           Comment[]
+  authors            Author[]  @relation("ResearchPaperAuthors")
+}
+
+model Author {
+  id             String          @id @default(cuid())
+  firstName      String
+  lastName       String
+  researchPapers ResearchPaper[] @relation("ResearchPaperAuthors")
+}
+
+model Comment {
+  id              String        @id @default(cuid())
+  content         String
+  createdAt       DateTime      @default(now())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  researchPaperId String
+  researchPaper   ResearchPaper @relation(fields: [researchPaperId], references: [id], onDelete: Cascade)
 }

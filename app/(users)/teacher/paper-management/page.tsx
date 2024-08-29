@@ -8,7 +8,7 @@ import TotalPapersCard from "@/components/(users)/teacher/paper-management/Total
 import TotalResearchProposal from "@/components/(users)/teacher/paper-management/TotalResearchProposal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { PaperItemModel, ResearchPaperModel } from "@/models/models";
+import { PaperItemModel, ResearchPaperModel1 } from "@/models/models";
 import Link from "next/link";
 import React from "react";
 
@@ -133,7 +133,7 @@ const dataPapers: PaperItemModel[] = [
   },
 ];
 
-const papersData: ResearchPaperModel[] = [
+const papersData: ResearchPaperModel1[] = [
   {
     adviser: "Maricor Santos",
     type: "Proposal",

@@ -8,20 +8,44 @@ export type registerSchema = {
 };
 
 export type PaperItemModel = {
-  title: string
-  id: string
-  date: Date
-  category: string
-}
+  title: string;
+  id: string;
+  date: Date;
+  category: string;
+};
+
+export type ResearchPaperModel1 = {
+  title: string;
+  id: string;
+  date: Date;
+  category: string;
+  adviser: string;
+  type: string;
+};
+
+export type AuthorPaper = {
+  id?: string; // id can be optional since it might be generated automatically
+  firstName: string;
+  lastName: string;
+};
 
 export type ResearchPaperModel = {
-  title: string
-  id: string
-  date: Date
-  category: string
-  adviser: string
-  type: string
-}
+  title: string;
+  researchAdviser: string;
+  researchConsultant: string;
+  researchCategory: string;
+  researchType: string;
+  date: Date;
+  introduction: string;
+  references: string;
+  file?: string;
+  grade?: string;
+  views?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+  userId: string;
+  authors?: AuthorPaper[];
+};
 
 export const LoginSchema = z.object({
   email: z.string().email({
@@ -66,11 +90,7 @@ export const RegisterSchema = z.object({
   image: z.string().optional(),
 });
 
-
-export const AddUserTeacherSchema = z.object({
-  
-})
-
+export const AddUserTeacherSchema = z.object({});
 
 export const UserEditSchema = z.object({
   email: z.string().email({
@@ -86,10 +106,8 @@ export const UserEditSchema = z.object({
     message: "Role is required",
   }),
   image: z.string().optional(),
-  password: z.string().optional()
-})
-
-
+  password: z.string().optional(),
+});
 
 export const AddSchoolSchema = z.object({
   email: z.string().email({
@@ -111,7 +129,7 @@ export const AddSchoolSchema = z.object({
     message: "Enter a valid 4-digit postal code",
   }),
   image: z.string().min(1, {
-    message: "Please Upload School Logo"
+    message: "Please Upload School Logo",
   }),
   contactNumber: z
     .string()
@@ -120,5 +138,4 @@ export const AddSchoolSchema = z.object({
     })
     .min(11, { message: "Phone number must be 11 digits long" })
     .max(11, { message: "Phone number must be 11 digits long" }),
- 
 });
