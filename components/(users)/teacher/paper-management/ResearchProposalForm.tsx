@@ -369,15 +369,17 @@ const ResearchProposalForm = () => {
                         <SelectValue placeholder="Category" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="life">Life Science</SelectItem>
-                        <SelectItem value="physical">
+                        <SelectItem value="life science">
+                          Life Science
+                        </SelectItem>
+                        <SelectItem value="physical science">
                           Physical Science
                         </SelectItem>
-                        <SelectItem value="expo">
+                        <SelectItem value="science innovation expo">
                           Science Innovation Expo
                         </SelectItem>
                         <SelectItem value="robotics">Robotics</SelectItem>
-                        <SelectItem value="mathematical">
+                        <SelectItem value="mathematical and computational">
                           Mathematical and Computational
                         </SelectItem>
                       </SelectContent>

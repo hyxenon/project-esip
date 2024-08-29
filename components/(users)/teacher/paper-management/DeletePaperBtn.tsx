@@ -1,3 +1,4 @@
+import { deletePaper } from "@/actions/paperManagement.action";
 import { deleteUser } from "@/actions/userManagement";
 import {
   AlertDialog,
@@ -14,65 +15,56 @@ import { useTeacherUserManagementContext } from "@/context/TeacherUserManagement
 import { useUserManagementContext } from "@/context/UserManagementContext";
 import { useSession } from "next-auth/react";
 
-interface DeleteUserButtonProps {
+interface DeletePaperButtonProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   name: string | null;
   id: string;
 }
-const DeleteUserButton = ({
+const DeletePaperBtn = ({
   isOpen,
   setIsOpen,
   name,
   id,
-}: DeleteUserButtonProps) => {
+}: DeletePaperButtonProps) => {
   const { toast } = useToast();
-  const { dispatch } = useUserManagementContext();
-  const { dispatch: teacherDispatch } = useTeacherUserManagementContext();
-  const { data: session } = useSession();
 
-  const handleDeleteUser = async () => {
-    const response = await deleteUser(id);
+  const handleDeletePaper = async () => {
+    const res = await deletePaper(id);
 
-    if (response.success) {
+    if (res) {
       toast({
         variant: "success",
         title: "Success",
-        description: "User deleted successfully.",
+        description: "Paper deleted successfully.",
       });
-
-      if (session?.user?.role === "ADMIN") {
-        dispatch({ type: "DELETE_USER", payload: id });
-      } else if (session?.user?.role === "TEACHER") {
-        teacherDispatch({ type: "DELETE_USER", payload: id });
-      }
     } else {
       toast({
         variant: "destructive",
         title: "Error",
-        description: response.error || "Failed to delete user.",
+        description: "Failed to delete paper.",
       });
     }
-
-    setIsOpen(false); // Close the dialog
   };
+
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you absolutely sure you want to delete {name}?
+            Are you absolutely sure you want to delete{" "}
+            <span className="font-bold text-red-500">{name}</span>?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the user
-            account and remove this data from our servers.
+            This action cannot be undone. This will permanently delete the
+            Research Paper and remove this data from our servers.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             className="bg-destructive hover:bg-destructive"
-            onClick={handleDeleteUser}
+            onClick={handleDeletePaper}
           >
             Delete
           </AlertDialogAction>
@@ -82,4 +74,4 @@ const DeleteUserButton = ({
   );
 };
 
-export default DeleteUserButton;
+export default DeletePaperBtn;

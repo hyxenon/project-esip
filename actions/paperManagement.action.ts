@@ -1,6 +1,7 @@
 "use server";
 import { db } from "@/lib/db";
 import { ResearchPaperModel } from "@/models/models";
+import { revalidatePath } from "next/cache";
 
 export const addResearchProposalPaper = async (data: ResearchPaperModel) => {
   const researchProposalPaper = await db.researchPaper.create({
@@ -34,4 +35,16 @@ export const addResearchProposalPaper = async (data: ResearchPaperModel) => {
 export const getAllPapers = async () => {
   const papers = await db.researchPaper.findMany();
   return { message: papers };
+};
+
+export const deletePaper = async (paperId: string) => {
+  const paper = await db.researchPaper.delete({
+    where: {
+      id: paperId,
+    },
+  });
+
+  revalidatePath("/teacher/paper-management");
+
+  return { message: "Deleted Paper" };
 };
