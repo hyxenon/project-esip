@@ -31,19 +31,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState, useTransition } from "react";
-import { useEdgeStore } from "@/lib/edgestore";
 
 import { useToast } from "@/components/ui/use-toast";
 
-import { PasswordInput } from "@/components/ui/password-input";
 import Image from "next/image";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { register } from "@/actions/auth/register";
-import {
-  UserModel,
-  useUserManagementContext,
-} from "@/context/UserManagementContext";
+
 import { User } from "./teacherTable/column";
 import { PasswordField } from "@/components/ui/password-field";
 
@@ -111,7 +106,6 @@ interface ProfileFormProps {
 }
 
 function ProfileForm({ selectedSchool }: ProfileFormProps) {
-  const { dispatch } = useUserManagementContext();
   const formSchema = z
     .object({
       email: z.string().email({ message: "Email is required." }),
@@ -183,7 +177,7 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
             schoolId: data.user.schoolId,
             school: data.user.school || null, // Adjust if `school` can be missing
           };
-          dispatch({ type: "ADD_USER", payload: newUser });
+
           setSuccess(data.success);
           form.reset();
         } else {
