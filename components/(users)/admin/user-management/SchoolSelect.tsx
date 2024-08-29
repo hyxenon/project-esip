@@ -47,7 +47,7 @@ const SchoolSelect = ({ schoolsData }: SchoolSelectProps) => {
         router.push(`/admin/user-management?id=${selectedSchool.id}`);
       }
     }
-  }, [selectedSchool, router]);
+  }, [selectedSchool, router, schoolsData]);
 
   useEffect(() => {
     const fetchSchool = async () => {
