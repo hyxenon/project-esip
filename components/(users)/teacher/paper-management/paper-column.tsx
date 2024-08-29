@@ -102,7 +102,7 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
     },
   },
   {
-    accessorKey: "type",
+    accessorKey: "researchType",
     header: ({ column }) => {
       return (
         <Button
@@ -116,7 +116,7 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
     },
   },
   {
-    accessorKey: "category",
+    accessorKey: "researchCategory",
     header: ({ column }) => {
       return (
         <Button
@@ -140,8 +140,12 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
     },
   },
   {
-    accessorKey: "adviser",
+    accessorKey: "researchAdviser",
     header: "Adviser",
+  },
+  {
+    accessorKey: "views",
+    header: "Views",
   },
   {
     id: "actions",

@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-import logo from "../../../assets/authForm/authLogo.svg";
 import { FaSchool, FaUser } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { GiArchiveResearch } from "react-icons/gi";
