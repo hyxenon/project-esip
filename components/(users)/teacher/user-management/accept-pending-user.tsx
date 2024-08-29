@@ -1,4 +1,4 @@
-import { acceptPendingUser, deletePendingUser } from "@/actions/userManagement";
+import { acceptPendingUser } from "@/actions/userManagement";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,8 +25,6 @@ const AcceptPendingUser = ({
 }: AcceptPendingProps) => {
   const { toast } = useToast();
 
-  const { dispatch: teacherDispatch } = useTeacherUserManagementContext();
-
   const handleDeleteUser = async () => {
     const res = await acceptPendingUser(id);
 
@@ -36,8 +34,6 @@ const AcceptPendingUser = ({
         title: "Success",
         description: "User request accepted.",
       });
-
-      teacherDispatch({ type: "DELETE_PENDING_USER", payload: id });
     } else {
       toast({
         variant: "destructive",

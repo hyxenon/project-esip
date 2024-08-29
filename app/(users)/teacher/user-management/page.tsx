@@ -1,26 +1,33 @@
-"use client";
-import TotalPendingUser from "@/components/(users)/teacher/user-management/cards/totalPendingUser";
+import { getSchool } from "@/actions/schoolManagement";
+import {
+  getAllUsersByStudent,
+  getAllUsersByTeacher,
+  getPendingUsers,
+} from "@/actions/userManagement";
+import { auth } from "@/auth";
+import { User } from "@/components/(users)/admin/user-management/tables/teacherTable/column";
 import TotalStudents from "@/components/(users)/teacher/user-management/cards/totalStudents";
 import TotalTeachers from "@/components/(users)/teacher/user-management/cards/totalTeachers";
 import TotalUsers from "@/components/(users)/teacher/user-management/cards/totalUsers";
 import TeacherUserTabList from "@/components/(users)/teacher/user-management/TeacherUserTabList";
-import { useTeacherUserManagementContext } from "@/context/TeacherUserManagementContext";
-import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
 
-const UserManagement = () => {
-  const { state, dispatch } = useTeacherUserManagementContext();
+const UserManagement = async () => {
+  const session = await auth();
+  let teachersData: User[] = [];
+  let studentsData: User[] = [];
+  let pendingData: User[] = [];
+  let specificSchool;
 
-  const { data: session } = useSession();
-
-  useEffect(() => {
-    if (session?.user?.schoolId) {
-      dispatch({
-        type: "SET_SELECTED_SCHOOL",
-        payload: session.user?.schoolId,
-      });
-    }
-  }, [session, dispatch]);
+  if (session?.user?.schoolId) {
+    const teachersResponse = await getAllUsersByTeacher(session.user.schoolId);
+    const studentsResponse = await getAllUsersByStudent(session.user.schoolId);
+    const pendingResponse = await getPendingUsers(session.user.schoolId);
+    const specificSchoolData = await getSchool(session.user.schoolId);
+    specificSchool = specificSchoolData?.message;
+    teachersData = teachersResponse;
+    studentsData = studentsResponse;
+    pendingData = pendingResponse;
+  }
 
   return (
     <div className="flex flex-col px-3 md:px-8 lg:py-4 lg:px-16 xl:px-28">
@@ -36,7 +43,12 @@ const UserManagement = () => {
       </div>
 
       {/* Tables */}
-      <TeacherUserTabList />
+      <TeacherUserTabList
+        teachersData={teachersData}
+        studentsData={studentsData}
+        pendingData={pendingData}
+        specificSchool={specificSchool}
+      />
     </div>
   );
 };

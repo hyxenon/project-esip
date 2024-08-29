@@ -25,8 +25,6 @@ const DeletePendingUser = ({
 }: DeleteUserButtonProps) => {
   const { toast } = useToast();
 
-  const { dispatch: teacherDispatch } = useTeacherUserManagementContext();
-
   const handleDeleteUser = async () => {
     const res = await deletePendingUser(id);
 
@@ -36,8 +34,6 @@ const DeletePendingUser = ({
         title: "Removed",
         description: "User request removed.",
       });
-
-      teacherDispatch({ type: "DELETE_PENDING_USER", payload: id });
     } else {
       toast({
         variant: "destructive",

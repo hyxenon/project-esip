@@ -285,6 +285,7 @@ export const acceptPendingUser = async (userId: string) => {
       include: { school: true },
     });
 
+    revalidatePath("/teacher/user-management");
     return { success: true };
   } catch (error) {
     console.error("Error updating user: ", error);
@@ -310,6 +311,7 @@ export const deletePendingUser = async (userId: string) => {
     await db.user.delete({
       where: { id: userId },
     });
+    revalidatePath("/teacher/user-management");
     return { success: true };
   } catch (error) {
     console.error("Error deleting user:", error);

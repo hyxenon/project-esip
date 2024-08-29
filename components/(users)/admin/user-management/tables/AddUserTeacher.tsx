@@ -55,7 +55,7 @@ interface SchoolModel {
 }
 
 interface AddUserTeacherProps {
-  selectedSchool: SchoolModel | null;
+  selectedSchool: any;
 }
 
 export function AddUserTeacher({ selectedSchool }: AddUserTeacherProps) {
