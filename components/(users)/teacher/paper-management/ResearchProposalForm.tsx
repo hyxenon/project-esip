@@ -45,9 +45,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { addResearchProposalPaper } from "@/actions/addPaper.action";
 import { AuthorPaper, ResearchPaperModel } from "@/models/models";
 import { useSession } from "next-auth/react";
+import { addResearchProposalPaper } from "@/actions/paperManagement.action";
 
 const authorFormSchema = z.object({
   firstName: z.string().min(1, {

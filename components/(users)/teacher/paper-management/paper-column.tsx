@@ -15,7 +15,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ResearchPaperModel1 } from "@/models/models";
+import { ResearchPaperModel } from "@/models/models";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
@@ -28,7 +28,7 @@ const options: Intl.DateTimeFormatOptions = {
 
 // Props type for the ResearchPaperActions component
 type ResearchPaperActionsProps = {
-  data: ResearchPaperModel1;
+  data: ResearchPaperModel;
 };
 
 const ResearchPaperActions: React.FC<ResearchPaperActionsProps> = ({
@@ -61,7 +61,7 @@ const ResearchPaperActions: React.FC<ResearchPaperActionsProps> = ({
   );
 };
 
-export const columns: ColumnDef<ResearchPaperModel1>[] = [
+export const columns: ColumnDef<ResearchPaperModel>[] = [
   {
     accessorKey: "title",
     header: ({ column }) => {
@@ -102,7 +102,7 @@ export const columns: ColumnDef<ResearchPaperModel1>[] = [
     },
   },
   {
-    accessorKey: "type",
+    accessorKey: "researchType",
     header: ({ column }) => {
       return (
         <Button
@@ -116,7 +116,7 @@ export const columns: ColumnDef<ResearchPaperModel1>[] = [
     },
   },
   {
-    accessorKey: "category",
+    accessorKey: "researchCategory",
     header: ({ column }) => {
       return (
         <Button
@@ -140,11 +140,12 @@ export const columns: ColumnDef<ResearchPaperModel1>[] = [
     },
   },
   {
-    accessorKey: "adviser",
+    accessorKey: "researchAdviser",
     header: "Adviser",
   },
   {
-    accessorKey: "vi",
+    accessorKey: "views",
+    header: "Views",
   },
   {
     id: "actions",

@@ -30,3 +30,8 @@ export const addResearchProposalPaper = async (data: ResearchPaperModel) => {
 
   return researchProposalPaper;
 };
+
+export const getAllPapers = async () => {
+  const papers = await db.researchPaper.findMany();
+  return { message: papers };
+};

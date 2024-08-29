@@ -30,6 +30,7 @@ export type AuthorPaper = {
 };
 
 export type ResearchPaperModel = {
+  id?: string;
   title: string;
   researchAdviser: string;
   researchConsultant: string;
@@ -38,7 +39,7 @@ export type ResearchPaperModel = {
   date: Date;
   introduction: string;
   references: string;
-  file?: string;
+  file?: string | null;
   grade?: string;
   views?: number;
   createdAt?: Date;
