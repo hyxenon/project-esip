@@ -26,7 +26,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { RegisterSchema, UserEditSchema } from "@/models/models";
+import { UserEditSchema } from "@/models/models";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
@@ -55,13 +55,8 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { getOneUserData, updateUser } from "@/actions/userManagement";
-import {
-  UserModel,
-  useUserManagementContext,
-} from "@/context/UserManagementContext";
-import { User } from "./teacherTable/column";
+
 import { useSession } from "next-auth/react";
-import { useTeacherUserManagementContext } from "@/context/TeacherUserManagementContext";
 
 interface EditUserButtonProps {
   isOpen: boolean;
@@ -117,12 +112,10 @@ type UserEditModel = {
 
 function ProfileForm({ id }: ProfileFormProps) {
   const { state: schoolState } = useSchoolContext();
-  const { state: userState, dispatch } = useUserManagementContext();
-  const { dispatch: teacherDispatch } = useTeacherUserManagementContext();
+
   const { data: session } = useSession();
 
   const { schools } = schoolState;
-  const { users } = userState;
 
   const [userData, setUserData] = useState<UserEditModel>();
   const [formInitialized, setFormInitialized] = useState(false);
@@ -167,23 +160,6 @@ function ProfileForm({ id }: ProfileFormProps) {
         title: "User Updated Successfully",
         description: `Updated changes to ${userData?.name}`,
       });
-      const updatedUser: User = {
-        id: user.id,
-        email: values.email,
-        image: values.image,
-        createdAt: new Date(user!.createdAt),
-        updatedAt: new Date(),
-        name: values.name,
-        role: values.role,
-        school: user.school,
-        schoolId: values.schoolId,
-      };
-
-      if (session?.user?.role === "ADMIN") {
-        dispatch({ type: "EDIT_USER", payload: updatedUser });
-      } else if (session?.user?.role === "TEACHER") {
-        teacherDispatch({ type: "EDIT_USER", payload: updatedUser });
-      }
     } else {
       toast({
         variant: "destructive",

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { User } from "@/components/(users)/admin/user-management/tables/teacherTable/column";
 import { parseStringify } from "@/lib/utils";
 import { liveblocks } from "@/lib/liveblocks";
+import { revalidatePath } from "next/cache";
 
 export const getAllUsersByTeacher = async (filter: string): Promise<User[]> => {
   try {
@@ -260,6 +261,7 @@ export const updateUser = async (
       },
     });
 
+    revalidatePath("/admin/user-management");
     return updatedUser;
   } catch (error) {
     console.error("Error updating user:", error);
@@ -295,6 +297,7 @@ export const deleteUser = async (userId: string) => {
     await db.user.delete({
       where: { id: userId },
     });
+    revalidatePath("/admin/user-management");
     return { success: true };
   } catch (error) {
     console.error("Error deleting user:", error);

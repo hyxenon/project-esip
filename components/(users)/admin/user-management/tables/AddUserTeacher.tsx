@@ -107,7 +107,7 @@ export function AddUserTeacher({ selectedSchool }: AddUserTeacherProps) {
 }
 
 interface ProfileFormProps {
-  selectedSchool: SchoolModel | null;
+  selectedSchool: any;
 }
 
 function ProfileForm({ selectedSchool }: ProfileFormProps) {
@@ -288,7 +288,7 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
                   height={30}
                   className="w-7 h-7 rounded-full"
                 />
-                <p>{selectedSchool?.label}</p>
+                <p>{selectedSchool.schoolName}</p>
               </div>
             </div>
           </div>
