@@ -1,10 +1,9 @@
-// SchoolForm.tsx
-"use client";
 import { columns } from "./tables/schoolTable/columns";
 import { DataTable } from "./tables/schoolTable/data-table";
 import { AddSchoolButton } from "./tables/schoolTable/addSchoolButton";
-import { useSchoolContext } from "@/context/SchoolContext";
+
 import { Skeleton } from "@/components/ui/skeleton";
+import { getSchools } from "@/actions/schoolManagement";
 
 export interface SchoolModel {
   email: string;
@@ -21,32 +20,18 @@ export interface SchoolModel {
   updatedAt: Date;
 }
 
-const SchoolForm = () => {
-  const { state, dispatch } = useSchoolContext();
-
-  const handleSchoolAdded = (newSchool: SchoolModel) => {
-    dispatch({ type: "ADD_SCHOOL", payload: newSchool });
-  };
-
+const SchoolForm = async () => {
+  const res = await getSchools();
+  const schools: SchoolModel[] = res.message;
   return (
     <section className="w-full">
       <div className="flex justify-end">
-        <AddSchoolButton onSchoolAdded={handleSchoolAdded} />
+        <AddSchoolButton />
       </div>
       <div className="">
-        {state.isLoading ? (
-          <div className="flex items-center space-x-4">
-            <Skeleton className="h-12 w-12 rounded-full" />
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-[250px]" />
-              <Skeleton className="h-4 w-[200px]" />
-            </div>
-          </div>
-        ) : (
-          <div>
-            <DataTable columns={columns} data={state.schools} />
-          </div>
-        )}
+        <div>
+          <DataTable columns={columns} data={schools} />
+        </div>
       </div>
     </section>
   );

@@ -8,10 +8,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
-import { useSchoolContext } from "@/context/SchoolContext";
 
 interface DeleteSchoolButtonProps {
   isOpen: boolean;
@@ -26,13 +24,11 @@ const DeleteSchoolButton = ({
   schoolName,
 }: DeleteSchoolButtonProps) => {
   const { toast } = useToast();
-  const { dispatch } = useSchoolContext();
 
   const handleDeleteSchool = async () => {
     try {
       const res = await deleteSchool(schoolId);
       if (res.success) {
-        dispatch({ type: "DELETE_SCHOOL", payload: schoolId });
         toast({
           variant: "success",
           title: "School Deleted Successfully",

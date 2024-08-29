@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React from "react";
-import SchoolForm from "./SchoolForm";
 
 interface SchoolTableProps {
   children: any;

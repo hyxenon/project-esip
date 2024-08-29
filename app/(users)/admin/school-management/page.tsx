@@ -1,4 +1,3 @@
-"use client";
 import SubscriptionCard from "@/components/(users)/admin/school-management/cards/SubscriptionCard";
 import TotalSchoolCard from "@/components/(users)/admin/school-management/cards/TotalSchoolCard";
 import ActiveSchoolCard from "@/components/(users)/admin/school-management/cards/ActiveSchoolCard";
