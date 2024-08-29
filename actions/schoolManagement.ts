@@ -134,6 +134,7 @@ export const statusChange = async (schoolId: string, newStatus: string) => {
       where: { id: schoolId },
       data: { status: newStatus },
     });
+    revalidatePath("/admin/school-management");
     return { success: true, message: updatedSchool };
   } catch (error: any) {
     console.error("Error updating school status:", error);
