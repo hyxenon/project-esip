@@ -1,5 +1,5 @@
 import { deletePaper } from "@/actions/paperManagement.action";
-import { deleteUser } from "@/actions/userManagement";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,9 +11,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
-import { useTeacherUserManagementContext } from "@/context/TeacherUserManagementContext";
-import { useUserManagementContext } from "@/context/UserManagementContext";
-import { useSession } from "next-auth/react";
 
 interface DeletePaperButtonProps {
   isOpen: boolean;

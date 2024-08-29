@@ -47,7 +47,7 @@ const SchoolSelect = ({ schoolsData }: SchoolSelectProps) => {
         router.push(`/admin/user-management?id=${selectedSchool.id}`);
       }
     }
-  }, [selectedSchool, router, schoolsData]);
+  }, [selectedSchool, router]);
 
   useEffect(() => {
     const fetchSchool = async () => {
@@ -68,7 +68,7 @@ const SchoolSelect = ({ schoolsData }: SchoolSelectProps) => {
     };
 
     fetchSchool();
-  }, []);
+  }, [schoolsData]);
 
   return (
     <div className="flex items-center space-x-4 mt-4">

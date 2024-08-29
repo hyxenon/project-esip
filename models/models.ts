@@ -1,3 +1,4 @@
+import { SchoolModel } from "@/components/(users)/admin/school-management/SchoolForm";
 import * as z from "zod";
 
 export type registerSchema = {
@@ -46,6 +47,19 @@ export type ResearchPaperModel = {
   updatedAt?: Date;
   userId: string;
   authors?: AuthorPaper[];
+};
+
+export type PendingUserModel = {
+  id: string;
+  name: string | null;
+  email: string | null;
+  role: string;
+  image?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  schoolId: string | null;
+  school?: SchoolModel | null;
+  isPending?: boolean;
 };
 
 export const LoginSchema = z.object({
