@@ -21,7 +21,7 @@ const Navbar = ({ role }: NavbarProps) => {
 
   return (
     <div
-      className={`lg:px-16 flex items-center gap-x-8 lg:shadow lg:py-4 lg:bg-[#283618]`}
+      className={`lg:px-16 flex items-center bg-gray-50 gap-x-8 lg:shadow lg:py-4 lg:bg-[#283618]`}
     >
       <Sheet>
         <SheetTrigger asChild>

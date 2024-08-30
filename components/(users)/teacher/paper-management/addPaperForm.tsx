@@ -29,7 +29,7 @@ interface AddPaperFormProps {
 
 const AddPaperForm = ({ isEdit, paperId, paper }: AddPaperFormProps) => {
   return (
-    <div>
+    <Card className="py-4 px-6">
       {/* Breadcrumb */}
       <Breadcrumb>
         <BreadcrumbList>
@@ -88,7 +88,7 @@ const AddPaperForm = ({ isEdit, paperId, paper }: AddPaperFormProps) => {
           </>
         )}
       </div>
-    </div>
+    </Card>
   );
 };
 

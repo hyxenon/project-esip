@@ -20,7 +20,7 @@ const PaperManagement = async () => {
   const typedPapers: ResearchPaperModel[] = papers;
 
   return (
-    <div className="flex flex-col px-3 md:px-8 lg:py-4 lg:px-16 xl:px-28">
+    <div className="flex flex-col py-4 px-3 md:px-8 lg:py-4 lg:px-16 xl:px-28">
       <h4 className="scroll-m-20 text-xl font-semibold tracking-tight lg:mt-4">
         Paper Management
       </h4>
