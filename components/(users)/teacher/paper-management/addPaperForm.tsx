@@ -18,8 +18,16 @@ import {
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ResearchProposalForm from "./ResearchProposalForm";
+import { ResearchPaperModel } from "@/models/models";
+import { Badge } from "@/components/ui/badge";
 
-const AddPaperForm = () => {
+interface AddPaperFormProps {
+  isEdit?: boolean;
+  paperId?: string;
+  paper?: ResearchPaperModel;
+}
+
+const AddPaperForm = ({ isEdit, paperId, paper }: AddPaperFormProps) => {
   return (
     <div>
       {/* Breadcrumb */}
@@ -33,28 +41,52 @@ const AddPaperForm = () => {
           <BreadcrumbSeparator />
 
           <BreadcrumbItem>
-            <BreadcrumbPage>Add Research Paper</BreadcrumbPage>
+            <BreadcrumbPage>
+              {isEdit ? "Edit Research Paper" : "Add Research Paper"}
+            </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       <div className="md:container">
-        <Tabs defaultValue="proposal" className="">
-          <CardHeader>
-            <CardTitle>
-              <TabsList className="shadow-2xl bg-[#D9D9D9] bg-opacity-70">
-                <TabsTrigger value="proposal">Research Proposal</TabsTrigger>
-                <TabsTrigger value="paper">Research Paper</TabsTrigger>
-              </TabsList>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="">
-            <TabsContent value="proposal">
-              <ResearchProposalForm />
-            </TabsContent>
-            <TabsContent value="paper">Reserach Paper</TabsContent>
-          </CardContent>
-        </Tabs>
+        {isEdit && paperId && paper ? (
+          <>
+            <div className="flex justify-center mt-4">
+              <Badge className="bg-[#606C38] hover:bg-[#606C38]">
+                Edit Mode
+              </Badge>
+            </div>
+            <h2 className="scroll-m-20 my-4 border-b pb-2 text-xl font-semibold tracking-tight first:mt-0 capitalize ">
+              research {paper.researchType}
+            </h2>
+            <ResearchProposalForm
+              isEdit={isEdit}
+              paperId={paperId}
+              paper={paper}
+            />
+          </>
+        ) : (
+          <>
+            <Tabs defaultValue="proposal" className="">
+              <CardHeader>
+                <CardTitle>
+                  <TabsList className="shadow-2xl bg-[#D9D9D9] bg-opacity-70">
+                    <TabsTrigger value="proposal">
+                      Research Proposal
+                    </TabsTrigger>
+                    <TabsTrigger value="paper">Research Paper</TabsTrigger>
+                  </TabsList>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="">
+                <TabsContent value="proposal">
+                  <ResearchProposalForm />
+                </TabsContent>
+                <TabsContent value="paper">Reserach Paper</TabsContent>
+              </CardContent>
+            </Tabs>
+          </>
+        )}
       </div>
     </div>
   );

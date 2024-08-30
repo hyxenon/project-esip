@@ -104,6 +104,7 @@ model ResearchPaper {
   references         String
   file               String?
   grade              String?
+  isPublic           Boolean   @default(false)
   views              Int       @default(0)
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt

@@ -15,6 +15,7 @@ export const addResearchProposalPaper = async (data: ResearchPaperModel) => {
       introduction: data.introduction,
       references: data.references,
       file: data.file,
+      isPublic: data.isPublic,
       grade: data.grade,
       userId: data.userId,
       authors:
@@ -35,6 +36,42 @@ export const addResearchProposalPaper = async (data: ResearchPaperModel) => {
 export const getAllPapers = async () => {
   const papers = await db.researchPaper.findMany();
   return { message: papers };
+};
+
+export const getPaper = async (paperId: string) => {
+  const paper = await db.researchPaper.findFirst({
+    where: { id: paperId },
+    include: {
+      authors: true,
+    },
+  });
+
+  return paper;
+};
+
+export const updatePaper = async (
+  paperId: string,
+  data: ResearchPaperModel
+) => {
+  const { authors, ...rest } = data;
+
+  const updateData: any = {
+    ...rest,
+    grade: data.grade === "" ? null : data.grade,
+    authors: authors
+      ? {
+          set: authors.map((author) => ({ id: author.id })), // assuming you have the author IDs
+        }
+      : undefined,
+  };
+
+  const updatedPaper = await db.researchPaper.update({
+    where: { id: paperId },
+    data: updateData,
+  });
+
+  revalidatePath("/teacher/paper-management/add-paper");
+  return updatedPaper;
 };
 
 export const deletePaper = async (paperId: string) => {

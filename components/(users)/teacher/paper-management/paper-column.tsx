@@ -20,6 +20,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import DeletePaperBtn from "./DeletePaperBtn";
+import { useRouter } from "next/navigation";
 
 const options: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -35,9 +36,8 @@ type ResearchPaperActionsProps = {
 const ResearchPaperActions: React.FC<ResearchPaperActionsProps> = ({
   data,
 }) => {
-  const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [isStatusChangeOpen, setStatusChangeOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <>
@@ -57,7 +57,13 @@ const ResearchPaperActions: React.FC<ResearchPaperActionsProps> = ({
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem>View Details</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
+          <DropdownMenuItem
+            onClick={() =>
+              router.push(
+                `/teacher/paper-management/add-paper?edit=true&paperId=${data.id}`
+              )
+            }
+          >
             Edit
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -173,7 +179,17 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
   },
   {
     accessorKey: "date",
-    header: "Date",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Date
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const data = row.original;
       const formattedDate = data.date.toLocaleDateString("en-US", options);
@@ -183,8 +199,41 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
   },
 
   {
+    accessorKey: "isPublic",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Visibility
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+
+    cell: ({ row }) => {
+      const data = row.original;
+
+      return (
+        <p className="capitalize">{data.isPublic ? "public" : "private"}</p>
+      );
+    },
+  },
+
+  {
     accessorKey: "views",
-    header: "Views",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Views
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     id: "actions",

@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CalendarDatePicker } from "@/components/ui/calendar-picker";
 import { Textarea } from "@/components/ui/textarea";
 import { z } from "zod";
@@ -47,7 +47,11 @@ import {
 } from "@/components/ui/card";
 import { AuthorPaper, ResearchPaperModel } from "@/models/models";
 import { useSession } from "next-auth/react";
-import { addResearchProposalPaper } from "@/actions/paperManagement.action";
+import {
+  addResearchProposalPaper,
+  updatePaper,
+} from "@/actions/paperManagement.action";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const authorFormSchema = z.object({
   firstName: z.string().min(1, {
@@ -77,11 +81,22 @@ const formSchema = z.object({
   references: z.string().min(1, {
     message: "References is required.",
   }),
+  isPublic: z.string(),
   file: z.string().optional(),
   grade: z.string().optional(),
 });
 
-const ResearchProposalForm = () => {
+interface ResearchProposalFormProps {
+  isEdit?: boolean;
+  paperId?: string;
+  paper?: ResearchPaperModel;
+}
+
+const ResearchProposalForm = ({
+  isEdit,
+  paperId,
+  paper,
+}: ResearchProposalFormProps) => {
   const { data: sessionData } = useSession();
   const [selectedDateRange, setSelectedDateRange] = useState({
     from: new Date(new Date().getFullYear(), 0, 1),
@@ -94,6 +109,7 @@ const ResearchProposalForm = () => {
 
   const [progress, setProgress] = useState<number>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [authors, setAuthors] = useState<AuthorPaper[]>([]);
 
   const { toast } = useToast();
 
@@ -115,9 +131,31 @@ const ResearchProposalForm = () => {
       researchConsultant: "",
       file: "",
       references: "",
+      isPublic: "false",
     },
   });
-  const [authors, setAuthors] = useState<AuthorPaper[]>([]);
+
+  useEffect(() => {
+    if (isEdit && paperId && paper) {
+      form.setValue("title", paper.title);
+      form.setValue("researchAdviser", paper.researchAdviser);
+      form.setValue("researchConsultant", paper.researchConsultant);
+      form.setValue("researchCategory", paper.researchCategory);
+      form.setValue("introduction", paper.introduction);
+      form.setValue("references", paper.references);
+      form.setValue("grade", paper.grade ?? "");
+      form.setValue("isPublic", paper.isPublic ? "true" : "false");
+
+      setSelectedDateRange({
+        from: new Date(paper.date),
+        to: new Date(paper.date), // Assuming you're setting both `from` and `to` to the same date
+      });
+
+      if (paper.authors) {
+        setAuthors(paper.authors);
+      }
+    }
+  }, [isEdit, paperId, paper, form]);
 
   const authorFormSubmit = (values: z.infer<typeof authorFormSchema>) => {
     setAuthors((prev) => [
@@ -133,36 +171,51 @@ const ResearchProposalForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-    handleFileUpload().then((uploadedUrl) => {
-      if (sessionData?.user?.id) {
-        const data: ResearchPaperModel = {
-          ...values,
-          researchType: "proposal",
-          date: selectedDateRange.from,
-          authors: authors,
-          userId: sessionData?.user?.id,
-          file: uploadedUrl || undefined, // Assign URL or undefined if null
-        };
+    if (isEdit && paperId && paper) {
+      const data: ResearchPaperModel = {
+        ...values,
+        isPublic: values.isPublic === "true" ? true : false,
+        researchType: paper.researchType,
+        date: selectedDateRange.from,
+        authors: authors,
+        userId: paper.userId,
+      };
 
-        addResearchProposalPaper(data).then((paper) => {
-          form.reset();
-          setAuthors([]);
-          setProgress(0);
-          if (fileInputRef.current) {
-            fileInputRef.current.value = ""; // Reset the input
-          }
-          setFile(undefined); // Reset the file state if needed
-          console.log(paper);
-        });
+      const updatedPaper = await updatePaper(paperId, data);
 
-        toast({
-          title: "Add Paper Successfully.",
-          variant: "success",
-        });
+      setIsLoading(false);
+    } else {
+      handleFileUpload().then((uploadedUrl) => {
+        if (sessionData?.user?.id) {
+          const data: ResearchPaperModel = {
+            ...values,
+            isPublic: values.isPublic === "true" ? true : false,
+            researchType: "proposal",
+            date: selectedDateRange.from,
+            authors: authors,
+            userId: sessionData?.user?.id,
+            file: uploadedUrl || undefined, // Assign URL or undefined if null
+          };
 
-        setIsLoading(false);
-      }
-    });
+          addResearchProposalPaper(data).then((paper) => {
+            form.reset();
+            setAuthors([]);
+            setProgress(0);
+            if (fileInputRef.current) {
+              fileInputRef.current.value = ""; // Reset the input
+            }
+            setFile(undefined); // Reset the file state if needed
+          });
+
+          toast({
+            title: "Add Paper Successfully.",
+            variant: "success",
+          });
+
+          setIsLoading(false);
+        }
+      });
+    }
   };
 
   const handleFileUpload = async (): Promise<string | null> => {
@@ -357,16 +410,20 @@ const ResearchProposalForm = () => {
                 <FormItem>
                   <FormLabel>Research Category</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <SelectTrigger
                         className={`${
                           form.formState.errors.researchCategory
                             ? "border-red-500"
                             : ""
                         }`}
-                        id="category"
                       >
-                        <SelectValue placeholder="Category" />
+                        <SelectValue
+                          placeholder={field.value ? field.value : "Category"}
+                        />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="life science">
@@ -473,6 +530,38 @@ const ResearchProposalForm = () => {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="isPublic"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Visibility</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value === "true" ? "true" : "false"}
+                      value={field.value}
+                      className="flex flex-col space-y-1"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value={"true"} />
+                        </FormControl>
+                        <FormLabel className="font-normal">Public</FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value={"false"} />
+                        </FormControl>
+                        <FormLabel className="font-normal">Private</FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
                 </FormItem>
               )}
             />
@@ -484,7 +573,7 @@ const ResearchProposalForm = () => {
           type="submit"
           className="bg-[#606C38] hover:bg-[#283618]"
         >
-          {isLoading ? progress : "Add Paper"}
+          {isLoading ? progress : isEdit ? "Edit Paper" : "Add Paper"}
         </Button>
       </form>
     </Form>
