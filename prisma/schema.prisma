@@ -111,14 +111,15 @@ model ResearchPaper {
   userId             String
   user               User      @relation(fields: [userId], references: [id])
   comments           Comment[]
-  authors            Author[]  @relation("ResearchPaperAuthors")
+  authors            Author[]
 }
 
 model Author {
-  id             String          @id @default(cuid())
-  firstName      String
-  lastName       String
-  researchPapers ResearchPaper[] @relation("ResearchPaperAuthors")
+  id   String @id @default(cuid())
+  name String
+
+  ResearchPaper   ResearchPaper? @relation(fields: [researchPaperId], references: [id], onDelete: Cascade)
+  researchPaperId String?
 }
 
 model Comment {

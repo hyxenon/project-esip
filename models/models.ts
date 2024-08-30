@@ -26,8 +26,7 @@ export type ResearchPaperModel1 = {
 
 export type AuthorPaper = {
   id?: string; // id can be optional since it might be generated automatically
-  firstName: string;
-  lastName: string;
+  name: string;
 };
 
 export type ResearchPaperModel = {

@@ -53,15 +53,6 @@ import {
 } from "@/actions/paperManagement.action";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-const authorFormSchema = z.object({
-  firstName: z.string().min(1, {
-    message: "First name must be at least 1 characters.",
-  }),
-  lastName: z.string().min(1, {
-    message: "Last name must be at least 1 characters.",
-  }),
-});
-
 const formSchema = z.object({
   title: z.string().min(1, {
     message: "Title is required.",
@@ -110,16 +101,9 @@ const ResearchProposalForm = ({
   const [progress, setProgress] = useState<number>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [authors, setAuthors] = useState<AuthorPaper[]>([]);
+  const [authorInput, setAuthorInput] = useState<string>("");
 
   const { toast } = useToast();
-
-  const authorForm = useForm<z.infer<typeof authorFormSchema>>({
-    resolver: zodResolver(authorFormSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-    },
-  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -157,16 +141,17 @@ const ResearchProposalForm = ({
     }
   }, [isEdit, paperId, paper, form]);
 
-  const authorFormSubmit = (values: z.infer<typeof authorFormSchema>) => {
-    setAuthors((prev) => [
-      ...prev,
-      {
-        firstName: values.firstName.toLowerCase(),
-        lastName: values.lastName.toLowerCase(),
-        id: uuidv4(),
-      },
-    ]);
-    authorForm.reset();
+  const authorFormSubmit = () => {
+    if (authorInput !== "") {
+      setAuthors((prev) => [
+        ...prev,
+        {
+          name: authorInput,
+          id: uuidv4(),
+        },
+      ]);
+      setAuthorInput("");
+    }
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -182,6 +167,11 @@ const ResearchProposalForm = ({
       };
 
       const updatedPaper = await updatePaper(paperId, data);
+
+      toast({
+        title: "Edit Paper Successfully.",
+        variant: "success",
+      });
 
       setIsLoading(false);
     } else {
@@ -229,7 +219,6 @@ const ResearchProposalForm = ({
           },
         })
         .then((res) => {
-          console.log("File uploaded, URL:", res.url);
           return res.url; // Return the URL as a string
         });
     } else {
@@ -269,71 +258,19 @@ const ResearchProposalForm = ({
             <CardHeader>
               <CardDescription>Add Authors</CardDescription>
               <CardTitle className="flex gap-4 justify-between">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      size={"sm"}
-                      className="w-[160px] text-sm bg-[#BC6C25] hover:bg-[#A85A1D]"
-                    >
-                      Add Author
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Add a New Author</DialogTitle>
-                      <DialogDescription>
-                        You can add multiple authors to this research proposal.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <Form {...authorForm}>
-                      <form
-                        onSubmit={authorForm.handleSubmit(authorFormSubmit)}
-                        className="flex gap-2"
-                      >
-                        <FormField
-                          control={authorForm.control}
-                          name="firstName"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input
-                                  type="text"
-                                  placeholder="First name"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={authorForm.control}
-                          name="lastName"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input
-                                  type="text"
-                                  placeholder="Last Name"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <Button
-                          size={"sm"}
-                          type="submit"
-                          className="w-[160px] text-sm bg-[#BC6C25] hover:bg-[#A85A1D]"
-                        >
-                          Add Author
-                        </Button>
-                      </form>
-                    </Form>
-                  </DialogContent>
-                </Dialog>
+                <Input
+                  value={authorInput}
+                  onChange={(e) => setAuthorInput(e.target.value)}
+                  type="text"
+                />
+                <Button
+                  type="button"
+                  size={"sm"}
+                  className="w-[160px] text-sm bg-[#BC6C25] hover:bg-[#A85A1D]"
+                  onClick={authorFormSubmit}
+                >
+                  Add Author
+                </Button>
               </CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
@@ -342,9 +279,7 @@ const ResearchProposalForm = ({
                   key={author.id}
                   className="flex justify-between items-center"
                 >
-                  <p className="capitalize text-sm">
-                    {author.firstName} {author.lastName}
-                  </p>
+                  <p className="capitalize text-sm">{author.name}</p>
                   <IoMdClose
                     className="cursor-pointer text-red-500"
                     onClick={() =>
