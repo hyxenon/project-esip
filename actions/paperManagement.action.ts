@@ -12,6 +12,7 @@ export const addResearchProposalPaper = async (data: ResearchPaperModel) => {
       researchCategory: data.researchCategory.toLowerCase(),
       researchType: data.researchType.toLowerCase(),
       date: data.date,
+      abstract: data.abstract,
       introduction: data.introduction,
       references: data.references,
       file: data.file,

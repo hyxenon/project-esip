@@ -1,6 +1,5 @@
 import { getPaper } from "@/actions/paperManagement.action";
 import AddPaperForm from "@/components/(users)/teacher/paper-management/addPaperForm";
-import { ResearchPaperModel } from "@/models/models";
 
 const AddPaper = async ({
   searchParams,

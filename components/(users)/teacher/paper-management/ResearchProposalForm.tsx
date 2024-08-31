@@ -25,14 +25,6 @@ import { IoMdClose } from "react-icons/io";
 import { v4 as uuidv4 } from "uuid";
 import { useEdgeStore } from "@/lib/edgestore";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
 
 import { Input } from "@/components/ui/input";
@@ -122,9 +114,12 @@ const ResearchProposalForm = ({
   useEffect(() => {
     if (isEdit && paperId && paper) {
       form.setValue("title", paper.title);
-      form.setValue("researchAdviser", paper.researchAdviser);
-      form.setValue("researchConsultant", paper.researchConsultant);
-      form.setValue("researchCategory", paper.researchCategory);
+      form.setValue("researchAdviser", paper.researchAdviser.toUpperCase());
+      form.setValue(
+        "researchConsultant",
+        paper.researchConsultant.toUpperCase()
+      );
+      form.setValue("researchCategory", paper.researchCategory.toUpperCase());
       form.setValue("introduction", paper.introduction);
       form.setValue("references", paper.references);
       form.setValue("grade", paper.grade ?? "");
@@ -132,7 +127,7 @@ const ResearchProposalForm = ({
 
       setSelectedDateRange({
         from: new Date(paper.date),
-        to: new Date(paper.date), // Assuming you're setting both `from` and `to` to the same date
+        to: new Date(paper.date),
       });
 
       if (paper.authors) {
@@ -159,6 +154,9 @@ const ResearchProposalForm = ({
     if (isEdit && paperId && paper) {
       const data: ResearchPaperModel = {
         ...values,
+        researchAdviser: values.researchAdviser.toLowerCase(),
+        researchConsultant: values.researchConsultant.toLowerCase(),
+        researchCategory: values.researchCategory.toLowerCase(),
         isPublic: values.isPublic === "true" ? true : false,
         researchType: paper.researchType,
         date: selectedDateRange.from,
@@ -465,7 +463,6 @@ const ResearchProposalForm = ({
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
