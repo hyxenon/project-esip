@@ -44,6 +44,7 @@ import {
   updatePaper,
 } from "@/actions/paperManagement.action";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import Link from "next/link";
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -152,26 +153,37 @@ const ResearchProposalForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     if (isEdit && paperId && paper) {
-      const data: ResearchPaperModel = {
-        ...values,
-        researchAdviser: values.researchAdviser.toLowerCase(),
-        researchConsultant: values.researchConsultant.toLowerCase(),
-        researchCategory: values.researchCategory.toLowerCase(),
-        isPublic: values.isPublic === "true" ? true : false,
-        researchType: paper.researchType,
-        date: selectedDateRange.from,
-        authors: authors,
-        userId: paper.userId,
-      };
+      handleFileUpload().then((uploadedUrl) => {
+        const data: ResearchPaperModel = {
+          ...values,
+          researchAdviser: values.researchAdviser.toLowerCase(),
+          researchConsultant: values.researchConsultant.toLowerCase(),
+          researchCategory: values.researchCategory.toLowerCase(),
+          isPublic: values.isPublic === "true" ? true : false,
+          researchType: paper.researchType,
+          date: selectedDateRange.from,
+          authors: authors,
+          userId: paper.userId,
+          file: file ? uploadedUrl : paper.file,
+        };
 
-      const updatedPaper = await updatePaper(paperId, data);
+        if (uploadedUrl && paper.file) {
+          edgestore.myProtectedFiles.delete({
+            url: paper.file,
+          });
+        }
 
-      toast({
-        title: "Edit Paper Successfully.",
-        variant: "success",
+        updatePaper(paperId, data).then((paper) => {
+          setProgress(0);
+        });
+
+        toast({
+          title: "Edit Paper Successfully.",
+          variant: "success",
+        });
+
+        setIsLoading(false);
       });
-
-      setIsLoading(false);
     } else {
       handleFileUpload().then((uploadedUrl) => {
         if (sessionData?.user?.id) {
@@ -440,6 +452,7 @@ const ResearchProposalForm = ({
                 ref={fileInputRef}
                 onChange={(e) => {
                   setFile(e.target.files?.[0]);
+                  console.log(e.target.files);
                 }}
                 id="file"
                 type="file"
@@ -500,12 +513,33 @@ const ResearchProposalForm = ({
           </div>
         </div>
 
+        {isEdit && paper?.file && (
+          <div className="flex items-center gap-2">
+            <p className="font-medium">Current File:</p>
+            {isEdit && paper?.file && (
+              <Link
+                className="underline text-sm font-medium text-[#BC6C25] hover:text-[#DDA15E]"
+                target="_blank"
+                href={paper.file}
+              >
+                View File
+              </Link>
+            )}
+          </div>
+        )}
+
         <Button
           disabled={isLoading}
           type="submit"
           className="bg-[#606C38] hover:bg-[#283618]"
         >
-          {isLoading ? progress : isEdit ? "Edit Paper" : "Add Paper"}
+          {isLoading ? (
+            <p>{progress}% loading...</p>
+          ) : isEdit ? (
+            "Edit Paper"
+          ) : (
+            "Add Paper"
+          )}
         </Button>
       </form>
     </Form>

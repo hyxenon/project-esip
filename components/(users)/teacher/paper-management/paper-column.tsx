@@ -66,6 +66,17 @@ const ResearchPaperActions: React.FC<ResearchPaperActionsProps> = ({
           >
             Edit
           </DropdownMenuItem>
+          {data.researchType === "proposal" && (
+            <DropdownMenuItem
+              onClick={() =>
+                router.push(
+                  `/teacher/paper-management/add-paper?edit=true&paperId=${data.id}&researchType=paper`
+                )
+              }
+            >
+              Add Research Paper
+            </DropdownMenuItem>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="text-red-500"

@@ -7,6 +7,7 @@ const AddPaper = async ({
   searchParams?: {
     edit?: string;
     paperId?: string;
+    researchType?: string;
   };
 }) => {
   let paperData: any;
@@ -20,6 +21,7 @@ const AddPaper = async ({
         isEdit={searchParams?.edit === "true" ? true : false}
         paperId={searchParams?.paperId}
         paper={paperData}
+        researchType={searchParams?.researchType}
       />
     </div>
   );
