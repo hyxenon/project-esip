@@ -1,5 +1,7 @@
 "use client";
-
+import { CiLock } from "react-icons/ci";
+import { LuBookOpen } from "react-icons/lu";
+import { LuBookOpenCheck } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -21,6 +23,7 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import DeletePaperBtn from "./DeletePaperBtn";
 import { useRouter } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 
 const options: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -146,7 +149,24 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
     cell: ({ row }) => {
       const data = row.original;
 
-      return <p className="capitalize">{data.researchType}</p>;
+      return (
+        <div className="flex items-center gap-1">
+          {data.researchType === "proposal" ? (
+            <LuBookOpen className="text-[#BC6C25]" />
+          ) : (
+            <LuBookOpenCheck className="text-[#283618]" />
+          )}
+          <p
+            className={`capitalize ${
+              data.researchType === "proposal"
+                ? "text-[#BC6C25]"
+                : "text-[#283618]"
+            }`}
+          >
+            {data.researchType}
+          </p>
+        </div>
+      );
     },
   },
   {
@@ -205,7 +225,7 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
       const data = row.original;
       const formattedDate = data.date.toLocaleDateString("en-US", options);
 
-      return formattedDate;
+      return <p className="text-sm">{formattedDate}</p>;
     },
   },
 
@@ -227,7 +247,14 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
       const data = row.original;
 
       return (
-        <p className="capitalize">{data.isPublic ? "public" : "private"}</p>
+        <div
+          className={`capitalize text-sm flex items-center gap-1  ${
+            data.isPublic ? "" : "text-red-500"
+          }`}
+        >
+          {!data.isPublic && <CiLock className="font-bold text-red-600" />}
+          {data.isPublic ? "public" : "private"}
+        </div>
       );
     },
   },
