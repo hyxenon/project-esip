@@ -189,25 +189,25 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
       return <p className="capitalize">{data.researchCategory}</p>;
     },
   },
-  {
-    accessorKey: "researchAdviser",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Adviser
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const data = row.original;
+  // {
+  //   accessorKey: "researchAdviser",
+  //   header: ({ column }) => {
+  //     return (
+  //       <Button
+  //         variant="ghost"
+  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  //       >
+  //         Adviser
+  //         <ArrowUpDown className="ml-2 h-4 w-4" />
+  //       </Button>
+  //     );
+  //   },
+  //   cell: ({ row }) => {
+  //     const data = row.original;
 
-      return <p className="capitalize">{data.researchAdviser}</p>;
-    },
-  },
+  //     return <p className="capitalize">{data.researchAdviser}</p>;
+  //   },
+  // },
   {
     accessorKey: "date",
     header: ({ column }) => {

@@ -32,9 +32,24 @@ export const addResearchProposalPaper = async (data: ResearchPaperModel) => {
 
   return researchProposalPaper;
 };
+export const getAllPapers = async (schoolId: string, category?: string) => {
+  const papers = await db.researchPaper.findMany({
+    where: {
+      user: {
+        schoolId: schoolId,
+      },
+      ...(category &&
+        category !== "all" && {
+          researchCategory: category,
+        }),
+    },
+    include: {
+      user: true,
+      authors: true,
+      comments: true,
+    },
+  });
 
-export const getAllPapers = async () => {
-  const papers = await db.researchPaper.findMany();
   return { message: papers };
 };
 

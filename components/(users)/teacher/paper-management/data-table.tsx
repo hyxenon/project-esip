@@ -44,6 +44,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import PaginationTable from "../../admin/school-management/tables/paginationTable";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -57,6 +58,8 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [category, setCategory] = useState("all");
+  const router = useRouter();
 
   const table = useReactTable({
     data,
@@ -75,6 +78,11 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
   });
 
+  const handleCategoryChange = (value: string) => {
+    setCategory(value);
+    router.push(`/teacher/paper-management?category=${value}`);
+  };
+
   return (
     <>
       {/* Filter and Radio Group */}
@@ -90,23 +98,24 @@ export function DataTable<TData, TValue>({
           />
           <div className="flex flex-col gap-1 md:flex-row">
             <Select defaultValue="all">
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>School Year</SelectLabel>
                   <SelectItem value="all">All Year</SelectItem>
-                  <SelectItem value="apple">2019 - 2020</SelectItem>
-                  <SelectItem value="banana">2020 - 2021</SelectItem>
-                  <SelectItem value="blueberry">2021 - 2022</SelectItem>
-                  <SelectItem value="grapes">2022 - 2023</SelectItem>
-                  <SelectItem value="pineapple">2023 - 2024</SelectItem>
+                  <SelectItem value="2019">2019</SelectItem>
+                  <SelectItem value="2020">2020</SelectItem>
+                  <SelectItem value="2021">2021</SelectItem>
+                  <SelectItem value="2022">2022</SelectItem>
+                  <SelectItem value="2023">2023</SelectItem>
+                  <SelectItem value="2024">2024</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
 
-            <Select defaultValue="all">
+            <Select defaultValue="all" onValueChange={handleCategoryChange}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -114,13 +123,11 @@ export function DataTable<TData, TValue>({
                 <SelectGroup>
                   <SelectLabel>Category</SelectLabel>
                   <SelectItem value="all">All Category</SelectItem>
-                  <SelectItem value="apple">Life Science</SelectItem>
-                  <SelectItem value="banana">Physical Science</SelectItem>
-                  <SelectItem value="blueberry">
-                    Science Innovation Expo
-                  </SelectItem>
-                  <SelectItem value="grapes">Robotics</SelectItem>
-                  <SelectItem value="pineapple">
+                  <SelectItem value="life">Life Science</SelectItem>
+                  <SelectItem value="physical">Physical Science</SelectItem>
+                  <SelectItem value="expo">Science Innovation Expo</SelectItem>
+                  <SelectItem value="robotics">Robotics</SelectItem>
+                  <SelectItem value="mathematical">
                     Mathematical and Computational
                   </SelectItem>
                 </SelectGroup>
