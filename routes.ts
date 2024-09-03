@@ -16,8 +16,8 @@ export const authRoutes = [
   "/error",
   "/reset-password",
   "/new-password",
-  '/school-register',
-  "/"
+  "/school-register",
+  "/",
 ];
 
 /**
@@ -32,3 +32,6 @@ export const apiAuthPrefix = "/api/auth";
  * @type {string}
  */
 export const DEFAULT_LOGIN_REDIRECT = "/settings";
+export const DEFAULT_LOGIN_REDIRECT_ADMIN = "/admin";
+export const DEFAULT_LOGIN_REDIRECT_TEACHER = "/teacher";
+export const DEFAULT_LOGIN_REDIRECT_STUDENT = "/settings";
