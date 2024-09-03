@@ -149,7 +149,7 @@ const TotalVisitors = () => {
     return date >= now;
   });
   return (
-    <Card className="2xl:col-span-2 border-[#B0B0B0]">
+    <Card className="2xl:col-span-2 border-gray-300">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1 text-center sm:text-left">
           <CardTitle>Mobile vs Desktop</CardTitle>

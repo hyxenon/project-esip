@@ -74,7 +74,7 @@ const SchoolSelect = ({ schoolsData }: SchoolSelectProps) => {
     <div className="flex items-center space-x-4 mt-4">
       <p className="text-sm text-muted-foreground">School</p>
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
+        <PopoverTrigger asChild className="border-gray-300">
           <Button variant="outline" className="justify-start">
             {selectedSchool ? (
               <>

@@ -1,19 +1,28 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users } from "lucide-react";
 
-const TotalPaperCard = () => {
+interface TotalCardsProps {
+  children: any;
+  cardTitle: string;
+  cardTotalNumber: number;
+}
+
+const TotalCards = ({
+  children,
+  cardTitle,
+  cardTotalNumber,
+}: TotalCardsProps) => {
   return (
     <Card className="flex-1 border-gray-300">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Papers</CardTitle>
-        <Users className="h-4 w-4 text-muted-foreground" />
+        <CardTitle className="text-sm font-medium">{cardTitle}</CardTitle>
+        {children}
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">12</div>
+        <div className="text-2xl font-bold">{cardTotalNumber}</div>
         <p className="text-xs text-muted-foreground">+35.1% from last month</p>
       </CardContent>
     </Card>
   );
 };
 
-export default TotalPaperCard;
+export default TotalCards;

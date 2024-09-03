@@ -10,6 +10,10 @@ import TotalStudents from "@/components/(users)/teacher/user-management/cards/to
 import TotalTeachers from "@/components/(users)/teacher/user-management/cards/totalTeachers";
 import TotalUsers from "@/components/(users)/teacher/user-management/cards/totalUsers";
 import TeacherUserTabList from "@/components/(users)/teacher/user-management/TeacherUserTabList";
+import TotalCards from "@/components/(users)/TotalCards";
+import { Users } from "lucide-react";
+import { FaChalkboardTeacher } from "react-icons/fa";
+import { PiStudentFill } from "react-icons/pi";
 
 const UserManagement = async () => {
   const session = await auth();
@@ -35,10 +39,16 @@ const UserManagement = async () => {
         User Management
       </h4>
       <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 mt-2">
-        <TotalUsers />
-        <TotalTeachers />
+        <TotalCards cardTitle="Total Users" cardTotalNumber={0}>
+          <Users className="h-5 w-5 text-[#283618]" />
+        </TotalCards>
+        <TotalCards cardTitle="Total Teachers" cardTotalNumber={0}>
+          <FaChalkboardTeacher className="h-5 w-5 text-[#283618]" />
+        </TotalCards>
         <div className="col-span-2 lg:col-span-1">
-          <TotalStudents />
+          <TotalCards cardTitle="Total Students" cardTotalNumber={0}>
+            <PiStudentFill className="h-5 w-5 text-[#283618]" />
+          </TotalCards>
         </div>
       </div>
 

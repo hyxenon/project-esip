@@ -3,8 +3,7 @@ import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { FaAlignLeft } from "react-icons/fa6";
 import MobileMenu from "@/components/(users)/admin/mobileMenu";
-import TotalStudents from "@/components/(users)/admin/user-management/cards/TotalStudents";
-import TotalTeachers from "@/components/(users)/admin/user-management/cards/TotalTeachers";
+
 import UserTabs from "@/components/(users)/admin/user-management/UserTabs";
 import SchoolSelect from "@/components/(users)/admin/user-management/SchoolSelect";
 import {
@@ -12,6 +11,10 @@ import {
   getAllUsersByTeacher,
 } from "@/actions/userManagement";
 import { User } from "@/components/(users)/admin/user-management/tables/teacherTable/column";
+import TotalCards from "@/components/(users)/TotalCards";
+
+import { FaChalkboardTeacher } from "react-icons/fa";
+import { PiStudentFill } from "react-icons/pi";
 
 const UserManagement = async ({
   searchParams,
@@ -54,8 +57,12 @@ const UserManagement = async ({
 
       {/* Card Count */}
       <div className="flex gap-4 flex-wrap">
-        <TotalTeachers />
-        <TotalStudents />
+        <TotalCards cardTitle="Total Teachers" cardTotalNumber={0}>
+          <FaChalkboardTeacher className="h-5 w-5 text-[#283618]" />
+        </TotalCards>
+        <TotalCards cardTitle="Total Students" cardTotalNumber={0}>
+          <PiStudentFill className="h-5 w-5 text-[#283618]" />
+        </TotalCards>
       </div>
       <SchoolSelect schoolsData={schoolsResponse.message} />
       {/* Tabs */}

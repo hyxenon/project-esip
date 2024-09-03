@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const NewSchools = () => {
   return (
-    <Card className="border-[#B0B0B0]">
+    <Card className="border-gray-300">
       <CardHeader>
         <CardTitle>Recent Schools</CardTitle>
       </CardHeader>

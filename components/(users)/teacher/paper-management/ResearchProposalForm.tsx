@@ -252,7 +252,7 @@ const ResearchProposalForm = ({
               <FormControl>
                 <Input
                   type="text"
-                  className={`border-[#B0B0B0] ${
+                  className={`border-gray-300 ${
                     form.formState.errors.title ? "border-red-500" : ""
                   }`}
                   placeholder="Effect of exposure to different colors light emitting diode on the yield and physical properties of grey and white oyster mushrooms"
@@ -264,7 +264,7 @@ const ResearchProposalForm = ({
         />
 
         <div className="w-full grid md:grid-cols-2 gap-4">
-          <Card className="border-[#B0B0B0]">
+          <Card className="border-gray-300">
             <CardHeader>
               <CardDescription>Add Authors</CardDescription>
               <CardTitle className="flex gap-4 justify-between">
@@ -303,7 +303,7 @@ const ResearchProposalForm = ({
             </CardContent>
           </Card>
 
-          <Card className="flex flex-col border-[#B0B0B0] p-4 space-y-4">
+          <Card className="flex flex-col border-gray-300 p-4 space-y-4">
             <FormField
               control={form.control}
               name="researchAdviser"
@@ -414,7 +414,7 @@ const ResearchProposalForm = ({
                 <FormControl>
                   <Textarea
                     placeholder="Type introduction paper here."
-                    className={`border-[#B0B0B0] min-h-[200px] ${
+                    className={`border-gray-300 min-h-[200px] ${
                       form.formState.errors.introduction ? "border-red-500" : ""
                     }`}
                     {...field}
@@ -433,7 +433,7 @@ const ResearchProposalForm = ({
                 <FormControl>
                   <Textarea
                     placeholder="Paste references here."
-                    className={`border-[#B0B0B0] min-h-[200px] ${
+                    className={`border-gray-300 min-h-[200px] ${
                       form.formState.errors.references ? "border-red-500" : ""
                     }`}
                     {...field}
@@ -457,7 +457,7 @@ const ResearchProposalForm = ({
                 id="file"
                 type="file"
                 accept="application/pdf"
-                className="border-[#B0B0B0]"
+                className="border-gray-300"
               />
             </div>
             <FormField
@@ -469,7 +469,7 @@ const ResearchProposalForm = ({
                   <FormControl>
                     <Input
                       placeholder="90"
-                      className="border-[#B0B0B0]"
+                      className="border-gray-300"
                       type="number"
                       max={100}
                       min={0}
