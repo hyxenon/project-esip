@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { FaSearch } from "react-icons/fa";
 
 import { cn } from "@/lib/utils";
 
@@ -64,9 +65,12 @@ export function TeacherNavbarMenu() {
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <Link href="" legacyBehavior passHref>
+          <Link href="/search" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Search Paper
+              <div className="flex gap-1 items-center">
+                <FaSearch />
+                Search Paper
+              </div>
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>

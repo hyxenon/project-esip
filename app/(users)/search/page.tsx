@@ -1,7 +1,9 @@
 import { auth } from "@/auth";
 import Navbar from "@/components/(users)/navbar";
+import SearchComponent from "@/components/(users)/search/search";
+import React from "react";
 
-const GrammarChecker = async () => {
+const page = async () => {
   const session = await auth();
 
   if (!session?.user) {
@@ -11,9 +13,11 @@ const GrammarChecker = async () => {
   return (
     <div>
       <Navbar role={session.user.role} />
-      <p>Grammar checker</p>
+      <div className="">
+        <SearchComponent />
+      </div>
     </div>
   );
 };
 
-export default GrammarChecker;
+export default page;

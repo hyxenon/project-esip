@@ -14,6 +14,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { FaSearch } from "react-icons/fa";
 
 export function StudentNavbarMenu() {
   return (
@@ -42,9 +43,12 @@ export function StudentNavbarMenu() {
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <Link href="" legacyBehavior passHref>
+          <Link href="/search" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Search Paper
+              <div className="flex gap-1 items-center">
+                <FaSearch />
+                Search Paper
+              </div>
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>

@@ -1,6 +1,5 @@
 "use client";
-import logo from "../../assets/authForm/authLogo.svg";
-import Image from "next/image";
+
 import { useSession } from "next-auth/react";
 import ProfileIcon from "@/components/navbar/profileIcon";
 import React from "react";
@@ -10,15 +9,12 @@ import { Button } from "../ui/button";
 import { FaAlignLeft } from "react-icons/fa6";
 import MobileMenu from "./admin/mobileMenu";
 import { StudentNavbarMenu } from "./studentNavbarMenu";
-import Notifications from "./student/Notifications";
 
 type NavbarProps = {
   role: string;
 };
 
 const Navbar = ({ role }: NavbarProps) => {
-  const { data: session } = useSession();
-
   return (
     <div
       className={`lg:px-16 flex items-center bg-gray-50 gap-x-8 lg:shadow lg:py-4 lg:bg-[#283618]`}
