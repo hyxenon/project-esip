@@ -41,19 +41,9 @@ import { addSchool } from "@/actions/schoolManagement";
 import { useSchoolContext } from "@/context/SchoolContext";
 import { SchoolModel } from "../../SchoolForm";
 
-interface AddSchoolButtonProps {
-  onSchoolAdded: (newSchool: SchoolModel) => void;
-}
-
-export function AddSchoolButton({ onSchoolAdded }: AddSchoolButtonProps) {
+export function AddSchoolButton() {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-
-  const { dispatch } = useSchoolContext();
-
-  const handleSchoolAdded = (school: SchoolModel) => {
-    dispatch({ type: "ADD_SCHOOL", payload: school });
-  };
 
   if (isDesktop) {
     return (
@@ -70,7 +60,7 @@ export function AddSchoolButton({ onSchoolAdded }: AddSchoolButtonProps) {
           <DialogHeader>
             <DialogTitle>Add School</DialogTitle>
           </DialogHeader>
-          <ProfileForm onSchoolAdded={handleSchoolAdded} />
+          <ProfileForm />
         </DialogContent>
       </Dialog>
     );
@@ -87,7 +77,7 @@ export function AddSchoolButton({ onSchoolAdded }: AddSchoolButtonProps) {
         <DrawerHeader className="text-left">
           <DrawerTitle>Add School</DrawerTitle>
         </DrawerHeader>
-        <ProfileForm onSchoolAdded={handleSchoolAdded} />
+        <ProfileForm />
 
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
@@ -99,11 +89,7 @@ export function AddSchoolButton({ onSchoolAdded }: AddSchoolButtonProps) {
   );
 }
 
-interface ProfileFormProps {
-  onSchoolAdded: (school: any) => void;
-}
-
-function ProfileForm({ onSchoolAdded }: ProfileFormProps) {
+function ProfileForm() {
   const form = useForm<z.infer<typeof AddSchoolSchema>>({
     resolver: zodResolver(AddSchoolSchema),
     defaultValues: {
@@ -136,8 +122,6 @@ function ProfileForm({ onSchoolAdded }: ProfileFormProps) {
       form.reset();
       setFile(undefined);
       setProgress(0);
-
-      onSchoolAdded(res.data);
     } catch (err: any) {
       toast({
         variant: "destructive",

@@ -1,29 +1,33 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TeacherTable from "./TeacherTable";
-
-interface SchoolModel {
-  label: string;
-  value: string;
-  image: string | null;
-  id: string;
-}
+import { User } from "./tables/teacherTable/column";
 
 type UserTabsProps = {
-  selectedSchool: SchoolModel | null;
+  teachers: User[];
+  students: User[];
+  specificSchool: any;
 };
 
-const UserTabs = ({ selectedSchool }: UserTabsProps) => {
+const UserTabs = ({ teachers, students, specificSchool }: UserTabsProps) => {
   return (
-    <Tabs defaultValue="teachers" className="w-full">
+    <Tabs defaultValue="teachers" className="w-full pb-4">
       <TabsList className="grid md:w-[400px] grid-cols-2 shadow-2xl bg-[#D9D9D9] bg-opacity-70">
         <TabsTrigger value="teachers">Teachers</TabsTrigger>
         <TabsTrigger value="students">Students</TabsTrigger>
       </TabsList>
       <TabsContent value="teachers">
-        <TeacherTable selectedSchool={selectedSchool} role="TEACHER" />
+        <TeacherTable
+          data={teachers}
+          role="TEACHER"
+          specificSchool={specificSchool}
+        />
       </TabsContent>
       <TabsContent value="students">
-        <TeacherTable selectedSchool={selectedSchool} role="STUDENT" />
+        <TeacherTable
+          data={students}
+          role="STUDENT"
+          specificSchool={specificSchool}
+        />
       </TabsContent>
     </Tabs>
   );

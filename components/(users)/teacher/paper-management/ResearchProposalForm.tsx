@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CalendarDatePicker } from "@/components/ui/calendar-picker";
 import { Textarea } from "@/components/ui/textarea";
 import { z } from "zod";
@@ -25,14 +25,6 @@ import { IoMdClose } from "react-icons/io";
 import { v4 as uuidv4 } from "uuid";
 import { useEdgeStore } from "@/lib/edgestore";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
 
 import { Input } from "@/components/ui/input";
@@ -47,16 +39,12 @@ import {
 } from "@/components/ui/card";
 import { AuthorPaper, ResearchPaperModel } from "@/models/models";
 import { useSession } from "next-auth/react";
-import { addResearchProposalPaper } from "@/actions/paperManagement.action";
-
-const authorFormSchema = z.object({
-  firstName: z.string().min(1, {
-    message: "First name must be at least 1 characters.",
-  }),
-  lastName: z.string().min(1, {
-    message: "Last name must be at least 1 characters.",
-  }),
-});
+import {
+  addResearchProposalPaper,
+  updatePaper,
+} from "@/actions/paperManagement.action";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import Link from "next/link";
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -77,11 +65,22 @@ const formSchema = z.object({
   references: z.string().min(1, {
     message: "References is required.",
   }),
+  isPublic: z.string(),
   file: z.string().optional(),
   grade: z.string().optional(),
 });
 
-const ResearchProposalForm = () => {
+interface ResearchProposalFormProps {
+  isEdit?: boolean;
+  paperId?: string;
+  paper?: ResearchPaperModel;
+}
+
+const ResearchProposalForm = ({
+  isEdit,
+  paperId,
+  paper,
+}: ResearchProposalFormProps) => {
   const { data: sessionData } = useSession();
   const [selectedDateRange, setSelectedDateRange] = useState({
     from: new Date(new Date().getFullYear(), 0, 1),
@@ -94,16 +93,10 @@ const ResearchProposalForm = () => {
 
   const [progress, setProgress] = useState<number>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [authors, setAuthors] = useState<AuthorPaper[]>([]);
+  const [authorInput, setAuthorInput] = useState<string>("");
 
   const { toast } = useToast();
-
-  const authorForm = useForm<z.infer<typeof authorFormSchema>>({
-    resolver: zodResolver(authorFormSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-    },
-  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -115,54 +108,114 @@ const ResearchProposalForm = () => {
       researchConsultant: "",
       file: "",
       references: "",
+      isPublic: "false",
     },
   });
-  const [authors, setAuthors] = useState<AuthorPaper[]>([]);
 
-  const authorFormSubmit = (values: z.infer<typeof authorFormSchema>) => {
-    setAuthors((prev) => [
-      ...prev,
-      {
-        firstName: values.firstName.toLowerCase(),
-        lastName: values.lastName.toLowerCase(),
-        id: uuidv4(),
-      },
-    ]);
-    authorForm.reset();
+  useEffect(() => {
+    if (isEdit && paperId && paper) {
+      form.setValue("title", paper.title);
+      form.setValue("researchAdviser", paper.researchAdviser.toUpperCase());
+      form.setValue(
+        "researchConsultant",
+        paper.researchConsultant.toUpperCase()
+      );
+      form.setValue("researchCategory", paper.researchCategory.toUpperCase());
+      form.setValue("introduction", paper.introduction);
+      form.setValue("references", paper.references);
+      form.setValue("grade", paper.grade ?? "");
+      form.setValue("isPublic", paper.isPublic ? "true" : "false");
+
+      setSelectedDateRange({
+        from: new Date(paper.date),
+        to: new Date(paper.date),
+      });
+
+      if (paper.authors) {
+        setAuthors(paper.authors);
+      }
+    }
+  }, [isEdit, paperId, paper, form]);
+
+  const authorFormSubmit = () => {
+    if (authorInput !== "") {
+      setAuthors((prev) => [
+        ...prev,
+        {
+          name: authorInput,
+          id: uuidv4(),
+        },
+      ]);
+      setAuthorInput("");
+    }
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-    handleFileUpload().then((uploadedUrl) => {
-      if (sessionData?.user?.id) {
+    if (isEdit && paperId && paper) {
+      handleFileUpload().then((uploadedUrl) => {
         const data: ResearchPaperModel = {
           ...values,
-          researchType: "proposal",
+          researchAdviser: values.researchAdviser.toLowerCase(),
+          researchConsultant: values.researchConsultant.toLowerCase(),
+          researchCategory: values.researchCategory.toLowerCase(),
+          isPublic: values.isPublic === "true" ? true : false,
+          researchType: paper.researchType,
           date: selectedDateRange.from,
           authors: authors,
-          userId: sessionData?.user?.id,
-          file: uploadedUrl || undefined, // Assign URL or undefined if null
+          userId: paper.userId,
+          file: file ? uploadedUrl : paper.file,
         };
 
-        addResearchProposalPaper(data).then((paper) => {
-          form.reset();
-          setAuthors([]);
+        if (uploadedUrl && paper.file) {
+          edgestore.myProtectedFiles.delete({
+            url: paper.file,
+          });
+        }
+
+        updatePaper(paperId, data).then((paper) => {
           setProgress(0);
-          if (fileInputRef.current) {
-            fileInputRef.current.value = ""; // Reset the input
-          }
-          setFile(undefined); // Reset the file state if needed
-          console.log(paper);
         });
 
         toast({
-          title: "Add Paper Successfully.",
+          title: "Edit Paper Successfully.",
           variant: "success",
         });
 
         setIsLoading(false);
-      }
-    });
+      });
+    } else {
+      handleFileUpload().then((uploadedUrl) => {
+        if (sessionData?.user?.id) {
+          const data: ResearchPaperModel = {
+            ...values,
+            isPublic: values.isPublic === "true" ? true : false,
+            researchType: "proposal",
+            date: selectedDateRange.from,
+            authors: authors,
+            userId: sessionData?.user?.id,
+            file: uploadedUrl || undefined, // Assign URL or undefined if null
+          };
+
+          addResearchProposalPaper(data).then((paper) => {
+            form.reset();
+            setAuthors([]);
+            setProgress(0);
+            if (fileInputRef.current) {
+              fileInputRef.current.value = ""; // Reset the input
+            }
+            setFile(undefined); // Reset the file state if needed
+          });
+
+          toast({
+            title: "Add Paper Successfully.",
+            variant: "success",
+          });
+
+          setIsLoading(false);
+        }
+      });
+    }
   };
 
   const handleFileUpload = async (): Promise<string | null> => {
@@ -176,7 +229,6 @@ const ResearchProposalForm = () => {
           },
         })
         .then((res) => {
-          console.log("File uploaded, URL:", res.url);
           return res.url; // Return the URL as a string
         });
     } else {
@@ -200,7 +252,7 @@ const ResearchProposalForm = () => {
               <FormControl>
                 <Input
                   type="text"
-                  className={`border-[#B0B0B0] ${
+                  className={`border-gray-300 ${
                     form.formState.errors.title ? "border-red-500" : ""
                   }`}
                   placeholder="Effect of exposure to different colors light emitting diode on the yield and physical properties of grey and white oyster mushrooms"
@@ -212,75 +264,23 @@ const ResearchProposalForm = () => {
         />
 
         <div className="w-full grid md:grid-cols-2 gap-4">
-          <Card className="border-[#B0B0B0]">
+          <Card className="border-gray-300">
             <CardHeader>
               <CardDescription>Add Authors</CardDescription>
               <CardTitle className="flex gap-4 justify-between">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      size={"sm"}
-                      className="w-[160px] text-sm bg-[#BC6C25] hover:bg-[#A85A1D]"
-                    >
-                      Add Author
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Add a New Author</DialogTitle>
-                      <DialogDescription>
-                        You can add multiple authors to this research proposal.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <Form {...authorForm}>
-                      <form
-                        onSubmit={authorForm.handleSubmit(authorFormSubmit)}
-                        className="flex gap-2"
-                      >
-                        <FormField
-                          control={authorForm.control}
-                          name="firstName"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input
-                                  type="text"
-                                  placeholder="First name"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={authorForm.control}
-                          name="lastName"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input
-                                  type="text"
-                                  placeholder="Last Name"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <Button
-                          size={"sm"}
-                          type="submit"
-                          className="w-[160px] text-sm bg-[#BC6C25] hover:bg-[#A85A1D]"
-                        >
-                          Add Author
-                        </Button>
-                      </form>
-                    </Form>
-                  </DialogContent>
-                </Dialog>
+                <Input
+                  value={authorInput}
+                  onChange={(e) => setAuthorInput(e.target.value)}
+                  type="text"
+                />
+                <Button
+                  type="button"
+                  size={"sm"}
+                  className="w-[160px] text-sm bg-[#BC6C25] hover:bg-[#A85A1D]"
+                  onClick={authorFormSubmit}
+                >
+                  Add Author
+                </Button>
               </CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
@@ -289,9 +289,7 @@ const ResearchProposalForm = () => {
                   key={author.id}
                   className="flex justify-between items-center"
                 >
-                  <p className="capitalize text-sm">
-                    {author.firstName} {author.lastName}
-                  </p>
+                  <p className="capitalize text-sm">{author.name}</p>
                   <IoMdClose
                     className="cursor-pointer text-red-500"
                     onClick={() =>
@@ -305,7 +303,7 @@ const ResearchProposalForm = () => {
             </CardContent>
           </Card>
 
-          <Card className="flex flex-col border-[#B0B0B0] p-4 space-y-4">
+          <Card className="flex flex-col border-gray-300 p-4 space-y-4">
             <FormField
               control={form.control}
               name="researchAdviser"
@@ -357,27 +355,33 @@ const ResearchProposalForm = () => {
                 <FormItem>
                   <FormLabel>Research Category</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <SelectTrigger
                         className={`${
                           form.formState.errors.researchCategory
                             ? "border-red-500"
                             : ""
                         }`}
-                        id="category"
                       >
-                        <SelectValue placeholder="Category" />
+                        <SelectValue
+                          placeholder={field.value ? field.value : "Category"}
+                        />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="life">Life Science</SelectItem>
-                        <SelectItem value="physical">
+                        <SelectItem value="life science">
+                          Life Science
+                        </SelectItem>
+                        <SelectItem value="physical science">
                           Physical Science
                         </SelectItem>
-                        <SelectItem value="expo">
+                        <SelectItem value="science innovation expo">
                           Science Innovation Expo
                         </SelectItem>
                         <SelectItem value="robotics">Robotics</SelectItem>
-                        <SelectItem value="mathematical">
+                        <SelectItem value="mathematical and computational">
                           Mathematical and Computational
                         </SelectItem>
                       </SelectContent>
@@ -410,7 +414,7 @@ const ResearchProposalForm = () => {
                 <FormControl>
                   <Textarea
                     placeholder="Type introduction paper here."
-                    className={`border-[#B0B0B0] min-h-[200px] ${
+                    className={`border-gray-300 min-h-[200px] ${
                       form.formState.errors.introduction ? "border-red-500" : ""
                     }`}
                     {...field}
@@ -429,7 +433,7 @@ const ResearchProposalForm = () => {
                 <FormControl>
                   <Textarea
                     placeholder="Paste references here."
-                    className={`border-[#B0B0B0] min-h-[200px] ${
+                    className={`border-gray-300 min-h-[200px] ${
                       form.formState.errors.references ? "border-red-500" : ""
                     }`}
                     {...field}
@@ -448,11 +452,12 @@ const ResearchProposalForm = () => {
                 ref={fileInputRef}
                 onChange={(e) => {
                   setFile(e.target.files?.[0]);
+                  console.log(e.target.files);
                 }}
                 id="file"
                 type="file"
                 accept="application/pdf"
-                className="border-[#B0B0B0]"
+                className="border-gray-300"
               />
             </div>
             <FormField
@@ -464,7 +469,7 @@ const ResearchProposalForm = () => {
                   <FormControl>
                     <Input
                       placeholder="90"
-                      className="border-[#B0B0B0]"
+                      className="border-gray-300"
                       type="number"
                       max={100}
                       min={0}
@@ -474,15 +479,67 @@ const ResearchProposalForm = () => {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="isPublic"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Visibility</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value === "true" ? "true" : "false"}
+                      value={field.value}
+                      className="flex flex-col space-y-1"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value={"true"} />
+                        </FormControl>
+                        <FormLabel className="font-normal">Public</FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value={"false"} />
+                        </FormControl>
+                        <FormLabel className="font-normal">Private</FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
           </div>
         </div>
+
+        {isEdit && paper?.file && (
+          <div className="flex items-center gap-2">
+            <p className="font-medium">Current File:</p>
+            {isEdit && paper?.file && (
+              <Link
+                className="underline text-sm font-medium text-[#BC6C25] hover:text-[#DDA15E]"
+                target="_blank"
+                href={paper.file}
+              >
+                View File
+              </Link>
+            )}
+          </div>
+        )}
 
         <Button
           disabled={isLoading}
           type="submit"
           className="bg-[#606C38] hover:bg-[#283618]"
         >
-          {isLoading ? progress : "Add Paper"}
+          {isLoading ? (
+            <p>{progress}% loading...</p>
+          ) : isEdit ? (
+            "Edit Paper"
+          ) : (
+            "Add Paper"
+          )}
         </Button>
       </form>
     </Form>

@@ -1,7 +1,5 @@
 "use client";
-import logo from "../../assets/authForm/authLogo.svg";
-import Image from "next/image";
-import { useSession } from "next-auth/react";
+
 import ProfileIcon from "@/components/navbar/profileIcon";
 import React from "react";
 import { TeacherNavbarMenu } from "./navbarMenu";
@@ -10,18 +8,15 @@ import { Button } from "../ui/button";
 import { FaAlignLeft } from "react-icons/fa6";
 import MobileMenu from "./admin/mobileMenu";
 import { StudentNavbarMenu } from "./studentNavbarMenu";
-import Notifications from "./student/Notifications";
 
 type NavbarProps = {
   role: string;
 };
 
 const Navbar = ({ role }: NavbarProps) => {
-  const { data: session } = useSession();
-
   return (
     <div
-      className={`lg:px-16 flex items-center gap-x-8 lg:shadow lg:py-4 lg:bg-[#283618]`}
+      className={`lg:px-16 flex items-center bg-gray-50 gap-x-8 lg:shadow lg:py-4 lg:bg-[#283618]`}
     >
       <Sheet>
         <SheetTrigger asChild>
@@ -29,7 +24,7 @@ const Navbar = ({ role }: NavbarProps) => {
             <FaAlignLeft />
           </Button>
         </SheetTrigger>
-        <MobileMenu role="TEACHER" />
+        <MobileMenu role={role} />
       </Sheet>
       <div className="lg:flex items-center hidden">
         {/* <Image src={logo} alt="logo" className="w-[0px]" /> */}

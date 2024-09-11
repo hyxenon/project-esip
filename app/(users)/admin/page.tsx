@@ -1,6 +1,3 @@
-"use client";
-import TotalStudentsCard from "@/components/(users)/admin/dashboard/cards/TotalStudentsCard";
-import TotalTeacherCard from "@/components/(users)/admin/dashboard/cards/TotalTeacherCard";
 import MostUsersSchool from "@/components/(users)/admin/dashboard/charts/MostUsersSchool";
 import PopularPapers from "@/components/(users)/admin/dashboard/charts/PopularPapers";
 import TotalVisitors from "@/components/(users)/admin/dashboard/charts/TotalVisitors";
@@ -8,11 +5,15 @@ import NewPapers from "@/components/(users)/admin/dashboard/recent-activity/NewP
 import NewSchools from "@/components/(users)/admin/dashboard/recent-activity/NewSchools";
 import NewUsers from "@/components/(users)/admin/dashboard/recent-activity/NewUsers";
 import MobileMenu from "@/components/(users)/admin/mobileMenu";
-import TotalSchoolCard from "@/components/(users)/admin/school-management/cards/TotalSchoolCard";
+import TotalCards from "@/components/(users)/TotalCards";
+
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import React from "react";
+import { FaChalkboardTeacher } from "react-icons/fa";
 import { FaAlignLeft } from "react-icons/fa6";
+import { PiStudentFill } from "react-icons/pi";
+import { RiSchoolLine } from "react-icons/ri";
 
 const AdminHome = () => {
   return (
@@ -23,13 +24,19 @@ const AdminHome = () => {
             <FaAlignLeft />
           </Button>
         </SheetTrigger>
-        <MobileMenu />
+        <MobileMenu role="ADMIN" />
       </Sheet>
       {/* Card */}
       <div className="flex gap-4 flex-wrap">
-        <TotalSchoolCard />
-        <TotalTeacherCard />
-        <TotalStudentsCard />
+        <TotalCards cardTitle="Total Schools" cardTotalNumber={0}>
+          <RiSchoolLine className="h-5 w-5 text-[#283618]" />
+        </TotalCards>
+        <TotalCards cardTitle="Total Teachers" cardTotalNumber={0}>
+          <FaChalkboardTeacher className="h-5 w-5 text-[#283618]" />
+        </TotalCards>
+        <TotalCards cardTitle="Total Students" cardTotalNumber={0}>
+          <PiStudentFill className="h-5 w-5 text-[#283618]" />
+        </TotalCards>
       </div>
       {/* Recent Activity Summary */}
       <div className="mt-4">

@@ -1,30 +1,32 @@
 import type { Metadata } from "next";
 
 import Navbar from "@/components/(users)/navbar";
-import { TeacherUserManagementProvider } from "@/context/TeacherUserManagementContext";
-import { UserManagementProvider } from "@/context/UserManagementContext";
+
 import { SchoolProvider } from "@/context/SchoolContext";
+import { auth } from "@/auth";
+import Unauthorized from "@/components/UnAuthorized";
 
 export const metadata: Metadata = {
   title: "Teacher",
   description: "Teacher View",
 };
 
-export default function TeacherLayout({
+export default async function TeacherLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+
+  if (session?.user?.role !== "TEACHER") {
+    return <Unauthorized />;
+  }
   return (
     <SchoolProvider>
-      <UserManagementProvider>
-        <TeacherUserManagementProvider>
-          <Navbar role="TEACHER" />
-          <div className="flex flex-col py-4 lg:min-h-[calc(100vh-79px)] ">
-            <div className="flex-1">{children}</div>
-          </div>
-        </TeacherUserManagementProvider>
-      </UserManagementProvider>
+      <Navbar role="TEACHER" />
+      <div className="flex flex-col lg:min-h-[calc(100vh-73px)] ">
+        <div className="flex-1 bg-gray-50">{children}</div>
+      </div>
     </SchoolProvider>
   );
 }

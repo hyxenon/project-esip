@@ -1,4 +1,4 @@
-import { deleteSchool, statusChange } from "@/actions/schoolManagement";
+import { statusChange } from "@/actions/schoolManagement";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,7 +8,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { useSchoolContext } from "@/context/SchoolContext";
@@ -28,17 +27,12 @@ const StatusChange = ({
   status,
 }: DeleteSchoolButtonProps) => {
   const { toast } = useToast();
-  const { dispatch } = useSchoolContext();
 
   const handleStatusChange = async () => {
     const newStatus = status === "Active" ? "Inactive" : "Active";
     const res = await statusChange(schoolId, newStatus);
 
     if (res.success) {
-      dispatch({
-        type: "EDIT_SCHOOL",
-        payload: { ...res.message, status: newStatus },
-      });
       toast({
         variant: "success",
         title: "Status Updated",

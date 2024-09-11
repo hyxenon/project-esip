@@ -1,19 +1,22 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React from "react";
-import TeacherTable from "../../admin/user-management/TeacherTable";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import TeacherUserManagementTable from "./TeacherUserManagementTable";
+import { User } from "../../admin/user-management/tables/teacherTable/column";
 
-interface SchoolModel {
-  label: string;
-  value: string;
-  image: string | null;
-  id: string;
-}
+type TeacherUserTabListProps = {
+  teachersData: User[];
+  studentsData: User[];
+  pendingData: User[];
+  specificSchool: any;
+};
 
-type TablistProps = {};
-
-const TeacherUserTabList = ({}: TablistProps) => {
+const TeacherUserTabList = ({
+  teachersData,
+  studentsData,
+  pendingData,
+  specificSchool,
+}: TeacherUserTabListProps) => {
   return (
     <div>
       <Tabs defaultValue="allTeachers" className="w-full mt-8">
@@ -23,13 +26,23 @@ const TeacherUserTabList = ({}: TablistProps) => {
           <TabsTrigger value="pendingUsers">Pending Users</TabsTrigger>
         </TabsList>
         <TabsContent value="allTeachers">
-          <TeacherUserManagementTable role="TEACHER" />
+          <TeacherUserManagementTable
+            teachersData={teachersData}
+            role="TEACHER"
+            specificSchool={specificSchool}
+          />
         </TabsContent>
         <TabsContent value="allStudents">
-          <TeacherUserManagementTable role="STUDENT" />
+          <TeacherUserManagementTable
+            studentsData={studentsData}
+            role="STUDENT"
+          />
         </TabsContent>
         <TabsContent value="pendingUsers">
-          <TeacherUserManagementTable role="PENDING" />
+          <TeacherUserManagementTable
+            pendingData={pendingData}
+            role="PENDING"
+          />
         </TabsContent>
       </Tabs>
     </div>

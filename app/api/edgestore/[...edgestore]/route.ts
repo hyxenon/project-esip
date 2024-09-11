@@ -50,6 +50,10 @@ const edgeStoreRouter = es.router({
           role: { eq: "ADMIN" },
         },
       ],
+    })
+    .beforeDelete(({ ctx, fileInfo }) => {
+      console.log("beforeDelete", ctx, fileInfo);
+      return true; // allow delete
     }),
 });
 const handler = createEdgeStoreNextHandler({

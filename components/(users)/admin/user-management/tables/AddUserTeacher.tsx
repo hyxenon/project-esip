@@ -31,19 +31,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState, useTransition } from "react";
-import { useEdgeStore } from "@/lib/edgestore";
 
 import { useToast } from "@/components/ui/use-toast";
 
-import { PasswordInput } from "@/components/ui/password-input";
 import Image from "next/image";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { register } from "@/actions/auth/register";
-import {
-  UserModel,
-  useUserManagementContext,
-} from "@/context/UserManagementContext";
+
 import { User } from "./teacherTable/column";
 import { PasswordField } from "@/components/ui/password-field";
 
@@ -55,7 +50,7 @@ interface SchoolModel {
 }
 
 interface AddUserTeacherProps {
-  selectedSchool: SchoolModel | null;
+  selectedSchool: any;
 }
 
 export function AddUserTeacher({ selectedSchool }: AddUserTeacherProps) {
@@ -107,11 +102,10 @@ export function AddUserTeacher({ selectedSchool }: AddUserTeacherProps) {
 }
 
 interface ProfileFormProps {
-  selectedSchool: SchoolModel | null;
+  selectedSchool: any;
 }
 
 function ProfileForm({ selectedSchool }: ProfileFormProps) {
-  const { dispatch } = useUserManagementContext();
   const formSchema = z
     .object({
       email: z.string().email({ message: "Email is required." }),
@@ -183,7 +177,7 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
             schoolId: data.user.schoolId,
             school: data.user.school || null, // Adjust if `school` can be missing
           };
-          dispatch({ type: "ADD_USER", payload: newUser });
+
           setSuccess(data.success);
           form.reset();
         } else {
@@ -257,7 +251,7 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
             <PasswordField name="confirmPassword" title="Confirm Password" />
 
             <Button
-              className="w-[9rem] mt-4"
+              className="w-[9rem] mt-4 hover:bg-[#283618] bg-[#606C38]"
               type="button"
               onClick={() => {
                 const ranPass = randomPasswordGenerator();
@@ -288,7 +282,7 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
                   height={30}
                   className="w-7 h-7 rounded-full"
                 />
-                <p>{selectedSchool?.label}</p>
+                <p>{selectedSchool.schoolName}</p>
               </div>
             </div>
           </div>

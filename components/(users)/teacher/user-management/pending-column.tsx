@@ -14,9 +14,10 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
-import { PendingUserModel } from "@/context/TeacherUserManagementContext";
 import DeletePendingUser from "./delete-pending-user";
 import AcceptPendingUser from "./accept-pending-user";
+import { Badge } from "@/components/ui/badge";
+import { PendingUserModel } from "@/models/models";
 
 type PendingUserActionsProps = {
   user: PendingUserModel;
@@ -151,7 +152,11 @@ export const pendingColumn: ColumnDef<PendingUserModel>[] = [
     },
     cell: ({ row }) => {
       const user = row.original;
-      return <p className="">{user.role}</p>;
+      return (
+        <Badge variant={"outline"} className="border-[#606C38]">
+          {user.role}
+        </Badge>
+      );
     },
   },
   {

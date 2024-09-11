@@ -7,6 +7,7 @@ import { RegisterSchema, registerSchema } from "@/models/models";
 import bcrypt from "bcryptjs";
 import * as z from "zod";
 import { UserRole } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 function titleCase(str: string) {
   return str
@@ -60,5 +61,6 @@ export const register = async (
     isAdmin
   );
 
+  revalidatePath("/admin/user-management");
   return { success: "Confirmation email sent!", user: user };
 };

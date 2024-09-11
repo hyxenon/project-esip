@@ -4,7 +4,12 @@ import { generateVerificationToken } from "@/lib/token";
 import { getUserByEmail } from "@/data/user";
 import { sendVerificationEmail } from "@/lib/mail";
 import { LoginSchema } from "@/models/models";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import {
+  DEFAULT_LOGIN_REDIRECT,
+  DEFAULT_LOGIN_REDIRECT_ADMIN,
+  DEFAULT_LOGIN_REDIRECT_STUDENT,
+  DEFAULT_LOGIN_REDIRECT_TEACHER,
+} from "@/routes";
 import { AuthError } from "next-auth";
 import * as z from "zod";
 
@@ -37,10 +42,22 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   }
 
   try {
+    let defaultLogin;
+    if (existingUser.role === "TEACHER") {
+      defaultLogin = DEFAULT_LOGIN_REDIRECT_TEACHER;
+    }
+
+    if (existingUser.role === "STUDENT") {
+      defaultLogin = DEFAULT_LOGIN_REDIRECT_STUDENT;
+    }
+
+    if (existingUser.role === "ADMIN") {
+      defaultLogin = DEFAULT_LOGIN_REDIRECT_ADMIN;
+    }
     await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: defaultLogin,
     });
   } catch (error) {
     if (error instanceof AuthError) {

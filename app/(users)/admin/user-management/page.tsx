@@ -1,74 +1,48 @@
-"use client";
-import { useEffect, useState } from "react";
+import { getSchool, getSchools } from "@/actions/schoolManagement";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { FaAlignLeft } from "react-icons/fa6";
 import MobileMenu from "@/components/(users)/admin/mobileMenu";
-import TotalStudents from "@/components/(users)/admin/user-management/cards/TotalStudents";
-import TotalTeachers from "@/components/(users)/admin/user-management/cards/TotalTeachers";
+
 import UserTabs from "@/components/(users)/admin/user-management/UserTabs";
+import SchoolSelect from "@/components/(users)/admin/user-management/SchoolSelect";
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
+  getAllUsersByStudent,
+  getAllUsersByTeacher,
+} from "@/actions/userManagement";
+import { User } from "@/components/(users)/admin/user-management/tables/teacherTable/column";
+import TotalCards from "@/components/(users)/TotalCards";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import Image from "next/image";
-import { getSchools } from "@/actions/schoolManagement";
-import { useUserManagementContext } from "@/context/UserManagementContext";
-import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
+import { FaChalkboardTeacher } from "react-icons/fa";
+import { PiStudentFill } from "react-icons/pi";
 
-interface SchoolModel {
-  label: string;
-  value: string;
-  image: string | null;
-  id: string;
-}
+const UserManagement = async ({
+  searchParams,
+}: {
+  searchParams?: {
+    id?: string;
+  };
+}) => {
+  const schoolsResponse = await getSchools();
+  let teacherUsers: User[] = [];
+  let studentUsers: User[] = [];
+  let specificSchool;
 
-const UserManagement = () => {
-  const { state, dispatch } = useUserManagementContext();
-  const [schools, setSchools] = useState<SchoolModel[]>([]);
-  const [open, setOpen] = useState(false);
-  const [selectedSchool, setSelectedSchool] = useState<SchoolModel | null>(
-    null
-  );
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-
-  useEffect(() => {
-    const fetchSchool = async () => {
-      try {
-        const res = await getSchools();
-        const formattedSchools = res.message.map((school) => ({
-          label: school.schoolName,
-          value: school.schoolName,
-          image: school.image,
-          id: school.id,
-        }));
-        setSchools([
-          { label: "All School", value: "All School", image: null, id: "all" },
-          ...formattedSchools,
-        ]);
-      } catch (error) {
-        console.error("Error fetching schools:", error);
-      }
-    };
-
-    fetchSchool();
-  }, []);
-
-  useEffect(() => {
-    if (selectedSchool) {
-      dispatch({ type: "SET_SELECTED_SCHOOL", payload: selectedSchool.id });
-    }
-  }, [selectedSchool, dispatch]);
+  if (searchParams?.id === undefined) {
+    const allTeacherUsersData = await getAllUsersByTeacher("all");
+    const allStudentUsersData = await getAllUsersByStudent("all");
+    teacherUsers = allTeacherUsersData;
+    studentUsers = allStudentUsersData;
+  } else {
+    const specificUsersData = await getAllUsersByTeacher(searchParams.id);
+    const specificStudentUsersData = await getAllUsersByStudent(
+      searchParams.id
+    );
+    const specificSchoolData = await getSchool(searchParams.id);
+    specificSchool = specificSchoolData?.message;
+    teacherUsers = specificUsersData;
+    studentUsers = specificStudentUsersData;
+  }
 
   return (
     <div className="w-full h-screen px-4 md:px-8 py-4">
@@ -78,101 +52,26 @@ const UserManagement = () => {
             <FaAlignLeft />
           </Button>
         </SheetTrigger>
-        <MobileMenu />
+        <MobileMenu role="ADMIN" />
       </Sheet>
 
       {/* Card Count */}
       <div className="flex gap-4 flex-wrap">
-        <TotalTeachers />
-        <TotalStudents />
+        <TotalCards cardTitle="Total Teachers" cardTotalNumber={0}>
+          <FaChalkboardTeacher className="h-5 w-5 text-[#283618]" />
+        </TotalCards>
+        <TotalCards cardTitle="Total Students" cardTotalNumber={0}>
+          <PiStudentFill className="h-5 w-5 text-[#283618]" />
+        </TotalCards>
       </div>
-
-      <div className="flex items-center space-x-4 mt-4">
-        <p className="text-sm text-muted-foreground">School</p>
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button variant="outline" className="justify-start">
-              {selectedSchool ? (
-                <>
-                  <div className="flex gap-1">
-                    <Image
-                      src={
-                        selectedSchool.image === null
-                          ? "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
-                          : selectedSchool.image
-                      }
-                      alt="logo"
-                      width={20}
-                      height={10}
-                    />{" "}
-                    {selectedSchool.label}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="flex gap-1">
-                    <Image
-                      src={
-                        "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
-                      }
-                      alt="logo"
-                      width={20}
-                      height={10}
-                    />{" "}
-                    All School
-                  </div>
-                </>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent
-            side={isDesktop ? "right" : "bottom"}
-            className="p-0"
-            align="start"
-          >
-            <Command>
-              <CommandInput placeholder="Find School..." />
-              <CommandList>
-                <CommandEmpty>No results found.</CommandEmpty>
-                <CommandGroup>
-                  {schools.map((school) => (
-                    <CommandItem
-                      key={school.value}
-                      value={school.value}
-                      onSelect={(value) => {
-                        setSelectedSchool(
-                          schools.find(
-                            (priority) => priority.value === value
-                          ) || null
-                        );
-                        setOpen(false);
-                      }}
-                    >
-                      <div className="flex gap-4">
-                        <Image
-                          alt="logo"
-                          src={
-                            school.image === null
-                              ? "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
-                              : school.image
-                          }
-                          width={20}
-                          height={10}
-                        />
-                        {school.label}
-                      </div>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
-      </div>
-
+      <SchoolSelect schoolsData={schoolsResponse.message} />
       {/* Tabs */}
       <div className="flex gap-8 mt-8">
-        <UserTabs selectedSchool={selectedSchool} />
+        <UserTabs
+          specificSchool={specificSchool}
+          teachers={teacherUsers}
+          students={studentUsers}
+        />
       </div>
     </div>
   );

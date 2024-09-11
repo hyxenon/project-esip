@@ -1,4 +1,5 @@
-import { acceptPendingUser } from "@/actions/userManagement";
+import { deletePaper } from "@/actions/paperManagement.action";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,37 +12,36 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
 
-interface AcceptPendingProps {
+interface DeletePaperButtonProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   name: string | null;
   id: string;
 }
-const AcceptPendingUser = ({
+const DeletePaperBtn = ({
   isOpen,
   setIsOpen,
   name,
   id,
-}: AcceptPendingProps) => {
+}: DeletePaperButtonProps) => {
   const { toast } = useToast();
 
-  const handleDeleteUser = async () => {
-    const res = await acceptPendingUser(id);
+  const handleDeletePaper = async () => {
+    const res = await deletePaper(id);
 
-    if (res.success) {
+    if (res) {
       toast({
         variant: "success",
         title: "Success",
-        description: "User request accepted.",
+        description: "Paper deleted successfully.",
       });
     } else {
       toast({
         variant: "destructive",
         title: "Error",
-        description: res.error || "Failed to accept user.",
+        description: "Failed to delete paper.",
       });
     }
-    setIsOpen(false);
   };
 
   return (
@@ -49,21 +49,21 @@ const AcceptPendingUser = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you absolutely sure you want to accept {name} request?
+            Are you absolutely sure you want to delete{" "}
+            <span className="font-bold text-red-500">{name}</span>?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This action can be undone. The user's pending request will be
-            removed from your school. This user can now access the website and
-            if this is a mistake you can delete them in the user specific tab.
+            This action cannot be undone. This will permanently delete the
+            Research Paper and remove this data from our servers.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            className="bg-[#606C38] hover:bg-[#606C38]"
-            onClick={handleDeleteUser}
+            className="bg-destructive hover:bg-destructive"
+            onClick={handleDeletePaper}
           >
-            Accept Request
+            Delete
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -71,4 +71,4 @@ const AcceptPendingUser = ({
   );
 };
 
-export default AcceptPendingUser;
+export default DeletePaperBtn;

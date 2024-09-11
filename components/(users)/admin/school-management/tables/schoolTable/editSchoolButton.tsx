@@ -87,7 +87,6 @@ interface ProfileFormProps {
 }
 
 function ProfileForm({ schoolId }: ProfileFormProps) {
-  const { dispatch } = useSchoolContext();
   const [schoolData, setSchoolData] = useState<SchoolModel>();
   const [formInitialized, setFormInitialized] = useState(false);
 
@@ -159,8 +158,6 @@ function ProfileForm({ schoolId }: ProfileFormProps) {
         updatedAt: new Date(),
         status: schoolData!.status,
       };
-
-      dispatch({ type: "EDIT_SCHOOL", payload: updatedSchool });
 
       setFile(undefined);
       setProgress(0);
