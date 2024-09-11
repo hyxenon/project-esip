@@ -1,6 +1,5 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import ProfileIcon from "@/components/navbar/profileIcon";
 import React from "react";
 import { TeacherNavbarMenu } from "./navbarMenu";
@@ -25,7 +24,7 @@ const Navbar = ({ role }: NavbarProps) => {
             <FaAlignLeft />
           </Button>
         </SheetTrigger>
-        <MobileMenu role="TEACHER" />
+        <MobileMenu role={role} />
       </Sheet>
       <div className="lg:flex items-center hidden">
         {/* <Image src={logo} alt="logo" className="w-[0px]" /> */}

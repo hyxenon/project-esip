@@ -12,19 +12,32 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
 
-export default function SearchComponent() {
+interface SearchComponentProps {
+  queryTitle?: string;
+}
+
+export default function SearchComponent({ queryTitle }: SearchComponentProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [paperType, setPaperType] = useState("all");
   const [categories, setCategories] = useState<string[]>([]);
+  const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Search query:", searchQuery);
-    console.log("Paper type:", paperType);
-    console.log("Categories:", categories);
-    // Here you would typically make an API call with these parameters
+    const categoriesLowerCase = categories.map((category) =>
+      category.toLowerCase()
+    );
+
+    const queryString = new URLSearchParams({
+      query: searchQuery,
+      paperType: paperType,
+      categories: categoriesLowerCase.join(","),
+    }).toString();
+
+    router.push(`/search?${queryString}`);
   };
 
   const handleCategoryChange = (category: string) => {
@@ -44,17 +57,24 @@ export default function SearchComponent() {
   };
 
   return (
-    <div className="py-12 px-4 sm:px-6 lg:px-8 lg:mt-16">
+    <div
+      className={`py-12 px-4 sm:px-6 lg:px-8 ${
+        queryTitle ? "py-2" : "lg:mt-16"
+      }`}
+    >
       <div className="max-w-3xl mx-auto">
-        <div className="text-center">
-          <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
-            <span className="text-[#283618]">PROJECT</span>{" "}
-            <span className="text-[#BC6C25]">E-SIP</span>
-          </h1>
-          <p className="mt-5 text-xl text-gray-500">
-            Search for research papers, proposals, and more
-          </p>
-        </div>
+        {!queryTitle && (
+          <div className="text-center">
+            <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
+              <span className="text-[#283618]">PROJECT</span>{" "}
+              <span className="text-[#BC6C25]">E-SIP</span>
+            </h1>
+            <p className="mt-5 text-xl text-gray-500">
+              Search for research papers, proposals, and more
+            </p>
+          </div>
+        )}
+
         <form onSubmit={handleSearch} className="mt-8">
           <div className="flex items-center border-b border-gray-300 py-2">
             <Input
@@ -109,10 +129,9 @@ export default function SearchComponent() {
             {[
               "Life Science",
               "Physical Science",
-              "Science Expo",
-              "Earth Science",
-              "Space Science",
-              "Technology",
+              "Science Innovation Expo",
+              "Robotics",
+              "Mathematical and Computational",
             ].map((category) => (
               <div key={category} className="flex items-center">
                 <Checkbox

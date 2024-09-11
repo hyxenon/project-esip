@@ -251,7 +251,7 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
             <PasswordField name="confirmPassword" title="Confirm Password" />
 
             <Button
-              className="w-[9rem] mt-4"
+              className="w-[9rem] mt-4 hover:bg-[#283618] bg-[#606C38]"
               type="button"
               onClick={() => {
                 const ranPass = randomPasswordGenerator();

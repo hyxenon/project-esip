@@ -24,7 +24,7 @@ const AdminHome = () => {
             <FaAlignLeft />
           </Button>
         </SheetTrigger>
-        <MobileMenu />
+        <MobileMenu role="ADMIN" />
       </Sheet>
       {/* Card */}
       <div className="flex gap-4 flex-wrap">

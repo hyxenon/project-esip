@@ -52,7 +52,7 @@ const UserManagement = async ({
             <FaAlignLeft />
           </Button>
         </SheetTrigger>
-        <MobileMenu />
+        <MobileMenu role="ADMIN" />
       </Sheet>
 
       {/* Card Count */}
