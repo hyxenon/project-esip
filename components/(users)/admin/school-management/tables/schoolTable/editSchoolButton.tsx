@@ -37,6 +37,8 @@ import { editSchool, getSchool } from "@/actions/schoolManagement";
 import Image from "next/image";
 import { SchoolModel } from "../../SchoolForm";
 import { useSchoolContext } from "@/context/SchoolContext";
+import { SingleImageDropzone } from "../../SingleImageDropzone";
+import { Progress } from "@/components/ui/progress";
 
 interface EditSchoolButtonProps {
   isOpen: boolean;
@@ -131,6 +133,7 @@ function ProfileForm({ schoolId }: ProfileFormProps) {
   }, [schoolData]);
 
   const [file, setFile] = useState<File>();
+  const [changeLogo, setChangeLogo] = useState<boolean>(false);
   const { edgestore } = useEdgeStore();
   const [progress, setProgress] = useState<number>(0);
   const { toast } = useToast();
@@ -158,7 +161,9 @@ function ProfileForm({ schoolId }: ProfileFormProps) {
         updatedAt: new Date(),
         status: schoolData!.status,
       };
-
+      await edgestore.publicFiles.confirmUpload({
+        url: values.image,
+      });
       setFile(undefined);
       setProgress(0);
     } catch (err: any) {
@@ -318,52 +323,69 @@ function ProfileForm({ schoolId }: ProfileFormProps) {
                         <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-4">
                           Logo Image
                         </p>
-                        {/* <div className="flex flex-col justify-center items-center ">
-                          <SingleImageDropzone
-                            width={100}
-                            height={100}
-                            value={file}
-                            onChange={(file) => {
-                              setFile(file);
-                            }}
-                          />
-                          <Progress
-                            value={progress}
-                            className="w-[100%] mt-2"
-                          />
-                          <p className="text-sm">{progress}%</p>
-                          <Button
-                            className="mt-2"
-                            type="button"
-                            onClick={async () => {
-                              if (file) {
-                                const res = await edgestore.publicFiles.upload({
-                                  file,
-                                  onProgressChange: (progressData) => {
-                                    setProgress(progressData);
-                                  },
-                                });
-                                form.setValue("image", res.url);
-                                toast({
-                                  title: "Image Uploaded Successfully!",
-                                });
+
+                        {changeLogo && (
+                          <div className="flex flex-col justify-center items-center ">
+                            <SingleImageDropzone
+                              width={100}
+                              height={100}
+                              value={file}
+                              onChange={(file) => {
+                                setFile(file);
+                              }}
+                            />
+                            <Progress
+                              value={progress}
+                              className="w-[100%] mt-2"
+                            />
+                            <p className="text-sm">{progress}%</p>
+                            <Button
+                              className="mt-2"
+                              type="button"
+                              onClick={async () => {
+                                if (file) {
+                                  const res =
+                                    await edgestore.publicFiles.upload({
+                                      file,
+                                      options: {
+                                        temporary: true,
+                                      },
+                                      onProgressChange: (progressData) => {
+                                        setProgress(progressData);
+                                      },
+                                    });
+                                  form.setValue("image", res.url);
+                                  toast({
+                                    title: "Image Uploaded Successfully!",
+                                  });
+                                }
+                              }}
+                            >
+                              Upload
+                            </Button>
+                          </div>
+                        )}
+
+                        {!changeLogo && (
+                          <div>
+                            <Image
+                              src={
+                                schoolData?.image
+                                  ? schoolData.image
+                                  : "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
                               }
-                            }}
-                          >
-                            Upload
-                          </Button>
-                        </div> */}
-                        <Image
-                          src={
-                            schoolData?.image
-                              ? schoolData.image
-                              : "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721383200&semt=sph"
-                          }
-                          alt="logo"
-                          width={100}
-                          height={100}
-                        />
-                        <Button type="button">Change Logo</Button>
+                              alt="logo"
+                              width={100}
+                              height={100}
+                            />
+                            <Button
+                              type="button"
+                              onClick={() => setChangeLogo(true)}
+                            >
+                              Change Logo
+                            </Button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </FormControl>

@@ -38,8 +38,6 @@ import { SingleImageDropzone } from "../../SingleImageDropzone";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { addSchool } from "@/actions/schoolManagement";
-import { useSchoolContext } from "@/context/SchoolContext";
-import { SchoolModel } from "../../SchoolForm";
 
 export function AddSchoolButton() {
   const [open, setOpen] = useState(false);
