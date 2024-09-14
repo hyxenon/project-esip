@@ -19,6 +19,7 @@ export const addResearchProposalPaper = async (data: ResearchPaperModel) => {
       isPublic: data.isPublic,
       grade: data.grade,
       userId: data.userId,
+      keywords: data.keywords,
       authors:
         data.authors && data.authors.length > 0
           ? {

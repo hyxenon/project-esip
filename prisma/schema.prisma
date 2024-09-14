@@ -112,6 +112,7 @@ model ResearchPaper {
   user               User      @relation(fields: [userId], references: [id])
   comments           Comment[]
   authors            Author[]
+  keywords           String[]
 }
 
 model Author {
