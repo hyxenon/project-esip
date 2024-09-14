@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { ResearchPaperModel } from "@/models/models";
 
 export const searchPaper = async ({
   searchParams,
@@ -45,5 +46,8 @@ export const searchPaper = async ({
     },
   });
 
-  return papers;
+  return papers.map((paper) => ({
+    ...paper,
+    abstract: paper.abstract as string | null,
+  })) as ResearchPaperModel[];
 };

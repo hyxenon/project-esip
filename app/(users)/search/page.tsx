@@ -2,6 +2,8 @@ import { searchPaper } from "@/actions/search";
 import { auth } from "@/auth";
 import Navbar from "@/components/(users)/navbar";
 import SearchComponent from "@/components/(users)/search/search";
+import SearchResultsComponent from "@/components/(users)/search/SearchResultsComponent";
+import { ResearchPaperModel } from "@/models/models";
 import React from "react";
 
 const page = async ({
@@ -14,10 +16,10 @@ const page = async ({
   };
 }) => {
   const session = await auth();
+  let searchPaperResults: ResearchPaperModel[] = [];
 
   if (searchParams?.query) {
-    const searchPaperResults = await searchPaper({ searchParams });
-    console.log(searchPaperResults);
+    searchPaperResults = await searchPaper({ searchParams });
   }
 
   if (!session?.user) {
@@ -29,6 +31,9 @@ const page = async ({
       <Navbar role={session.user.role} />
       <div className="">
         <SearchComponent queryTitle={searchParams?.query} />
+        {searchParams?.query && (
+          <SearchResultsComponent papers={searchPaperResults} />
+        )}
       </div>
     </div>
   );

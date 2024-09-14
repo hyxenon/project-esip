@@ -74,7 +74,7 @@ export default function SearchComponent({ queryTitle }: SearchComponentProps) {
             </p>
           </div>
         )}
-
+        
         <form onSubmit={handleSearch} className="mt-8">
           <div className="flex items-center border-b border-gray-300 py-2">
             <Input
