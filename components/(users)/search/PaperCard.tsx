@@ -26,10 +26,8 @@ import {
 } from "@/components/ui/tooltip";
 import { ResearchPaperModel } from "@/models/models";
 import {
-  ArrowUpDown,
   BookmarkIcon,
   BookOpenIcon,
-  BrainIcon,
   CalendarIcon,
   DownloadIcon,
   LightbulbIcon,
@@ -43,42 +41,127 @@ interface PaperCardProps {
 }
 
 const PaperCard = ({ paper }: PaperCardProps) => {
+  const formatAuthorName = (name: string) => {
+    const nameParts = name.split(" ");
+    const lastName = nameParts.pop();
+    const initials = nameParts.map((part) => part[0]).join(". ") + ".";
+
+    return `${initials} ${lastName}`;
+  };
+
+  const formatAuthorNameWithInitials = (name: string) => {
+    const nameParts = name.split(" ");
+    const lastName = nameParts.pop(); // Get the last name
+    const capitalizedLastName = lastName
+      ? lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase()
+      : ""; // Capitalize only the first letter
+    const initials = nameParts
+      .map((part) => part[0].toUpperCase() + ".")
+      .join(" ");
+    return `${capitalizedLastName}, ${initials}`;
+  };
+
+  const formatAuthorsForCitation = (authors: string[]) => {
+    if (authors.length === 1) {
+      return formatAuthorNameWithInitials(authors[0]);
+    } else if (authors.length === 2) {
+      return `${formatAuthorNameWithInitials(
+        authors[0]
+      )} & ${formatAuthorNameWithInitials(authors[1])}`;
+    } else {
+      return `${formatAuthorNameWithInitials(authors[0])}, et al.`;
+    }
+  };
+
+  const getApaCitation = () => {
+    if (paper.authors && paper.authors.length > 0) {
+      const authorNames = paper.authors.map((author) => author.name); // Extract author names
+      return `${formatAuthorsForCitation(
+        authorNames
+      )}. (${paper.date.getFullYear()}). ${paper.title}.`;
+    }
+    return `No authors available. (${paper.date.getFullYear()}). ${
+      paper.title
+    }.`;
+  };
+
+  const getChicagoCitation = () => {
+    if (paper.authors && paper.authors.length > 0) {
+      const authorNames = paper.authors.map((author) => author.name); // Extract author names
+      return `${authorNames.map(formatAuthorNameWithInitials).join(", ")}. "${
+        paper.title
+      }." (${paper.date.getFullYear()}).`;
+    }
+    return `No authors available. "${
+      paper.title
+    }." (${paper.date.getFullYear()}).`;
+  };
+
+  const getMlaCitation = () => {
+    if (paper.authors && paper.authors.length > 0) {
+      const firstAuthorLastName = paper.authors[0].name.split(" ").pop(); // Get the last name of the first author
+      return `${firstAuthorLastName}, et al. "${
+        paper.title
+      }," ${paper.date.getFullYear()}.`;
+    }
+    return `No authors available. "${
+      paper.title
+    }," ${paper.date.getFullYear()}.`;
+  };
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
   return (
     <Card className="hover:shadow-lg transition-shadow duration-300">
       <CardHeader>
-        <CardTitle className="text-xl font-bold text-blue-600 hover:underline cursor-pointer">
-          title
+        <CardTitle className="text-xl font-bold text-[#283618] hover:underline cursor-pointer">
+          {paper.title}
         </CardTitle>
         <div className="flex items-center text-sm text-gray-600 mt-2">
-          <UsersIcon className="w-4 h-4 mr-2" />
-          authors
+          {paper.authors && paper.authors.length > 0 && (
+            <div className="flex items-center text-sm text-gray-600 mt-2">
+              <UsersIcon className="w-4 h-4 mr-2" />
+              {paper.authors.map((author, index) => (
+                <span key={index} className="capitalize mx-0.5">
+                  {formatAuthorName(author.name)}
+                  {index < paper.authors!.length - 1 ? ", " : ""}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
         <div className="flex items-center text-sm text-gray-600">
           <CalendarIcon className="w-4 h-4 mr-2" />
-          date
+          {paper.date.toLocaleDateString("en-US", options)}
         </div>
-        <div className="flex items-center text-sm text-gray-600">
+        <div className="flex items-center text-sm text-gray-600 capitalize">
           <BookOpenIcon className="w-4 h-4 mr-2" />
-          journal
+          Research {paper.researchType}
         </div>
         <div className="flex items-center text-sm text-gray-600">
           <MapIcon className="w-4 h-4 mr-2" />
-          school
+          {paper.user.school.schoolName}
         </div>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-20 mb-4">
-          <div className="flex flex-wrap gap-2">category</div>
-        </ScrollArea>
+        <div className="line-clamp-2">
+          {paper.abstract ? paper.abstract : paper.introduction}
+        </div>
 
         <div className="text-xs text-gray-500 mb-2">
-          <span className="font-semibold">References:</span> paper references
+          <span className="font-semibold">Keywords:</span>{" "}
+          {paper.keywords !== undefined
+            ? paper.keywords.join(", ")
+            : "No keywords"}
         </div>
 
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center text-green-600">
             <LightbulbIcon className="w-4 h-4 mr-2" />
-            Views: 0
+            Views: {paper.views}
           </div>
         </div>
       </CardContent>
@@ -115,19 +198,34 @@ const PaperCard = ({ paper }: PaperCardProps) => {
                 <Label htmlFor="apa" className="text-right">
                   APA
                 </Label>
-                <Input id="apa" className="col-span-3" readOnly />
+                <Input
+                  id="apa"
+                  className="col-span-3"
+                  readOnly
+                  value={getApaCitation()}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="mla" className="text-right">
                   MLA
                 </Label>
-                <Input id="mla" className="col-span-3" readOnly />
+                <Input
+                  id="mla"
+                  className="col-span-3"
+                  readOnly
+                  value={getMlaCitation()}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="chicago" className="text-right">
                   Chicago
                 </Label>
-                <Input id="chicago" className="col-span-3" readOnly />
+                <Input
+                  id="chicago"
+                  className="col-span-3"
+                  readOnly
+                  value={getChicagoCitation()}
+                />
               </div>
             </div>
           </DialogContent>

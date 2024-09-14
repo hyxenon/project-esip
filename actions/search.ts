@@ -17,10 +17,19 @@ export const searchPaper = async ({
   // Add title search condition
   if (searchQuery) {
     conditions.push({
-      title: {
-        contains: searchQuery,
-        mode: "insensitive", // Case-insensitive search
-      },
+      OR: [
+        {
+          title: {
+            contains: searchQuery,
+            mode: "insensitive", // Case-insensitive search
+          },
+        },
+        {
+          keywords: {
+            hasSome: searchQuery.toLowerCase().split(" "), // Search based on keywords
+          },
+        },
+      ],
     });
   }
 
@@ -43,6 +52,14 @@ export const searchPaper = async ({
   const papers = await db.researchPaper.findMany({
     where: {
       AND: conditions.length > 0 ? conditions : undefined,
+    },
+    include: {
+      authors: true,
+      user: {
+        include: {
+          school: true,
+        },
+      },
     },
   });
 
