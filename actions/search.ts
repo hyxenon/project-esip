@@ -68,3 +68,40 @@ export const searchPaper = async ({
     abstract: paper.abstract as string | null,
   })) as ResearchPaperModel[];
 };
+
+export const getPaperDetails = async (paperId: string, schoolId: string) => {
+  try {
+    const paper = await db.researchPaper.findFirst({
+      where: {
+        id: paperId,
+        OR: [
+          { isPublic: true },
+          {
+            AND: [
+              { isPublic: false },
+              {
+                user: {
+                  schoolId: schoolId,
+                },
+              },
+            ],
+          },
+        ],
+      },
+      include: {
+        user: {
+          include: {
+            school: true,
+          },
+        },
+        authors: true,
+        comments: true,
+      },
+    });
+
+    return paper;
+  } catch (error) {
+    console.error("Error fetching paper details:", error);
+    return null;
+  }
+};

@@ -34,6 +34,7 @@ import {
   MapIcon,
   UsersIcon,
 } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 interface PaperCardProps {
@@ -118,7 +119,7 @@ const PaperCard = ({ paper }: PaperCardProps) => {
     <Card className="hover:shadow-lg transition-shadow duration-300">
       <CardHeader>
         <CardTitle className="text-xl font-bold text-[#283618] hover:underline cursor-pointer">
-          {paper.title}
+          <Link href={`/search/${paper.id}`}>{paper.title}</Link>
         </CardTitle>
         <div className="flex items-center text-sm text-gray-600 mt-2">
           {paper.authors && paper.authors.length > 0 && (

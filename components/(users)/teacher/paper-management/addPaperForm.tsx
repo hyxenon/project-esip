@@ -32,7 +32,7 @@ const AddPaperForm = ({
   researchType,
 }: AddPaperFormProps) => {
   return (
-    <Card className="py-8 px-8 lg:mt-8 lg:p-16 border-gray-300">
+    <Card className="py-8 px-8 lg:mt-8 lg:p-16 border-gray-300 container">
       {/* Breadcrumb */}
       <Breadcrumb>
         <BreadcrumbList>
@@ -104,41 +104,36 @@ const AddPaperForm = ({
 
         {!isEdit && (
           <Tabs defaultValue="proposal" className="">
-            <CardHeader>
-              <CardTitle>
-                <TabsList className="shadow-2xl bg-[#D9D9D9] bg-opacity-70">
-                  <TabsTrigger value="proposal">Research Proposal</TabsTrigger>
-                  <TabsTrigger value="paper">Research Paper</TabsTrigger>
-                </TabsList>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="">
-              <TabsContent value="proposal">
-                <ResearchProposalForm />
-              </TabsContent>
-              <TabsContent value="paper">
-                <Alert className="mt-4 mb-10  bg-[#FEFAE0] text-[#606C38] shadow-md ">
-                  <div className="flex items-start">
-                    <RocketIcon className="h-4 w-4 mr-2 text-[#283618]" />
-                    <div>
-                      <AlertTitle className="text-[#283618] font-semibold">
-                        Heads up!
-                      </AlertTitle>
-                      <AlertDescription className="text-[#606C38]">
-                        You're currently adding a Research Paper. You can import
-                        data from an existing Research Proposal by going to the
-                        Paper Management table. In the actions dropdown for your
-                        desired paper, select "Add Research Paper" to
-                        automatically populate the relevant data into your new
-                        Research Paper.
-                      </AlertDescription>
-                    </div>
-                  </div>
-                </Alert>
+            <TabsList className="shadow-2xl bg-[#D9D9D9] bg-opacity-70 my-6">
+              <TabsTrigger value="proposal">Research Proposal</TabsTrigger>
+              <TabsTrigger value="paper">Research Paper</TabsTrigger>
+            </TabsList>
 
-                <ResearchPaperForm />
-              </TabsContent>
-            </CardContent>
+            <TabsContent value="proposal">
+              <ResearchProposalForm />
+            </TabsContent>
+            <TabsContent value="paper">
+              <Alert className="mt-4 mb-10  bg-[#FEFAE0] text-[#606C38] shadow-md ">
+                <div className="flex items-start">
+                  <RocketIcon className="h-4 w-4 mr-2 text-[#283618]" />
+                  <div>
+                    <AlertTitle className="text-[#283618] font-semibold">
+                      Heads up!
+                    </AlertTitle>
+                    <AlertDescription className="text-[#606C38]">
+                      You're currently adding a Research Paper. You can import
+                      data from an existing Research Proposal by going to the
+                      Paper Management table. In the actions dropdown for your
+                      desired paper, select "Add Research Paper" to
+                      automatically populate the relevant data into your new
+                      Research Paper.
+                    </AlertDescription>
+                  </div>
+                </div>
+              </Alert>
+
+              <ResearchPaperForm />
+            </TabsContent>
           </Tabs>
         )}
       </div>

@@ -15,26 +15,18 @@ const page = async ({
     categories?: string;
   };
 }) => {
-  const session = await auth();
   let searchPaperResults: ResearchPaperModel[] = [];
 
   if (searchParams?.query) {
     searchPaperResults = await searchPaper({ searchParams });
   }
 
-  if (!session?.user) {
-    return <div>no session found</div>;
-  }
-
   return (
-    <div>
-      <Navbar role={session.user.role} />
-      <div className="">
-        <SearchComponent queryTitle={searchParams?.query} />
-        {searchParams?.query && (
-          <SearchResultsComponent papers={searchPaperResults} />
-        )}
-      </div>
+    <div className="">
+      <SearchComponent queryTitle={searchParams?.query} />
+      {searchParams?.query && (
+        <SearchResultsComponent papers={searchPaperResults} />
+      )}
     </div>
   );
 };
