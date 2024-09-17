@@ -19,7 +19,8 @@ const PaperId = async ({ params }: PaperIdProps) => {
 
   const paper = await getPaperDetails(
     params.paperId[0],
-    session?.user?.schoolId!
+    session?.user?.schoolId!,
+    session?.user?.id!
   );
 
   if (!paper) {

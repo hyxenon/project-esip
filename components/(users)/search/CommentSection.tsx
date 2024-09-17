@@ -1,11 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
-import { addComment } from "@/actions/search";
+import { addComment, likeComment, unlikeComment } from "@/actions/search";
 import { Session } from "next-auth";
 
 interface Comment {
@@ -15,7 +15,8 @@ interface Comment {
   };
   content: string;
   createdAt: string;
-  likes: number;
+  likesCount: number;
+  hasLiked: boolean;
   parentId?: string | null;
   children: Comment[];
 }
@@ -31,23 +32,40 @@ export default function CommentSection({
   paperId,
   session,
 }: CommentSectionProps) {
+  const [allComments, setAllComments] = useState<Comment[]>(comments);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  console.log("Comments: ", comments);
+  const [isPending, startTransition] = useTransition();
 
   const handleAddComment = async (content: string, parentId?: string) => {
     try {
       setLoading(true);
       setError(null);
 
-      const newComment = await addComment({
+      const newCommentData = await addComment({
         content,
         userId: session.user?.id!,
         paperId: paperId,
         parentId,
       });
+
+      // Construct a Comment object with all required properties
+      const newComment: Comment = {
+        ...newCommentData,
+        likesCount: 0, // Assuming new comments start with 0 likes
+        hasLiked: false, // Assuming the user hasn't liked their own comment yet
+        children: [], // New comments won't have replies initially
+        // If 'user' in newCommentData doesn't match, ensure it conforms to { name: string }
+        user: {
+          name: session.user?.name || "Unknown", // Use session data or a default value
+        },
+        // Ensure 'createdAt' is a string, if it's a Date object, convert it
+        createdAt: new Date().toISOString(),
+      };
+
+      // Update local state
+      setAllComments((prevComments) => [...prevComments, newComment]);
 
       setReplyingTo(null);
     } catch (err) {
@@ -55,6 +73,47 @@ export default function CommentSection({
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLike = (comment: Comment) => {
+    // Optimistic UI Update
+    setAllComments((prevComments) =>
+      prevComments.map((c) =>
+        c.id === comment.id
+          ? {
+              ...c,
+              hasLiked: !c.hasLiked,
+              likesCount: comment.hasLiked
+                ? comment.likesCount - 1
+                : comment.likesCount + 1,
+            }
+          : c
+      )
+    );
+
+    startTransition(async () => {
+      try {
+        if (comment.hasLiked) {
+          await unlikeComment(comment.id, session.user?.id!, paperId);
+        } else {
+          await likeComment(comment.id, session.user?.id!, paperId);
+        }
+      } catch (error) {
+        // Revert optimistic update on error
+        setAllComments((prevComments) =>
+          prevComments.map((c) =>
+            c.id === comment.id
+              ? {
+                  ...c,
+                  hasLiked: comment.hasLiked,
+                  likesCount: comment.likesCount,
+                }
+              : c
+          )
+        );
+        console.error(error);
+      }
+    });
   };
 
   function buildCommentTree(comments: Comment[]) {
@@ -81,7 +140,7 @@ export default function CommentSection({
     return roots;
   }
 
-  const rootComments = buildCommentTree(comments);
+  const rootComments = buildCommentTree(allComments);
 
   const CommentCard = ({
     comment,
@@ -115,6 +174,17 @@ export default function CommentSection({
             className="h-auto p-0 text-gray-500 hover:text-blue-600"
           >
             Reply
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleLike(comment)}
+            disabled={isPending}
+            className={`h-auto p-0 hover:text-blue-600 ${
+              comment.hasLiked ? "text-blue-600" : "text-gray-500"
+            }`}
+          >
+            {comment.hasLiked ? "Unlike" : "Like"} ({comment.likesCount})
           </Button>
           <span>{new Date(comment.createdAt).toLocaleString()}</span>
         </div>

@@ -71,7 +71,11 @@ export const searchPaper = async ({
   })) as ResearchPaperModel[];
 };
 
-export const getPaperDetails = async (paperId: string, schoolId: string) => {
+export const getPaperDetails = async (
+  paperId: string,
+  schoolId: string,
+  userId: string
+) => {
   try {
     const paper = await db.researchPaper.findFirst({
       where: {
@@ -100,15 +104,37 @@ export const getPaperDetails = async (paperId: string, schoolId: string) => {
         comments: {
           include: {
             user: true,
+            Likes: true,
+            _count: {
+              select: { Likes: true },
+            },
             children: {
               include: {
                 user: true,
+                Likes: true,
+                _count: {
+                  select: { Likes: true },
+                },
               },
             },
           },
         },
       },
     });
+
+    if (paper) {
+      paper.comments = paper.comments.map((comment) => ({
+        ...comment,
+        likesCount: comment._count.Likes,
+        hasLiked: comment.Likes.some((like) => like.userId === userId),
+        // Process children comments similarly
+        children: comment.children.map((child) => ({
+          ...child,
+          likesCount: child._count.Likes,
+          hasLiked: child.Likes.some((like) => like.userId === userId),
+        })),
+      }));
+    }
 
     return paper;
   } catch (error) {
@@ -145,5 +171,51 @@ export const addComment = async ({
   } catch (error) {
     console.error("Error adding comment:", error);
     throw new Error("Failed to add comment.");
+  }
+};
+
+export const likeComment = async (
+  commentId: string,
+  userId: string,
+  paperId: string
+) => {
+  try {
+    await db.like.create({
+      data: {
+        userId,
+        commentId,
+      },
+    });
+
+    revalidatePath(`/search/${paperId}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error liking comment:", error);
+    throw new Error("Failed to like comment.");
+  }
+};
+
+export const unlikeComment = async (
+  commentId: string,
+  userId: string,
+  paperId: string
+) => {
+  try {
+    await db.like.delete({
+      where: {
+        userId_commentId: {
+          userId,
+          commentId,
+        },
+      },
+    });
+
+    revalidatePath(`/search/${paperId}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error unliking comment:", error);
+    throw new Error("Failed to unlike comment.");
   }
 };
