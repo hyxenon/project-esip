@@ -1,5 +1,7 @@
+"use server";
 import { db } from "@/lib/db";
 import { ResearchPaperModel } from "@/models/models";
+import { revalidatePath } from "next/cache";
 
 export const searchPaper = async ({
   searchParams,
@@ -95,7 +97,16 @@ export const getPaperDetails = async (paperId: string, schoolId: string) => {
           },
         },
         authors: true,
-        comments: true,
+        comments: {
+          include: {
+            user: true,
+            children: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -103,5 +114,36 @@ export const getPaperDetails = async (paperId: string, schoolId: string) => {
   } catch (error) {
     console.error("Error fetching paper details:", error);
     return null;
+  }
+};
+
+export const addComment = async ({
+  content,
+  userId,
+  paperId,
+  parentId = null,
+}: {
+  content: string;
+  userId: string;
+  paperId: string;
+  parentId?: string | null;
+}) => {
+  try {
+    const newComment = await db.comment.create({
+      data: {
+        content,
+        userId,
+        researchPaperId: paperId,
+        parentId,
+      },
+      include: {
+        user: true,
+      },
+    });
+    revalidatePath(`/search/${paperId}`);
+    return newComment;
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    throw new Error("Failed to add comment.");
   }
 };

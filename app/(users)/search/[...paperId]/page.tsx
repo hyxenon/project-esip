@@ -22,15 +22,13 @@ const PaperId = async ({ params }: PaperIdProps) => {
     session?.user?.schoolId!
   );
 
-  console.log(paper);
-
   if (!paper) {
     return <PaperNotFound />;
   }
 
   return (
     <div className="">
-      <PaperDetails paper1={paper} />
+      <PaperDetails paper1={paper} session={session} />
     </div>
   );
 };

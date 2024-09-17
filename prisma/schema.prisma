@@ -35,6 +35,7 @@ model User {
   isPending     Boolean?
   ResearchPaper ResearchPaper[]
   Comment       Comment[]
+  Likes         Like[]
 }
 
 model Account {
@@ -127,8 +128,22 @@ model Comment {
   id              String        @id @default(cuid())
   content         String
   createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
   userId          String
-  user            User          @relation(fields: [userId], references: [id])
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   researchPaperId String
   researchPaper   ResearchPaper @relation(fields: [researchPaperId], references: [id], onDelete: Cascade)
+  parent          Comment?      @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
+  children        Comment[]     @relation("ParentChild")
+  parentId        String?
+  Likes           Like[]
+}
+
+model Like {
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  userId    String
+  commentId String
+
+  @@id([userId, commentId])
 }
