@@ -8,10 +8,20 @@ import { Send } from "lucide-react";
 import {
   addComment,
   editComment,
+  deleteComment,
   likeComment,
   unlikeComment,
 } from "@/actions/search";
 import { Session } from "next-auth";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogClose, // Import DialogClose
+} from "@/components/ui/dialog";
 
 interface Comment {
   id: string;
@@ -101,6 +111,31 @@ export default function CommentSection({
       );
     } catch (err) {
       setError("Failed to edit comment. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to handle deleting a comment
+  const handleDeleteComment = async (commentId: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      await deleteComment({
+        commentId,
+        userId: session.user?.id!,
+        paperId: paperId,
+      });
+
+      // Update local state by removing the deleted comment and its replies
+      setAllComments((prevComments) =>
+        prevComments.filter(
+          (c) => c.id !== commentId && c.parentId !== commentId
+        )
+      );
+    } catch (err) {
+      setError("Failed to delete comment. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -237,14 +272,49 @@ export default function CommentSection({
           </Card>
           <div className="flex items-center space-x-2 text-xs text-gray-500">
             {isOwnComment && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsEditing(true)}
-                className="h-auto p-0 text-gray-500 hover:text-blue-600"
-              >
-                Edit
-              </Button>
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsEditing(true)}
+                  className="h-auto p-0 text-gray-500 hover:text-blue-600"
+                >
+                  Edit
+                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-auto p-0 text-red-500 hover:text-red-600"
+                    >
+                      Delete
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Confirm Deletion</DialogTitle>
+                    </DialogHeader>
+                    <p>
+                      Are you sure you want to delete this comment? This action
+                      cannot be undone.
+                    </p>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button variant="ghost">Cancel</Button>
+                      </DialogClose>
+                      <DialogClose asChild>
+                        <Button
+                          variant="destructive"
+                          onClick={() => handleDeleteComment(comment.id)}
+                        >
+                          Delete
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </>
             )}
             <Button
               variant="ghost"
