@@ -50,17 +50,16 @@ export default function CommentSection({
         parentId,
       });
 
-      // Construct a Comment object with all required properties
       const newComment: Comment = {
         ...newCommentData,
-        likesCount: 0, // Assuming new comments start with 0 likes
-        hasLiked: false, // Assuming the user hasn't liked their own comment yet
-        children: [], // New comments won't have replies initially
-        // If 'user' in newCommentData doesn't match, ensure it conforms to { name: string }
+        likesCount: 0,
+        hasLiked: false,
+        children: [],
+
         user: {
-          name: session.user?.name || "Unknown", // Use session data or a default value
+          name: session.user?.name || "Unknown",
         },
-        // Ensure 'createdAt' is a string, if it's a Date object, convert it
+
         createdAt: new Date().toISOString(),
       };
 
@@ -76,7 +75,6 @@ export default function CommentSection({
   };
 
   const handleLike = (comment: Comment) => {
-    // Optimistic UI Update
     setAllComments((prevComments) =>
       prevComments.map((c) =>
         c.id === comment.id
@@ -186,7 +184,19 @@ export default function CommentSection({
           >
             {comment.hasLiked ? "Unlike" : "Like"} ({comment.likesCount})
           </Button>
-          <span>{new Date(comment.createdAt).toLocaleString()}</span>
+          <span>
+            {new Date(comment.createdAt).toLocaleDateString([], {
+              month: "numeric",
+              day: "numeric",
+              year: "numeric",
+            })}
+            ,{" "}
+            {new Date(comment.createdAt).toLocaleTimeString([], {
+              hour: "numeric",
+              minute: "2-digit",
+              hour12: true,
+            })}
+          </span>
         </div>
         {replyingTo === comment.id && (
           <form
