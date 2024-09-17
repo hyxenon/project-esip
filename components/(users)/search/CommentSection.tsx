@@ -1,10 +1,11 @@
 "use client";
 import React, { useState, useTransition } from "react";
+import { useMediaQuery } from "react-responsive"; // Import useMediaQuery
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Send } from "lucide-react";
+import { Send, ChevronDown, ChevronUp } from "lucide-react"; // Import icons
 import {
   addComment,
   editComment,
@@ -116,6 +117,7 @@ export default function CommentSection({
     }
   };
 
+  // Function to handle deleting a comment
   const handleDeleteComment = async (commentId: string) => {
     try {
       setLoading(true);
@@ -127,6 +129,7 @@ export default function CommentSection({
         paperId: paperId,
       });
 
+      // Update local state by removing the deleted comment and its replies
       setAllComments((prevComments) =>
         prevComments.filter(
           (c) => c.id !== commentId && c.parentId !== commentId
@@ -218,169 +221,221 @@ export default function CommentSection({
     const [editContent, setEditContent] = useState(comment.content);
     const isOwnComment = comment.user.id === session.user?.id;
 
+    // Limit indentation depth
+    const maxIndentationDepth = 2;
+    const indentationDepth =
+      depth > maxIndentationDepth ? maxIndentationDepth : depth;
+    const indentationClass = `ml-${indentationDepth * 4}`;
+
+    // State to control collapsing of replies
+    const [isCollapsed, setIsCollapsed] = useState(true);
+
+    // Detect if the device is mobile
+    const isMobile = useMediaQuery({ maxWidth: 640 });
+
     return (
-      <div className={`flex ${depth > 0 ? "ml-8 relative" : ""}`}>
-        {depth > 0 && (
-          <div className="absolute left-[-16px] top-0 bottom-0 w-[2px] bg-gray-200"></div>
-        )}
-        <Avatar className="h-8 w-8 mr-2 z-10">
-          <AvatarImage
-            src={`https://api.dicebear.com/6.x/initials/svg?seed=${comment.user.name}`}
-          />
-          <AvatarFallback>{comment.user.name[0]}</AvatarFallback>
-        </Avatar>
-        <div className="flex-1 space-y-1">
-          <Card className="bg-gray-100">
-            <CardContent className="p-3">
-              <p className="text-sm font-semibold">{comment.user.name}</p>
-              {isEditing ? (
-                <form
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    await handleEditComment(comment.id, editContent);
-                    setIsEditing(false);
-                  }}
-                >
+      <div
+        className={`flex flex-col ${
+          indentationDepth > 0 ? `${indentationClass}` : ""
+        }`}
+      >
+        <div className="flex">
+          <Avatar className="h-8 w-8 mr-2 z-10">
+            <AvatarImage
+              src={`https://api.dicebear.com/6.x/initials/svg?seed=${comment.user.name}`}
+            />
+            <AvatarFallback>{comment.user.name[0]}</AvatarFallback>
+          </Avatar>
+          <div className="flex-1 space-y-1">
+            <Card className="bg-gray-100">
+              <CardContent className="p-3">
+                <p className="text-sm font-semibold">{comment.user.name}</p>
+                {isEditing ? (
+                  <form
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      await handleEditComment(comment.id, editContent);
+                      setIsEditing(false);
+                    }}
+                  >
+                    <Input
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                      className="flex-1 bg-gray-100"
+                    />
+                    <div className="flex space-x-2 mt-2">
+                      <Button type="submit" size="sm" className="p-2">
+                        Save
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        className="p-2"
+                        onClick={() => {
+                          setIsEditing(false);
+                          setEditContent(comment.content);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </form>
+                ) : (
+                  <p className="text-sm">{comment.content}</p>
+                )}
+              </CardContent>
+            </Card>
+            <div className="flex items-center space-x-2 text-xs text-gray-500">
+              {isOwnComment && (
+                <>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsEditing(true)}
+                    className="h-auto p-0 text-gray-500 hover:text-blue-600"
+                  >
+                    Edit
+                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-auto p-0 text-red-500 hover:text-red-600"
+                      >
+                        Delete
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Confirm Deletion</DialogTitle>
+                      </DialogHeader>
+                      <p>
+                        Are you sure you want to delete this comment? This
+                        action cannot be undone.
+                      </p>
+                      <DialogFooter>
+                        <DialogClose asChild>
+                          <Button variant="ghost">Cancel</Button>
+                        </DialogClose>
+                        <DialogClose asChild>
+                          <Button
+                            variant="destructive"
+                            onClick={() => handleDeleteComment(comment.id)}
+                          >
+                            Delete
+                          </Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </>
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setReplyingTo(comment.id)}
+                className="h-auto p-0 text-gray-500 hover:text-blue-600"
+              >
+                Reply
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleLike(comment)}
+                disabled={isPending}
+                className={`h-auto p-0 hover:text-blue-600 ${
+                  comment.hasLiked ? "text-blue-600" : "text-gray-500"
+                }`}
+              >
+                {comment.hasLiked ? "Unlike" : "Like"} ({comment.likesCount})
+              </Button>
+              <span>
+                {new Date(comment.createdAt).toLocaleDateString([], {
+                  month: "numeric",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+                ,{" "}
+                {new Date(comment.createdAt).toLocaleTimeString([], {
+                  hour: "numeric",
+                  minute: "2-digit",
+                  hour12: true,
+                })}
+              </span>
+            </div>
+            {replyingTo === comment.id && (
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const replyText = (
+                    e.target as HTMLFormElement
+                  ).reply.value.trim();
+                  if (replyText) {
+                    await handleAddComment(replyText, comment.id);
+                    setReplyingTo(null);
+                    (e.target as HTMLFormElement).reset();
+                  }
+                }}
+              >
+                <div className="flex gap-0.5 items-center">
                   <Input
-                    value={editContent}
-                    onChange={(e) => setEditContent(e.target.value)}
+                    name="reply"
+                    placeholder="Write a reply..."
                     className="flex-1 bg-gray-100"
                   />
-                  <div className="flex space-x-2 mt-2">
-                    <Button type="submit" size="sm" className="p-2">
-                      Save
-                    </Button>
-                    <Button
-                      type="button"
-                      size="sm"
-                      className="p-2"
-                      onClick={() => {
-                        setIsEditing(false);
-                        setEditContent(comment.content);
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </form>
-              ) : (
-                <p className="text-sm">{comment.content}</p>
-              )}
-            </CardContent>
-          </Card>
-          <div className="flex items-center space-x-2 text-xs text-gray-500">
-            {isOwnComment && (
-              <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsEditing(true)}
-                  className="h-auto p-0 text-gray-500 hover:text-blue-600"
-                >
-                  Edit
-                </Button>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-auto p-0 text-red-500 hover:text-red-600"
-                    >
-                      Delete
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Confirm Deletion</DialogTitle>
-                    </DialogHeader>
-                    <p>
-                      Are you sure you want to delete this comment? This action
-                      cannot be undone.
-                    </p>
-                    <DialogFooter>
-                      <DialogClose asChild>
-                        <Button variant="ghost">Cancel</Button>
-                      </DialogClose>
-                      <DialogClose asChild>
-                        <Button
-                          variant="destructive"
-                          onClick={() => handleDeleteComment(comment.id)}
-                        >
-                          Delete
-                        </Button>
-                      </DialogClose>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </>
+                  <Button type="submit" size="sm" className="p-2">
+                    <Send className="h-4 w-4" />
+                    <span className="sr-only">Send reply</span>
+                  </Button>
+                </div>
+              </form>
             )}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setReplyingTo(comment.id)}
-              className="h-auto p-0 text-gray-500 hover:text-blue-600"
-            >
-              Reply
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => handleLike(comment)}
-              disabled={isPending}
-              className={`h-auto p-0 hover:text-blue-600 ${
-                comment.hasLiked ? "text-blue-600" : "text-gray-500"
-              }`}
-            >
-              {comment.hasLiked ? "Unlike" : "Like"} ({comment.likesCount})
-            </Button>
-            <span>
-              {new Date(comment.createdAt).toLocaleDateString([], {
-                month: "numeric",
-                day: "numeric",
-                year: "numeric",
-              })}
-              ,{" "}
-              {new Date(comment.createdAt).toLocaleTimeString([], {
-                hour: "numeric",
-                minute: "2-digit",
-                hour12: true,
-              })}
-            </span>
-          </div>
-          {replyingTo === comment.id && (
-            <form
-              onSubmit={async (e) => {
-                e.preventDefault();
-                const replyText = (
-                  e.target as HTMLFormElement
-                ).reply.value.trim();
-                if (replyText) {
-                  await handleAddComment(replyText, comment.id);
-                  setReplyingTo(null);
-                  (e.target as HTMLFormElement).reset();
-                }
-              }}
-            >
-              <div className="flex gap-0.5 items-center">
-                <Input
-                  name="reply"
-                  placeholder="Write a reply..."
-                  className="flex-1 bg-gray-100"
-                />
-                <Button type="submit" size="sm" className="p-2">
-                  <Send className="h-4 w-4" />
-                  <span className="sr-only">Send reply</span>
-                </Button>
+            {comment.children && comment.children.length > 0 && (
+              <div className="mt-2">
+                {isMobile ? (
+                  // Use collapsible replies on mobile
+                  <div>
+                    <button
+                      className="text-blue-600 text-sm flex items-center"
+                      onClick={() => setIsCollapsed(!isCollapsed)}
+                    >
+                      {isCollapsed ? (
+                        <ChevronDown className="h-4 w-4 mr-1" />
+                      ) : (
+                        <ChevronUp className="h-4 w-4 mr-1" />
+                      )}
+                      {isCollapsed
+                        ? `View Replies (${comment.children.length})`
+                        : "Hide Replies"}
+                    </button>
+                    {!isCollapsed && (
+                      <div>
+                        {comment.children.map((reply) => (
+                          <CommentCard
+                            key={reply.id}
+                            comment={reply}
+                            depth={depth + 1}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  // Show replies directly on larger screens
+                  <div>
+                    {comment.children.map((reply) => (
+                      <CommentCard
+                        key={reply.id}
+                        comment={reply}
+                        depth={depth + 1}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
-            </form>
-          )}
-          {comment.children && comment.children.length > 0 && (
-            <div className="mt-2">
-              {comment.children.map((reply) => (
-                <CommentCard key={reply.id} comment={reply} depth={depth + 1} />
-              ))}
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     );
