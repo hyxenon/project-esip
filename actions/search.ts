@@ -23,7 +23,7 @@ export const searchPaper = async ({
         {
           title: {
             contains: searchQuery,
-            mode: "insensitive", // Case-insensitive search
+            mode: "insensitive",
           },
         },
         {
@@ -217,5 +217,71 @@ export const unlikeComment = async (
   } catch (error) {
     console.error("Error unliking comment:", error);
     throw new Error("Failed to unlike comment.");
+  }
+};
+
+export const editComment = async ({
+  commentId,
+  content,
+  userId,
+  paperId,
+}: {
+  commentId: string;
+  content: string;
+  userId: string;
+  paperId: string;
+}) => {
+  try {
+    const comment = await db.comment.findUnique({
+      where: { id: commentId },
+      select: { userId: true },
+    });
+
+    if (comment?.userId !== userId) {
+      throw new Error("Unauthorized");
+    }
+
+    const updatedComment = await db.comment.update({
+      where: { id: commentId },
+      data: { content },
+    });
+
+    revalidatePath(`/search/${paperId}`);
+    return updatedComment;
+  } catch (error) {
+    console.error("Error editing comment:", error);
+    throw new Error("Failed to edit comment.");
+  }
+};
+
+export const deleteComment = async ({
+  commentId,
+  userId,
+  paperId,
+}: {
+  commentId: string;
+  userId: string;
+  paperId: string;
+}) => {
+  try {
+    const comment = await db.comment.findUnique({
+      where: { id: commentId },
+      select: { userId: true },
+    });
+
+    if (comment?.userId !== userId) {
+      throw new Error("Unauthorized");
+    }
+
+    await db.comment.delete({
+      where: { id: commentId },
+    });
+
+    revalidatePath(`/search/${paperId}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    throw new Error("Failed to delete comment.");
   }
 };
