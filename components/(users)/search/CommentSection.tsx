@@ -20,7 +20,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-  DialogClose, // Import DialogClose
+  DialogClose,
 } from "@/components/ui/dialog";
 
 interface Comment {
@@ -116,7 +116,6 @@ export default function CommentSection({
     }
   };
 
-  // Function to handle deleting a comment
   const handleDeleteComment = async (commentId: string) => {
     try {
       setLoading(true);
@@ -128,7 +127,6 @@ export default function CommentSection({
         paperId: paperId,
       });
 
-      // Update local state by removing the deleted comment and its replies
       setAllComments((prevComments) =>
         prevComments.filter(
           (c) => c.id !== commentId && c.parentId !== commentId
