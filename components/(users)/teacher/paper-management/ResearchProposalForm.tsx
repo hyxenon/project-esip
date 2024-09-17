@@ -148,7 +148,7 @@ const ResearchProposalForm = ({
       setAuthors((prev) => [
         ...prev,
         {
-          name: authorInput,
+          name: authorInput.toLowerCase(),
           id: uuidv4(),
         },
       ]);

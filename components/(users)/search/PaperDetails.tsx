@@ -1,27 +1,15 @@
 "use client";
 import React from "react";
-import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Textarea } from "@/components/ui/textarea";
 import {
   CalendarIcon,
   BookOpenIcon,
   UsersIcon,
-  ArrowUpDown,
   BookmarkIcon,
   DownloadIcon,
-  Share2Icon,
   EyeIcon,
-  ExternalLinkIcon,
 } from "lucide-react";
 import {
   Dialog,
@@ -37,6 +25,7 @@ import { Separator } from "@/components/ui/separator";
 
 import CommentSection from "./CommentSection";
 import { Session } from "next-auth";
+import Link from "next/link";
 
 interface PaperDetailsProps {
   paper1: any;
@@ -48,20 +37,8 @@ export default function PaperDetails({ paper1, session }: PaperDetailsProps) {
     // Implement citation functionality
   };
 
-  const handleDownload = () => {
-    // Implement download functionality
-  };
-
-  const handleShare = () => {
-    // Implement share functionality
-  };
-
   const handleSave = () => {
     // Implement save functionality
-  };
-
-  const handleComment = (comment: string) => {
-    // Implement comment functionality
   };
 
   const formatAuthorName = (name: string) => {
@@ -70,6 +47,68 @@ export default function PaperDetails({ paper1, session }: PaperDetailsProps) {
     const initials = nameParts.map((part) => part[0]).join(". ") + ".";
 
     return `${initials} ${lastName}`;
+  };
+
+  // Helper function to format author names with initials
+  const formatAuthorNameWithInitials = (name: string) => {
+    const nameParts = name.split(" ");
+    const lastName = nameParts.pop(); // Get the last name
+    const capitalizedLastName = lastName
+      ? lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase()
+      : "";
+    const initials = nameParts
+      .map((part) => part[0].toUpperCase() + ".")
+      .join(" ");
+    return `${capitalizedLastName}, ${initials}`;
+  };
+
+  const formatAuthorsForCitation = (authors: any[]) => {
+    const authorNames = authors.map((author) =>
+      formatAuthorNameWithInitials(author.name)
+    );
+    if (authorNames.length === 1) {
+      return authorNames[0];
+    } else if (authorNames.length === 2) {
+      return `${authorNames[0]} & ${authorNames[1]}`;
+    } else {
+      return `${authorNames[0]}, et al.`;
+    }
+  };
+
+  const getApaCitation = () => {
+    if (paper1.authors && paper1.authors.length > 0) {
+      return `${formatAuthorsForCitation(paper1.authors)} (${new Date(
+        paper1.date
+      ).getFullYear()}). ${paper1.title}.`;
+    }
+    return `No authors available (${new Date(paper1.date).getFullYear()}). ${
+      paper1.title
+    }.`;
+  };
+
+  const getChicagoCitation = () => {
+    if (paper1.authors && paper1.authors.length > 0) {
+      return `${paper1.authors
+        .map((author: any) => formatAuthorNameWithInitials(author.name))
+        .join(", ")} "${paper1.title}." (${new Date(
+        paper1.date
+      ).getFullYear()}).`;
+    }
+    return `No authors available "${paper1.title}." (${new Date(
+      paper1.date
+    ).getFullYear()}).`;
+  };
+
+  const getMlaCitation = () => {
+    if (paper1.authors && paper1.authors.length > 0) {
+      const firstAuthorLastName = paper1.authors[0].name.split(" ").pop();
+      return `${firstAuthorLastName}, et al. "${paper1.title}," ${new Date(
+        paper1.date
+      ).getFullYear()}.`;
+    }
+    return `No authors available. "${paper1.title}," ${new Date(
+      paper1.date
+    ).getFullYear()}.`;
   };
 
   const options: Intl.DateTimeFormatOptions = {
@@ -101,7 +140,7 @@ export default function PaperDetails({ paper1, session }: PaperDetailsProps) {
 
               <div className="flex items-center">
                 <CalendarIcon className="w-4 h-4 mr-2 text-primary" />
-                {paper1.date.toLocaleDateString("en-US", options)}
+                {new Date(paper1.date).toLocaleDateString("en-US", options)}
               </div>
               <div className="flex items-center capitalize">
                 <BookOpenIcon className="w-4 h-4 mr-2 text-primary" />
@@ -153,44 +192,39 @@ export default function PaperDetails({ paper1, session }: PaperDetailsProps) {
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
-                    {/* <div className="grid gap-2">
-                      <Label htmlFor="apa">APA</Label>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="apa" className="text-right">
+                        APA
+                      </Label>
                       <Input
                         id="apa"
-                        value={`${paper.authors.join(", ")}. (${new Date(
-                          paper.date
-                        ).getFullYear()}). ${paper.title}. ${
-                          paper.journal
-                        }. https://doi.org/${paper.doi}`}
+                        className="col-span-3"
                         readOnly
+                        value={getApaCitation()}
                       />
                     </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="mla">MLA</Label>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="mla" className="text-right">
+                        MLA
+                      </Label>
                       <Input
                         id="mla"
-                        value={`${paper.authors[0].split(",")[0]}, et al. "${
-                          paper.title
-                        }." ${paper.journal}, ${new Date(
-                          paper.date
-                        ).getFullYear()}, https://doi.org/${
-                          paper.doi
-                        }. Accessed ${new Date().toLocaleDateString()}.`}
+                        className="col-span-3"
                         readOnly
+                        value={getMlaCitation()}
                       />
                     </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="chicago">Chicago</Label>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="chicago" className="text-right">
+                        Chicago
+                      </Label>
                       <Input
                         id="chicago"
-                        value={`${paper.authors.join(", ")}. "${
-                          paper.title
-                        }." ${paper.journal} (${new Date(
-                          paper.date
-                        ).getFullYear()}). https://doi.org/${paper.doi}.`}
+                        className="col-span-3"
                         readOnly
+                        value={getChicagoCitation()}
                       />
-                    </div> */}
+                    </div>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -201,13 +235,20 @@ export default function PaperDetails({ paper1, session }: PaperDetailsProps) {
                 {paper1.views} views
               </div>
 
-              <Button
-                variant="default"
-                onClick={handleDownload}
-                className="bg-primary text-white hover:bg-primary/90 transition-colors"
-              >
-                Download PDF
-              </Button>
+              {paper1.file ? (
+                <Link target="_blank" href={paper1.file}>
+                  <Button
+                    variant="default"
+                    className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all"
+                  >
+                    Download PDF
+                  </Button>
+                </Link>
+              ) : (
+                <Badge className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all">
+                  No PDF available
+                </Badge>
+              )}
             </div>
           </div>
 
@@ -223,20 +264,25 @@ export default function PaperDetails({ paper1, session }: PaperDetailsProps) {
               </section>
             )}
 
-            <section className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h3 className="text-2xl font-semibold mb-4 text-gray-800">
-                Introduction
-              </h3>
-              <p className="text-gray-700 leading-relaxed">
-                {paper1.introduction}
-              </p>
-            </section>
-            <section className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h3 className="text-2xl font-semibold mb-4 text-gray-800">
-                References
-              </h3>
-              <p>{paper1.references}</p>
-            </section>
+            {paper1.introduction && (
+              <section className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                <h3 className="text-2xl font-semibold mb-4 text-gray-800">
+                  Introduction
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  {paper1.introduction}
+                </p>
+              </section>
+            )}
+
+            {paper1.references && (
+              <section className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                <h3 className="text-2xl font-semibold mb-4 text-gray-800">
+                  References
+                </h3>
+                <p>{paper1.references}</p>
+              </section>
+            )}
           </div>
 
           <Separator className="my-8" />

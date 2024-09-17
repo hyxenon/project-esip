@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Tooltip,
   TooltipContent,
@@ -63,14 +62,15 @@ const PaperCard = ({ paper }: PaperCardProps) => {
   };
 
   const formatAuthorsForCitation = (authors: string[]) => {
-    if (authors.length === 1) {
-      return formatAuthorNameWithInitials(authors[0]);
-    } else if (authors.length === 2) {
-      return `${formatAuthorNameWithInitials(
-        authors[0]
-      )} & ${formatAuthorNameWithInitials(authors[1])}`;
+    const formattedAuthors = authors.map((author) =>
+      formatAuthorNameWithInitials(author)
+    );
+    if (formattedAuthors.length === 1) {
+      return formattedAuthors[0];
+    } else if (formattedAuthors.length === 2) {
+      return `${formattedAuthors[0]} & ${formattedAuthors[1]}`;
     } else {
-      return `${formatAuthorNameWithInitials(authors[0])}, et al.`;
+      return `${formattedAuthors[0]}, et al.`;
     }
   };
 
@@ -79,9 +79,9 @@ const PaperCard = ({ paper }: PaperCardProps) => {
       const authorNames = paper.authors.map((author) => author.name); // Extract author names
       return `${formatAuthorsForCitation(
         authorNames
-      )}. (${paper.date.getFullYear()}). ${paper.title}.`;
+      )} (${paper.date.getFullYear()}). ${paper.title}.`;
     }
-    return `No authors available. (${paper.date.getFullYear()}). ${
+    return `No authors available (${paper.date.getFullYear()}). ${
       paper.title
     }.`;
   };
@@ -89,11 +89,11 @@ const PaperCard = ({ paper }: PaperCardProps) => {
   const getChicagoCitation = () => {
     if (paper.authors && paper.authors.length > 0) {
       const authorNames = paper.authors.map((author) => author.name); // Extract author names
-      return `${authorNames.map(formatAuthorNameWithInitials).join(", ")}. "${
+      return `${authorNames.map(formatAuthorNameWithInitials).join(", ")} "${
         paper.title
       }." (${paper.date.getFullYear()}).`;
     }
-    return `No authors available. "${
+    return `No authors available "${
       paper.title
     }." (${paper.date.getFullYear()}).`;
   };
@@ -105,7 +105,7 @@ const PaperCard = ({ paper }: PaperCardProps) => {
         paper.title
       }," ${paper.date.getFullYear()}.`;
     }
-    return `No authors available. "${
+    return `No authors available "${
       paper.title
     }," ${paper.date.getFullYear()}.`;
   };
@@ -115,6 +115,7 @@ const PaperCard = ({ paper }: PaperCardProps) => {
     month: "long",
     day: "numeric",
   };
+
   return (
     <Card className="hover:shadow-lg transition-shadow duration-300">
       <CardHeader>
