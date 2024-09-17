@@ -1,6 +1,5 @@
 import { searchPaper } from "@/actions/search";
-import { auth } from "@/auth";
-import Navbar from "@/components/(users)/navbar";
+
 import SearchComponent from "@/components/(users)/search/search";
 import SearchResultsComponent from "@/components/(users)/search/SearchResultsComponent";
 import { ResearchPaperModel } from "@/models/models";

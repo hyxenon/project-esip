@@ -36,6 +36,7 @@ model User {
   ResearchPaper ResearchPaper[]
   Comment       Comment[]
   Likes         Like[]
+  PaperView     PaperView[]
 }
 
 model Account {
@@ -93,7 +94,7 @@ model School {
 }
 
 model ResearchPaper {
-  id                 String    @id @default(cuid())
+  id                 String      @id @default(cuid())
   title              String
   researchAdviser    String
   researchConsultant String
@@ -105,15 +106,16 @@ model ResearchPaper {
   references         String
   file               String?
   grade              String?
-  isPublic           Boolean   @default(false)
-  views              Int       @default(0)
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
+  isPublic           Boolean     @default(false)
+  views              Int         @default(0)
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
   userId             String
-  user               User      @relation(fields: [userId], references: [id])
+  user               User        @relation(fields: [userId], references: [id])
   comments           Comment[]
   authors            Author[]
   keywords           String[]
+  PaperView          PaperView[]
 }
 
 model Author {
@@ -146,4 +148,16 @@ model Like {
   commentId String
 
   @@id([userId, commentId])
+}
+
+model PaperView {
+  id       String   @id @default(cuid())
+  userId   String
+  paperId  String
+  viewedAt DateTime @default(now())
+
+  user  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  paper ResearchPaper @relation(fields: [paperId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, paperId]) // Ensures a user can only have one view per paper
 }

@@ -29,6 +29,7 @@ import {
   BookOpenIcon,
   CalendarIcon,
   DownloadIcon,
+  EyeIcon,
   LightbulbIcon,
   MapIcon,
   UsersIcon,
@@ -162,8 +163,8 @@ const PaperCard = ({ paper }: PaperCardProps) => {
 
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center text-green-600">
-            <LightbulbIcon className="w-4 h-4 mr-2" />
-            Views: {paper.views}
+            <EyeIcon className="w-4 h-4 mr-1 " />
+            Views: {paper.uniqueViews}
           </div>
         </div>
       </CardContent>

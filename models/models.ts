@@ -50,6 +50,7 @@ export type ResearchPaperModel = {
   authors?: AuthorPaper[];
   keywords?: string[];
   user?: any;
+  uniqueViews?: number;
 };
 
 export type PendingUserModel = {

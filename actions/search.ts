@@ -62,12 +62,18 @@ export const searchPaper = async ({
           school: true,
         },
       },
+      _count: {
+        select: {
+          PaperView: true,
+        },
+      },
     },
   });
 
   return papers.map((paper) => ({
     ...paper,
     abstract: paper.abstract as string | null,
+    uniqueViews: paper._count.PaperView,
   })) as ResearchPaperModel[];
 };
 
@@ -123,6 +129,39 @@ export const getPaperDetails = async (
     });
 
     if (paper) {
+      // **Add this block to count unique views and record a new view**
+      // Count unique views
+      const uniqueViews = await db.paperView.count({
+        where: { paperId: paper.id },
+      });
+
+      // Add uniqueViews to the paper object
+      (paper as any).uniqueViews = uniqueViews;
+
+      // Check if the user has already viewed the paper
+      const existingView = await db.paperView.findUnique({
+        where: {
+          userId_paperId: {
+            userId,
+            paperId: paper.id,
+          },
+        },
+      });
+
+      // If not, create a new PaperView record
+      if (!existingView) {
+        await db.paperView.create({
+          data: {
+            userId,
+            paperId: paper.id,
+          },
+        });
+
+        // Increment the uniqueViews count
+        (paper as any).uniqueViews += 1;
+      }
+
+      // Process comments as before
       paper.comments = paper.comments.map((comment) => ({
         ...comment,
         likesCount: comment._count.Likes,

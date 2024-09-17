@@ -232,7 +232,7 @@ export default function PaperDetails({ paper1, session }: PaperDetailsProps) {
             <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm">
               <div className="flex items-center text-gray-600">
                 <EyeIcon className="w-4 h-4 mr-2 text-primary" />
-                {paper1.views} views
+                {paper1.uniqueViews} views
               </div>
 
               {paper1.file ? (
