@@ -11,7 +11,7 @@ type UserTabsProps = {
 const UserTabs = ({ teachers, students, specificSchool }: UserTabsProps) => {
   return (
     <Tabs defaultValue="teachers" className="w-full pb-4">
-      <TabsList className="grid md:w-[400px] grid-cols-2 shadow-2xl bg-[#D9D9D9] bg-opacity-70">
+      <TabsList className="grid md:w-[400px] grid-cols-2 shadow-md bg-[#D9D9D9] bg-opacity-50">
         <TabsTrigger value="teachers">Teachers</TabsTrigger>
         <TabsTrigger value="students">Students</TabsTrigger>
       </TabsList>

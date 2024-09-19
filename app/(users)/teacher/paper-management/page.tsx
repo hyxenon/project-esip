@@ -55,8 +55,8 @@ const PaperManagement = async ({
         <TotalResearchProposal />
         <TotalPapersCard />
       </div>
-      <div className="mt-4">
-        <Card className="border-gray-300">
+      <div className="mt-8">
+        <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
           <CardHeader>
             <div className="flex justify-end">
               <Link href={"paper-management/add-paper"}>

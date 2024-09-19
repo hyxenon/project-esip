@@ -8,7 +8,7 @@ interface SchoolTableProps {
 
 const SchoolTable = ({ children, cardTitle }: SchoolTableProps) => {
   return (
-    <Card className="w-full border-gray-300">
+    <Card className="w-full bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 mt-8">
       <CardHeader className="font-bold text-xl">{cardTitle}</CardHeader>
       <CardContent className="flex flex-col">{children}</CardContent>
     </Card>

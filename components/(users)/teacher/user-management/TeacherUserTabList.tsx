@@ -20,7 +20,7 @@ const TeacherUserTabList = ({
   return (
     <div>
       <Tabs defaultValue="allTeachers" className="w-full mt-8">
-        <TabsList className="grid md:w-[400px] grid-cols-3 shadow-2xl bg-[#D9D9D9] bg-opacity-70">
+        <TabsList className="grid md:w-[400px] grid-cols-3 shadow-md bg-[#D9D9D9] bg-opacity-30">
           <TabsTrigger value="allTeachers">Teachers</TabsTrigger>
           <TabsTrigger value="allStudents">Students</TabsTrigger>
           <TabsTrigger value="pendingUsers">Pending Users</TabsTrigger>

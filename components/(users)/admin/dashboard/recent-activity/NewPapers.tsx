@@ -23,7 +23,7 @@ import {
 
 const NewPapers = () => {
   return (
-    <Card className="2xl:col-span-2 border-gray-300">
+    <Card className="2xl:col-span-2 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader className="flex flex-row items-center">
         <div className="grid gap-2">
           <CardTitle>New Papers</CardTitle>

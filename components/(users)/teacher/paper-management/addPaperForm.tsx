@@ -32,7 +32,7 @@ const AddPaperForm = ({
   researchType,
 }: AddPaperFormProps) => {
   return (
-    <Card className="py-8 px-8 lg:mt-8 lg:p-16 border-gray-300 container">
+    <Card className="py-8 px-8 lg:mt-8 lg:p-16 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300container">
       {/* Breadcrumb */}
       <Breadcrumb>
         <BreadcrumbList>

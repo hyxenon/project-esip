@@ -58,7 +58,7 @@ const chartConfig = {
 
 const PopularPapers = () => {
   return (
-    <Card className="border-gray-300">
+    <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader>
         <CardTitle>Top 10 Popular Public Papers</CardTitle>
         <div className="flex justify-between">
