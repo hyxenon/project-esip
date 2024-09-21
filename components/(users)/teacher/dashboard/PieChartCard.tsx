@@ -38,6 +38,17 @@ export function PieChartCard({
   labelConfig,
   chartConfig,
 }: PieChartCardProps) {
+  // Check if all chartData counts are 0
+  const allZeroData = chartData.every((data) => data.count === 0);
+
+  if (allZeroData) {
+    return (
+      <div className="text-center text-gray-500">
+        <p>No data available for the chart.</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <ChartContainer
@@ -46,7 +57,13 @@ export function PieChartCard({
       >
         <PieChart>
           <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-          <Pie data={chartData} dataKey="count" label nameKey="role">
+          <Pie
+            data={chartData}
+            dataKey="count"
+            label
+            nameKey="role"
+            minAngle={5}
+          >
             {chartData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} />
             ))}

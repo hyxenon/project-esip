@@ -39,14 +39,23 @@ const UserManagement = async () => {
         User Management
       </h4>
       <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 mt-4">
-        <TotalCards cardTitle="Total Users" cardTotalNumber={0}>
+        <TotalCards
+          cardTitle="Total Users"
+          cardTotalNumber={teachersData.length + studentsData.length}
+        >
           <Users className="h-5 w-5 text-[#283618]" />
         </TotalCards>
-        <TotalCards cardTitle="Total Teachers" cardTotalNumber={0}>
+        <TotalCards
+          cardTitle="Total Teachers"
+          cardTotalNumber={teachersData.length}
+        >
           <FaChalkboardTeacher className="h-5 w-5 text-[#283618]" />
         </TotalCards>
         <div className="col-span-2 lg:col-span-1">
-          <TotalCards cardTitle="Total Students" cardTotalNumber={0}>
+          <TotalCards
+            cardTitle="Total Students"
+            cardTotalNumber={studentsData.length}
+          >
             <PiStudentFill className="h-5 w-5 text-[#283618]" />
           </TotalCards>
         </div>

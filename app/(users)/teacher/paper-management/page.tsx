@@ -42,6 +42,16 @@ const PaperManagement = async ({
     file: paper.file ?? undefined,
   }));
 
+  // Count papers with researchType === "proposal"
+  const totalResearchProposals = papers.filter(
+    (paper) => paper.researchType === "proposal"
+  ).length;
+
+  // Count papers with researchType === "Paper"
+  const totalResearchPapers = papers.filter(
+    (paper) => paper.researchType === "paper"
+  ).length;
+
   return (
     <div className="flex flex-col py-4 px-3 md:px-8 lg:py-4 lg:px-16 xl:px-28">
       <h4 className="scroll-m-20 text-xl font-semibold tracking-tight lg:mt-4">
@@ -51,9 +61,9 @@ const PaperManagement = async ({
       <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 mt-4">
         {/* <CurrentPaperCard cardTitle="Research Proposals" data={data} />
         <CurrentPaperCard cardTitle="Research Papers" data={dataPapers} /> */}
-        <TotalPaperCard />
-        <TotalResearchProposal />
-        <TotalPapersCard />
+        <TotalPaperCard count={papers.length} />
+        <TotalResearchProposal count={totalResearchProposals} />
+        <TotalPapersCard count={totalResearchPapers} />
       </div>
       <div className="mt-8">
         <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">

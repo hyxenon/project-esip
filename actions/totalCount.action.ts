@@ -29,6 +29,109 @@ export const getTotalCounts = async () => {
   }
 };
 
+export const getTotalCountTeacherDashboard = async (schoolId: string) => {
+  const totalUsers = await db.user.count({
+    where: {
+      schoolId: schoolId,
+      isPending: false,
+    },
+  });
+
+  const totalTeachers = await db.user.count({
+    where: {
+      schoolId: schoolId,
+      role: "TEACHER",
+      isPending: false,
+    },
+  });
+
+  const totalStudents = await db.user.count({
+    where: {
+      schoolId: schoolId,
+      role: "STUDENT",
+      isPending: false,
+    },
+  });
+
+  const lifeScienceCount = await db.researchPaper.count({
+    where: {
+      user: {
+        schoolId: schoolId,
+      },
+      researchCategory: "life science",
+    },
+  });
+
+  const physicalScienceCount = await db.researchPaper.count({
+    where: {
+      user: {
+        schoolId: schoolId,
+      },
+      researchCategory: "physical science",
+    },
+  });
+
+  const scienceInnovationExpoCount = await db.researchPaper.count({
+    where: {
+      user: {
+        schoolId: schoolId,
+      },
+      researchCategory: "science innovation expo",
+    },
+  });
+
+  const roboticsCount = await db.researchPaper.count({
+    where: {
+      user: {
+        schoolId: schoolId,
+      },
+      researchCategory: "robotics",
+    },
+  });
+
+  const mathematicalComputationalCount = await db.researchPaper.count({
+    where: {
+      user: {
+        schoolId: schoolId,
+      },
+      researchCategory: "mathematical and computational",
+    },
+  });
+
+  const totalResearchProposalCount = await db.researchPaper.count({
+    where: {
+      user: {
+        schoolId: schoolId,
+      },
+      researchType: "proposal",
+    },
+  });
+
+  const totalResearchPaperCount = await db.researchPaper.count({
+    where: {
+      user: {
+        schoolId: schoolId,
+      },
+      researchType: "paper",
+    },
+  });
+
+  return {
+    totalUsers,
+    totalTeachers,
+    totalStudents,
+    totalResearchProposalCount,
+    totalResearchPaperCount,
+    researchCategories: {
+      lifeScienceCount,
+      physicalScienceCount,
+      scienceInnovationExpoCount,
+      roboticsCount,
+      mathematicalComputationalCount,
+    },
+  };
+};
+
 export const getTotalSchools = async () => {
   const totalSchools = await db.school.count();
 
