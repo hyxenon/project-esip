@@ -1,3 +1,4 @@
+import { getTotalCounts } from "@/actions/totalCount.action";
 import MostUsersSchool from "@/components/(users)/admin/dashboard/charts/MostUsersSchool";
 import PopularPapers from "@/components/(users)/admin/dashboard/charts/PopularPapers";
 import TotalVisitors from "@/components/(users)/admin/dashboard/charts/TotalVisitors";
@@ -15,7 +16,9 @@ import { FaAlignLeft } from "react-icons/fa6";
 import { PiStudentFill } from "react-icons/pi";
 import { RiSchoolLine } from "react-icons/ri";
 
-const AdminHome = () => {
+const AdminHome = async () => {
+  const { totalSchools, totalTeachers, totalStudents } = await getTotalCounts();
+
   return (
     <div className="w-full h-screen px-4 md:px-8 py-4">
       <Sheet>
@@ -28,13 +31,13 @@ const AdminHome = () => {
       </Sheet>
       {/* Card */}
       <div className="flex gap-4 flex-wrap">
-        <TotalCards cardTitle="Total Schools" cardTotalNumber={0}>
+        <TotalCards cardTitle="Total Schools" cardTotalNumber={totalSchools}>
           <RiSchoolLine className="h-5 w-5 text-[#283618]" />
         </TotalCards>
-        <TotalCards cardTitle="Total Teachers" cardTotalNumber={0}>
+        <TotalCards cardTitle="Total Teachers" cardTotalNumber={totalTeachers}>
           <FaChalkboardTeacher className="h-5 w-5 text-[#283618]" />
         </TotalCards>
-        <TotalCards cardTitle="Total Students" cardTotalNumber={0}>
+        <TotalCards cardTitle="Total Students" cardTotalNumber={totalStudents}>
           <PiStudentFill className="h-5 w-5 text-[#283618]" />
         </TotalCards>
       </div>
