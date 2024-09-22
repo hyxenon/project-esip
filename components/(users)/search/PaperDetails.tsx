@@ -118,7 +118,7 @@ export default function PaperDetails({ paper1, session }: PaperDetailsProps) {
   };
 
   return (
-    <div className="container mx-auto p-4 bg-gradient-to-b from-gray-50 to-white min-h-screen">
+    <div className="container mx-auto p-4  min-h-screen">
       <Card className="mb-8 shadow-lg border-t-4 border-t-primary">
         <CardHeader className="space-y-6">
           <div className="space-y-2">

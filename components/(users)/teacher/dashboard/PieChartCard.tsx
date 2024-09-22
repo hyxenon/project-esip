@@ -57,13 +57,7 @@ export function PieChartCard({
       >
         <PieChart>
           <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-          <Pie
-            data={chartData}
-            dataKey="count"
-            label
-            nameKey="role"
-            minAngle={5}
-          >
+          <Pie data={chartData} dataKey="count" label nameKey="role">
             {chartData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} />
             ))}

@@ -30,7 +30,6 @@ import {
   CalendarIcon,
   DownloadIcon,
   EyeIcon,
-  LightbulbIcon,
   MapIcon,
   UsersIcon,
 } from "lucide-react";
@@ -118,17 +117,20 @@ const PaperCard = ({ paper }: PaperCardProps) => {
   };
 
   return (
-    <Card className="hover:shadow-lg transition-shadow duration-300">
+    <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader>
         <CardTitle className="text-xl font-bold text-[#283618] hover:underline cursor-pointer">
           <Link href={`/search/${paper.id}`}>{paper.title}</Link>
         </CardTitle>
         <div className="flex items-center text-sm text-gray-600 mt-2">
           {paper.authors && paper.authors.length > 0 && (
-            <div className="flex items-center text-sm text-gray-600 mt-2">
+            <div className="flex flex-wrap items-center text-sm text-gray-600 mt-2">
               <UsersIcon className="w-4 h-4 mr-2" />
               {paper.authors.map((author, index) => (
-                <span key={index} className="capitalize mx-0.5">
+                <span
+                  key={index}
+                  className="capitalize whitespace-nowrap mx-0.5"
+                >
                   {formatAuthorName(author.name)}
                   {index < paper.authors!.length - 1 ? ", " : ""}
                 </span>

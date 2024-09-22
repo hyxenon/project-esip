@@ -37,11 +37,11 @@ export type ResearchPaperModel = {
   researchCategory: string;
   researchType: string;
   date: Date;
-  abstract?: string;
+  abstract?: string | null;
   introduction: string;
   references: string;
   file?: string | null;
-  grade?: string;
+  grade?: string | null;
   views?: number;
   isPublic: boolean;
   createdAt?: Date;
