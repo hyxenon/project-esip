@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import * as XLSX from "xlsx";
 
 export const getRecentAddedPapers = async (
   schoolId: string,
@@ -144,4 +145,41 @@ export const getPopularKeywords = async (schoolId: string) => {
     .slice(0, 10);
 
   return topKeywords;
+};
+
+const applyStylesToHeader = (
+  worksheet: XLSX.WorkSheet,
+  headerRows: number[]
+) => {
+  headerRows.forEach((rowNumber) => {
+    const cell = worksheet[`A${rowNumber}`];
+    if (cell) {
+      cell.s = {
+        font: { bold: true },
+      };
+    }
+  });
+};
+
+export const convertJsonToExcel = (jsonData: any, filename: string) => {
+  const ws = XLSX.utils.json_to_sheet(jsonData);
+
+  applyStylesToHeader(ws, [1, 8, 14, 18]);
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+  const excelData = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+
+  const blob = new Blob([excelData], {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${filename}.xlsx`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 };

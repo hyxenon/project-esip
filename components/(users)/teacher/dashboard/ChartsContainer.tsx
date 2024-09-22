@@ -3,8 +3,6 @@ import { FileText, Users } from "lucide-react";
 import React, { Suspense } from "react";
 import { PieChartCard } from "./PieChartCard";
 import ResearchCategory from "./ResearchCategory";
-import { getTotalCountTeacherDashboard } from "@/actions/totalCount.action";
-import { auth } from "@/auth";
 
 const teachersStudentsLabels = [
   { name: "Teachers", color: "#283618" },
@@ -38,12 +36,11 @@ const researchTypeConfig = {
   },
 };
 
-const ChartsContainer = async () => {
-  const session = await auth();
-  const dashboardData = await getTotalCountTeacherDashboard(
-    session?.user?.schoolId!
-  );
+interface ChartsContainerProps {
+  dashboardData: any;
+}
 
+const ChartsContainer = async ({ dashboardData }: ChartsContainerProps) => {
   // Define chartData and labelConfig for PieChartCard
   const researchTypeData = [
     {

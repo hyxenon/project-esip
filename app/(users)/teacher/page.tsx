@@ -9,21 +9,8 @@ import {
   getPopularPapers,
 } from "@/actions/teacherDashboard.action";
 import { auth } from "@/auth";
-
-const paperData = [
-  { paper: "Paper 1", views: 150 },
-  { paper: "Paper 2", views: 120 },
-  { paper: "Paper 3", views: 180 },
-  // ...
-];
-
-const keywordData = [
-  { keyword: "Artificial Intelligence", count: 300 },
-  { keyword: "Machine Learning", count: 200 },
-  { keyword: "Blockchain", count: 150 },
-  { keyword: "Effect", count: 150 },
-  // ...
-];
+import Header from "@/components/(users)/teacher/dashboard/Header";
+import { getTotalCountTeacherDashboard } from "@/actions/totalCount.action";
 
 const TeacherDashboard = async ({
   searchParams,
@@ -32,17 +19,72 @@ const TeacherDashboard = async ({
 }) => {
   const session = await auth();
   const popularPapers = await getPopularPapers(session?.user?.schoolId!);
-
   const popularKeywords = await getPopularKeywords(session?.user?.schoolId!);
+
+  const dashboardData = await getTotalCountTeacherDashboard(
+    session?.user?.schoolId!
+  );
+
+  const jsonData = [
+    { Category: "Total Counts", Value: "" },
+    { Category: "Total Users", Value: dashboardData.totalUsers },
+    { Category: "Teachers", Value: dashboardData.totalTeachers },
+    { Category: "Students", Value: dashboardData.totalStudents },
+    {
+      Category: "Research Proposals",
+      Value: dashboardData.totalResearchProposalCount,
+    },
+    {
+      Category: "Research Papers",
+      Value: dashboardData.totalResearchPaperCount,
+    },
+
+    { Category: "", Value: "" }, // Blank row for spacing
+
+    { Category: "Research Category", Value: "" },
+    {
+      Category: "Life Science",
+      Value: dashboardData.researchCategories.lifeScienceCount,
+    },
+    {
+      Category: "Physical Science",
+      Value: dashboardData.researchCategories.physicalScienceCount,
+    },
+    {
+      Category: "Science Innovation Expo",
+      Value: dashboardData.researchCategories.scienceInnovationExpoCount,
+    },
+    {
+      Category: "Robotics",
+      Value: dashboardData.researchCategories.roboticsCount,
+    },
+    {
+      Category: "Mathematical and Computational",
+      Value: dashboardData.researchCategories.mathematicalComputationalCount,
+    },
+
+    { Category: "", Value: "" }, // Blank row for spacing
+
+    { Category: "Popular Papers", Value: "" },
+    ...popularPapers.map((paper) => ({
+      Category: paper.paper,
+      Value: paper.views,
+    })),
+
+    { Category: "", Value: "" }, // Blank row for spacing
+
+    { Category: "Popular Keywords", Value: "" },
+    ...popularKeywords.map((keyword) => ({
+      Category: keyword.keyword,
+      Value: keyword.count,
+    })),
+  ];
 
   return (
     <div className="py-4 px-3 md:px-8 lg:py-4 lg:px-16 xl:px-24  min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">
-        Teacher Dashboard
-      </h1>
-
+      <Header jsonData={jsonData} />
       {/* Charts component */}
-      <ChartsContainer />
+      <ChartsContainer dashboardData={dashboardData} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <RecentAddedPapers page={searchParams?.page} />
@@ -58,6 +100,7 @@ const TeacherDashboard = async ({
             data={popularPapers}
             dataKeyX="views"
             dataKeyY="paper"
+            barColor="#606C38"
           />
         </TopPopularBarChart>
         <TopPopularBarChart
@@ -68,6 +111,7 @@ const TeacherDashboard = async ({
             data={popularKeywords}
             dataKeyX="count"
             dataKeyY="keyword"
+            barColor="#283618"
           />
         </TopPopularBarChart>
       </div>
