@@ -43,7 +43,7 @@ export function PieChartCard({
 
   if (allZeroData) {
     return (
-      <div className="text-center text-gray-500">
+      <div className="text-center text-gray-500 mt-8">
         <p>No data available for the chart.</p>
       </div>
     );

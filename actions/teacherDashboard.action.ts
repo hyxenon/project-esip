@@ -60,7 +60,7 @@ export const getRecentUsers = async (schoolId: string) => {
     orderBy: {
       createdAt: "desc",
     },
-    take: 10,
+    take: 9,
   });
 
   const recentStudents = await db.user.findMany({
@@ -78,4 +78,70 @@ export const getRecentUsers = async (schoolId: string) => {
   });
 
   return { recentTeachers, recentStudents };
+};
+
+export const getPopularPapers = async (schoolId: string) => {
+  const popularPapers = await db.researchPaper.findMany({
+    where: {
+      user: {
+        schoolId: schoolId,
+      },
+    },
+    include: {
+      PaperView: true,
+    },
+    orderBy: {
+      PaperView: {
+        _count: "desc",
+      },
+    },
+    take: 10,
+  });
+
+  const filteredPapers = popularPapers.map((paper) => ({
+    paper: paper.title,
+    views: paper.PaperView.length,
+  }));
+  return filteredPapers;
+};
+
+export const getPopularKeywords = async (schoolId: string) => {
+  const researchPapers = await db.researchPaper.findMany({
+    where: {
+      user: {
+        schoolId,
+      },
+    },
+    select: {
+      keywords: true,
+    },
+  });
+
+  const allKeywords = researchPapers.flatMap((paper) => paper.keywords);
+
+  const keywordCount: { [key: string]: number } = allKeywords.reduce(
+    (acc, keyword) => {
+      if (keyword.trim() === "") {
+        return acc;
+      }
+      if (acc[keyword]) {
+        acc[keyword] += 1;
+      } else {
+        acc[keyword] = 1;
+      }
+      return acc;
+    },
+    {} as { [key: string]: number }
+  );
+
+  const keywordArray = Object.entries(keywordCount).map(([keyword, count]) => ({
+    keyword,
+    count,
+  }));
+
+  const topKeywords = keywordArray
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10);
+
+  return topKeywords;
 };

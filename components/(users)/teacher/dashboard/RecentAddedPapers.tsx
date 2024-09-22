@@ -50,74 +50,85 @@ const RecentAddedPapers = async ({ page }: { page?: string }) => {
       <CardHeader className="">
         <div className="flex flex-row items-center justify-between">
           <CardTitle className="text-xl font-semibold text-gray-700">
-            Recent Added Papers
+            Recently Added Papers
           </CardTitle>
           <Bell className="h-5 w-5 text-blue-500" />
         </div>
-        <CardDescription>Recent papers this school year.</CardDescription>
+        <CardDescription>Papers added this school year.</CardDescription>
       </CardHeader>
       <CardContent className="overflow-x-hidden">
-        <ul className="divide-y divide-gray-200">
-          {papers.map((paper) => (
-            <li key={paper.id} className="py-3">
-              <p className="font-semibold text-gray-800">{paper.title}</p>
-              <p className="text-sm text-gray-600 capitalize flex gap-0.5">
-                {paper.researchCategory}
-              </p>
-              <span className="flex flex-wrap text-sm text-gray-600 capitalize items-center">
-                <UsersIcon className="w-4 h-4 mr-2" />
-                {paper.authors && paper.authors?.length > 0
-                  ? paper.authors.map((author, index) => (
-                      <span
-                        key={author.id}
-                        className="capitalize whitespace-nowrap text-sm mx-0.5"
-                      >
-                        {formatAuthorName(author.name)}
-                        {index < paper.authors!.length - 1 ? ", " : ""}
-                      </span>
-                    ))
-                  : "No Author"}
-              </span>
-              <div className="flex gap-0.5 mt-1 items-center">
-                <FileText className="h-4 w-4 text-[#DDA15E]" />
-                <p className="text-xs text-gray-500 capitalize">
-                  Research {paper.researchType}
-                </p>
-              </div>
+        {papers.length === 0 ? (
+          <div className="flex justify-center py-10">
+            <p className="text-gray-500 text-center">
+              No papers found. Please add a paper to see them here.
+            </p>
+          </div>
+        ) : (
+          <>
+            <ul className="divide-y divide-gray-200">
+              {papers.map((paper) => (
+                <li key={paper.id} className="py-3">
+                  <p className="font-semibold text-gray-800">{paper.title}</p>
+                  <p className="text-sm text-gray-600 capitalize flex gap-0.5">
+                    {paper.researchCategory}
+                  </p>
+                  <span className="flex flex-wrap text-sm text-gray-600 capitalize items-center">
+                    <UsersIcon className="w-4 h-4 mr-2" />
+                    {paper.authors && paper.authors?.length > 0
+                      ? paper.authors.map((author, index) => (
+                          <span
+                            key={author.id}
+                            className="capitalize whitespace-nowrap text-sm mx-0.5"
+                          >
+                            {formatAuthorName(author.name)}
+                            {index < paper.authors!.length - 1 ? ", " : ""}
+                          </span>
+                        ))
+                      : "No Author"}
+                  </span>
+                  <div className="flex gap-0.5 mt-1 items-center">
+                    <FileText className="h-4 w-4 text-[#DDA15E]" />
+                    <p className="text-xs text-gray-500 capitalize">
+                      Research {paper.researchType}
+                    </p>
+                  </div>
 
-              <p className="text-xs text-gray-500 mt-1">
-                Submitted on: {paper.date.toLocaleDateString("en-US", options)}
-              </p>
-            </li>
-          ))}
-        </ul>
-        {totalPages > 1 && (
-          <Pagination>
-            <PaginationContent>
-              {currentPage > 1 && (
-                <PaginationItem>
-                  <PaginationPrevious href={`?page=${1}`} />
-                </PaginationItem>
-              )}
-
-              {[...Array(totalPages)].map((_, index) => (
-                <PaginationItem key={index}>
-                  <PaginationLink
-                    href={`?page=${index + 1}`}
-                    isActive={currentPage === index + 1}
-                  >
-                    {index + 1}
-                  </PaginationLink>
-                </PaginationItem>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Submitted on:{" "}
+                    {paper.date.toLocaleDateString("en-US", options)}
+                  </p>
+                </li>
               ))}
+            </ul>
+            {totalPages > 1 && (
+              <Pagination>
+                <PaginationContent>
+                  {currentPage > 1 && (
+                    <PaginationItem>
+                      <PaginationPrevious href={`?page=${1}`} />
+                    </PaginationItem>
+                  )}
 
-              {currentPage < totalPages && (
-                <PaginationItem>
-                  <PaginationNext href={`?page=${totalPages}`} />
-                </PaginationItem>
-              )}
-            </PaginationContent>
-          </Pagination>
+                  {[...Array(totalPages)].map((_, index) => (
+                    <PaginationItem key={index}>
+                      <PaginationLink
+                        href={`?page=${index + 1}`}
+                        isActive={currentPage === index + 1}
+                      >
+                        {index + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+
+                  {currentPage < totalPages && (
+                    <PaginationItem>
+                      <PaginationNext href={`?page=${totalPages}`} />
+                    </PaginationItem>
+                  )}
+                </PaginationContent>
+              </Pagination>
+            )}
+          </>
         )}
       </CardContent>
     </Card>
