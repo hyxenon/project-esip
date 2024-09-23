@@ -23,6 +23,7 @@ export interface SchoolModel {
 const SchoolForm = async () => {
   const res = await getSchools();
   const schools: SchoolModel[] = res.message;
+
   return (
     <section className="w-full">
       <div className="flex justify-end">

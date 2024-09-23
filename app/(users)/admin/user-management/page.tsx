@@ -57,10 +57,16 @@ const UserManagement = async ({
 
       {/* Card Count */}
       <div className="flex gap-4 flex-wrap">
-        <TotalCards cardTitle="Total Teachers" cardTotalNumber={0}>
+        <TotalCards
+          cardTitle="Total Teachers"
+          cardTotalNumber={teacherUsers.length}
+        >
           <FaChalkboardTeacher className="h-5 w-5 text-[#283618]" />
         </TotalCards>
-        <TotalCards cardTitle="Total Students" cardTotalNumber={0}>
+        <TotalCards
+          cardTitle="Total Students"
+          cardTotalNumber={studentUsers.length}
+        >
           <PiStudentFill className="h-5 w-5 text-[#283618]" />
         </TotalCards>
       </div>

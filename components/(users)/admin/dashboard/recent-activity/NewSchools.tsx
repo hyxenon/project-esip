@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const NewSchools = () => {
   return (
-    <Card className="border-gray-300">
+    <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader>
         <CardTitle>Recent Schools</CardTitle>
       </CardHeader>

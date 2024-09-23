@@ -16,6 +16,7 @@ import { useState } from "react";
 import { EditSchoolButton } from "./editSchoolButton";
 import DeleteSchoolButton from "./deleteSchoolButton";
 import StatusChange from "./statusChange";
+import { Badge } from "@/components/ui/badge";
 
 // This type is used to define the shape of our data.
 export type School = {
@@ -36,6 +37,12 @@ export type School = {
 // Props type for the SchoolActions component
 type SchoolActionsProps = {
   school: School;
+};
+
+const options: Intl.DateTimeFormatOptions = {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
 };
 
 const SchoolActions: React.FC<SchoolActionsProps> = ({ school }) => {
@@ -153,6 +160,42 @@ export const columns: ColumnDef<School>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      const school = row.original;
+      return (
+        <Badge
+          variant={"secondary"}
+          className={`${
+            school.status === "Active" ? "text-green-500" : "text-red-500"
+          }`}
+        >
+          {school.status}
+        </Badge>
+      );
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created At
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const school = row.original;
+      const formattedDate = school.createdAt.toLocaleDateString(
+        "en-US",
+        options
+      );
+
+      return formattedDate;
+    },
   },
   {
     id: "actions",

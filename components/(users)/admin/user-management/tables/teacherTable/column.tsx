@@ -156,7 +156,10 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const user = row.original;
       return (
-        <Badge variant={"outline"} className="border-[#606C38]">
+        <Badge
+          variant={"outline"}
+          className="bg-[#606C38] text-white tracking-wider"
+        >
           {user.role}
         </Badge>
       );

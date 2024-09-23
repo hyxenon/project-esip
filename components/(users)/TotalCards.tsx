@@ -12,7 +12,7 @@ const TotalCards = ({
   cardTotalNumber,
 }: TotalCardsProps) => {
   return (
-    <Card className="flex-1 border-gray-300">
+    <Card className="flex-1 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{cardTitle}</CardTitle>
         {children}

@@ -249,7 +249,7 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
       return (
         <div
           className={`capitalize text-sm flex items-center gap-1  ${
-            data.isPublic ? "" : "text-red-500"
+            data.isPublic ? "" : "text-red-600"
           }`}
         >
           {!data.isPublic && <CiLock className="font-bold text-red-600" />}

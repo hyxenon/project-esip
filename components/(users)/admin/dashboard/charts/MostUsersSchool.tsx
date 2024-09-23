@@ -58,7 +58,7 @@ const chartConfig = {
 
 const MostUsersSchool = () => {
   return (
-    <Card className="border-gray-300">
+    <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader>
         <CardTitle>Most User Count by School</CardTitle>
         <div className="flex justify-between">

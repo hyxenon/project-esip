@@ -68,6 +68,7 @@ const formSchema = z.object({
   isPublic: z.string(),
   file: z.string().optional(),
   grade: z.string().optional(),
+  keywords: z.string().optional(),
 });
 
 interface ResearchProposalFormProps {
@@ -109,6 +110,7 @@ const ResearchProposalForm = ({
       file: "",
       references: "",
       isPublic: "false",
+      keywords: "",
     },
   });
 
@@ -134,6 +136,10 @@ const ResearchProposalForm = ({
       if (paper.authors) {
         setAuthors(paper.authors);
       }
+
+      if (paper.keywords) {
+        form.setValue("keywords", paper.keywords.join(", "));
+      }
     }
   }, [isEdit, paperId, paper, form]);
 
@@ -142,7 +148,7 @@ const ResearchProposalForm = ({
       setAuthors((prev) => [
         ...prev,
         {
-          name: authorInput,
+          name: authorInput.toLowerCase(),
           id: uuidv4(),
         },
       ]);
@@ -152,6 +158,12 @@ const ResearchProposalForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
+
+    const keywordsArray =
+      values.keywords !== undefined
+        ? values.keywords.split(",").map((kw) => kw.trim())
+        : [];
+
     if (isEdit && paperId && paper) {
       handleFileUpload().then((uploadedUrl) => {
         const data: ResearchPaperModel = {
@@ -165,6 +177,7 @@ const ResearchProposalForm = ({
           authors: authors,
           userId: paper.userId,
           file: file ? uploadedUrl : paper.file,
+          keywords: keywordsArray,
         };
 
         if (uploadedUrl && paper.file) {
@@ -194,7 +207,8 @@ const ResearchProposalForm = ({
             date: selectedDateRange.from,
             authors: authors,
             userId: sessionData?.user?.id,
-            file: uploadedUrl || undefined, // Assign URL or undefined if null
+            file: uploadedUrl || undefined,
+            keywords: keywordsArray,
           };
 
           addResearchProposalPaper(data).then((paper) => {
@@ -399,6 +413,24 @@ const ResearchProposalForm = ({
                 numberOfMonths={1}
                 className="w-full"
                 id="date"
+              />
+            </div>
+            <div>
+              <FormField
+                control={form.control}
+                name="keywords"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Keywords</Label>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Enter keywords..."
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
               />
             </div>
           </Card>

@@ -12,7 +12,7 @@ type TeacherTableProps = {
 
 const TeacherTable = ({ data, specificSchool, role }: TeacherTableProps) => {
   return (
-    <Card className="w-full border-gray-300">
+    <Card className="w-full bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 mt-8">
       <CardContent className="flex flex-col">
         <div className="flex justify-end mt-8">
           {/* {selectedSchool?.value !== undefined &&
