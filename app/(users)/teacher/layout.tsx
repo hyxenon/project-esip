@@ -25,7 +25,7 @@ export default async function TeacherLayout({
     <SchoolProvider>
       <Navbar role="TEACHER" />
       <div className="flex flex-col lg:min-h-[calc(100vh-73px)] ">
-        <div className="flex-1 bg-gray-50">{children}</div>
+        <div className="flex-1 bg-white">{children}</div>
       </div>
     </SchoolProvider>
   );

@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import Navbar from "@/components/(users)/navbar";
 
 import { auth } from "@/auth";
-import Unauthorized from "@/components/UnAuthorized";
 
 export const metadata: Metadata = {
   title: "Search Paper",
@@ -24,7 +23,7 @@ export default async function SearchLayout({
   return (
     <>
       <Navbar role={session.user.role} />
-      <div>{children}</div>
+      <div className="">{children}</div>
     </>
   );
 }

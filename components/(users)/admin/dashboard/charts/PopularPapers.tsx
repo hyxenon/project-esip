@@ -49,7 +49,7 @@ const chartData = [
 const chartConfig = {
   likes: {
     label: "Likes",
-    color: "#283618",
+    color: "#606C38",
   },
   label: {
     color: "hsl(var(--background))",

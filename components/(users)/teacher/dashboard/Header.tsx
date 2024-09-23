@@ -10,13 +10,17 @@ const Header = ({ jsonData }: { jsonData: any }) => {
   return (
     <div className="flex justify-between my-8 items-center">
       <h1 className="text-3xl font-bold text-[#283618]">Teacher Dashboard</h1>
-      <Button
-        size={"sm"}
-        className="hover:bg-[#283618] bg-[#606C38] transition-all"
-        onClick={onClick}
-      >
-        Export Data
-      </Button>
+      <div className="flex flex-col md:flex-row gap-2 items-center">
+        <Button className="hover:bg-[#283618] bg-[#606C38] transition-all">
+          AI Analytics
+        </Button>
+        <Button
+          className="hover:bg-[#283618] bg-[#606C38] transition-all"
+          onClick={onClick}
+        >
+          Export Data
+        </Button>
+      </div>
     </div>
   );
 };

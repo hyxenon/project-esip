@@ -288,7 +288,8 @@ function ProfileForm() {
                           />
                           <p className="text-sm">{progress}%</p>
                           <Button
-                            className="mt-2"
+                            variant={"outline"}
+                            className="mt-2 hover:bg-[#606C38] hover:text-white"
                             type="button"
                             onClick={async () => {
                               if (file) {
