@@ -6,17 +6,20 @@ import {
 } from "@/actions/userManagement";
 import { auth } from "@/auth";
 import { User } from "@/components/(users)/admin/user-management/tables/teacherTable/column";
-import TotalStudents from "@/components/(users)/teacher/user-management/cards/totalStudents";
-import TotalTeachers from "@/components/(users)/teacher/user-management/cards/totalTeachers";
-import TotalUsers from "@/components/(users)/teacher/user-management/cards/totalUsers";
 import TeacherUserTabList from "@/components/(users)/teacher/user-management/TeacherUserTabList";
 import TotalCards from "@/components/(users)/TotalCards";
+import Unauthorized from "@/components/UnAuthorized";
 import { Users } from "lucide-react";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { PiStudentFill } from "react-icons/pi";
 
 const UserManagement = async () => {
   const session = await auth();
+
+  if (session?.user?.role !== "TEACHER") {
+    return <Unauthorized />;
+  }
+
   let teachersData: User[] = [];
   let studentsData: User[] = [];
   let pendingData: User[] = [];

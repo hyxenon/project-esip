@@ -11,6 +11,7 @@ import {
 import { auth } from "@/auth";
 import Header from "@/components/(users)/teacher/dashboard/Header";
 import { getTotalCountTeacherDashboard } from "@/actions/totalCount.action";
+import Unauthorized from "@/components/UnAuthorized";
 
 const TeacherDashboard = async ({
   searchParams,
@@ -18,9 +19,13 @@ const TeacherDashboard = async ({
   searchParams?: { page?: string };
 }) => {
   const session = await auth();
+
+  if (session?.user?.role !== "TEACHER") {
+    return <Unauthorized />;
+  }
+
   const popularPapers = await getPopularPapers(session?.user?.schoolId!);
   const popularKeywords = await getPopularKeywords(session?.user?.schoolId!);
-
   const dashboardData = await getTotalCountTeacherDashboard(
     session?.user?.schoolId!
   );
@@ -87,8 +92,8 @@ const TeacherDashboard = async ({
       <ChartsContainer dashboardData={dashboardData} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <RecentAddedPapers page={searchParams?.page} />
-        <RecentUsersCard />
+        <RecentAddedPapers page={searchParams?.page} session={session} />
+        <RecentUsersCard session={session} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
