@@ -24,11 +24,11 @@ const TeacherDashboard = async ({
     return <Unauthorized />;
   }
 
-  const popularPapers = await getPopularPapers(session?.user?.schoolId!);
-  const popularKeywords = await getPopularKeywords(session?.user?.schoolId!);
-  const dashboardData = await getTotalCountTeacherDashboard(
-    session?.user?.schoolId!
-  );
+  const [popularPapers, popularKeywords, dashboardData] = await Promise.all([
+    getPopularPapers(session?.user?.schoolId!),
+    getPopularKeywords(session?.user?.schoolId!),
+    getTotalCountTeacherDashboard(session?.user?.schoolId!),
+  ]);
 
   const jsonData = [
     { Category: "Total Counts", Value: "" },
