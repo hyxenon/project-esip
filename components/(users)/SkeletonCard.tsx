@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function SkeletonCard() {
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="flex flex-col space-y-4 mt-8">
       {/* Avatar Skeleton */}
       <div className="flex items-center space-x-4">
         <Skeleton className="h-12 w-12 rounded-full" />

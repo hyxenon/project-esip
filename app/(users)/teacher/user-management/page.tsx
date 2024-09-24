@@ -6,12 +6,26 @@ import {
 } from "@/actions/userManagement";
 import { auth } from "@/auth";
 import { User } from "@/components/(users)/admin/user-management/tables/teacherTable/column";
-import TeacherUserTabList from "@/components/(users)/teacher/user-management/TeacherUserTabList";
-import TotalCards from "@/components/(users)/TotalCards";
+import { SkeletonCard } from "@/components/(users)/SkeletonCard";
 import Unauthorized from "@/components/UnAuthorized";
 import { Users } from "lucide-react";
+import dynamic from "next/dynamic";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { PiStudentFill } from "react-icons/pi";
+
+const TotalCards = dynamic(() => import("@/components/(users)/TotalCards"), {
+  loading: () => <SkeletonCard />,
+  ssr: false,
+});
+
+const TeacherUserTabList = dynamic(
+  () =>
+    import("@/components/(users)/teacher/user-management/TeacherUserTabList"),
+  {
+    loading: () => <SkeletonCard />,
+    ssr: false,
+  }
+);
 
 const UserManagement = async () => {
   const session = await auth();
@@ -26,10 +40,18 @@ const UserManagement = async () => {
   let specificSchool;
 
   if (session?.user?.schoolId) {
-    const teachersResponse = await getAllUsersByTeacher(session.user.schoolId);
-    const studentsResponse = await getAllUsersByStudent(session.user.schoolId);
-    const pendingResponse = await getPendingUsers(session.user.schoolId);
-    const specificSchoolData = await getSchool(session.user.schoolId);
+    const [
+      teachersResponse,
+      studentsResponse,
+      pendingResponse,
+      specificSchoolData,
+    ] = await Promise.all([
+      getAllUsersByTeacher(session.user.schoolId),
+      getAllUsersByStudent(session.user.schoolId),
+      getPendingUsers(session.user.schoolId),
+      getSchool(session.user.schoolId),
+    ]);
+
     specificSchool = specificSchoolData?.message;
     teachersData = teachersResponse;
     studentsData = studentsResponse;
