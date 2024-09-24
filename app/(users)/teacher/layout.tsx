@@ -3,8 +3,6 @@ import type { Metadata } from "next";
 import Navbar from "@/components/(users)/navbar";
 
 import { SchoolProvider } from "@/context/SchoolContext";
-import { auth } from "@/auth";
-import Unauthorized from "@/components/UnAuthorized";
 
 export const metadata: Metadata = {
   title: "Teacher",
@@ -16,11 +14,11 @@ export default async function TeacherLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
+  // const session = await auth();
 
-  if (session?.user?.role !== "TEACHER") {
-    return <Unauthorized />;
-  }
+  // if (session?.user?.role !== "TEACHER") {
+  //   return <Unauthorized />;
+  // }
   return (
     <SchoolProvider>
       <Navbar role="TEACHER" />

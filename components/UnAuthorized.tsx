@@ -1,8 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function Unauthorized() {
   const defaultMessage = "You do not have permission to access this page.";
+  const router = useRouter();
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background">
@@ -12,7 +14,12 @@ export default function Unauthorized() {
           {defaultMessage}
         </p>
         <div className="space-x-4">
-          <Button variant={"link"} onClick={() => window.history.back()}>
+          <Button
+            variant={"link"}
+            onClick={() => {
+              router.push("/");
+            }}
+          >
             Go Back
           </Button>
         </div>

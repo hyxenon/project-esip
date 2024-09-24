@@ -17,6 +17,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Session } from "next-auth";
 
 const options: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -24,8 +25,13 @@ const options: Intl.DateTimeFormatOptions = {
   day: "numeric",
 };
 
-const RecentAddedPapers = async ({ page }: { page?: string }) => {
-  const session = await auth();
+const RecentAddedPapers = async ({
+  page,
+  session,
+}: {
+  page?: string;
+  session: Session;
+}) => {
   const currentPage = page ? parseInt(page) : 1;
   const pageSize = 5;
 
