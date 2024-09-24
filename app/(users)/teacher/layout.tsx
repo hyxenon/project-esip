@@ -9,16 +9,11 @@ export const metadata: Metadata = {
   description: "Teacher View",
 };
 
-export default async function TeacherLayout({
+export default function TeacherLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // const session = await auth();
-
-  // if (session?.user?.role !== "TEACHER") {
-  //   return <Unauthorized />;
-  // }
   return (
     <SchoolProvider>
       <Navbar role="TEACHER" />
