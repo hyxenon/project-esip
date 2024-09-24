@@ -1,9 +1,4 @@
 import React from "react";
-import RecentUsersCard from "@/components/(users)/teacher/dashboard/RecentUsersCard";
-import ChartsContainer from "@/components/(users)/teacher/dashboard/ChartsContainer";
-import RecentAddedPapers from "@/components/(users)/teacher/dashboard/RecentAddedPapers";
-import TopPopularBarChart from "@/components/(users)/teacher/dashboard/PopularPapers";
-import { PopularCharts } from "@/components/(users)/teacher/dashboard/PopularCharts";
 import {
   getPopularKeywords,
   getPopularPapers,
@@ -12,6 +7,41 @@ import { auth } from "@/auth";
 import Header from "@/components/(users)/teacher/dashboard/Header";
 import { getTotalCountTeacherDashboard } from "@/actions/totalCount.action";
 import Unauthorized from "@/components/UnAuthorized";
+import dynamic from "next/dynamic";
+import { SkeletonCard } from "@/components/(users)/SkeletonCard";
+import { PopularCharts } from "@/components/(users)/teacher/dashboard/PopularCharts";
+
+const ChartsContainer = dynamic(
+  () => import("@/components/(users)/teacher/dashboard/ChartsContainer"),
+  {
+    loading: () => <SkeletonCard />,
+    ssr: false,
+  }
+);
+
+const TopPopularBarChart = dynamic(
+  () => import("@/components/(users)/teacher/dashboard/PopularPapers"),
+  {
+    loading: () => <SkeletonCard />,
+    ssr: false,
+  }
+);
+
+const RecentAddedPapers = dynamic(
+  () => import("@/components/(users)/teacher/dashboard/RecentAddedPapers"),
+  {
+    loading: () => <SkeletonCard />,
+    ssr: false,
+  }
+);
+
+const RecentUsersCard = dynamic(
+  () => import("@/components/(users)/teacher/dashboard/RecentUsersCard"),
+  {
+    loading: () => <SkeletonCard />,
+    ssr: false,
+  }
+);
 
 const TeacherDashboard = async ({
   searchParams,

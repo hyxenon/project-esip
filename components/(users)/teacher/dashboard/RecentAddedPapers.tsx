@@ -1,5 +1,4 @@
 import { getRecentAddedPapers } from "@/actions/teacherDashboard.action";
-import { auth } from "@/auth";
 import {
   Card,
   CardContent,
