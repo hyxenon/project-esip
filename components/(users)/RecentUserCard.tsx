@@ -21,7 +21,7 @@ const RecentUserCard = ({
   });
   return (
     <div className="flex items-center gap-4">
-      <Avatar className="hidden h-9 w-9 sm:flex">
+      <Avatar className="h-9 w-9 sm:flex">
         <AvatarImage src={image} alt="Avatar" />
         <AvatarFallback>{name[0]}</AvatarFallback>
       </Avatar>

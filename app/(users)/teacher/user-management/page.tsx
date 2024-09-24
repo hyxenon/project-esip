@@ -26,10 +26,18 @@ const UserManagement = async () => {
   let specificSchool;
 
   if (session?.user?.schoolId) {
-    const teachersResponse = await getAllUsersByTeacher(session.user.schoolId);
-    const studentsResponse = await getAllUsersByStudent(session.user.schoolId);
-    const pendingResponse = await getPendingUsers(session.user.schoolId);
-    const specificSchoolData = await getSchool(session.user.schoolId);
+    const [
+      teachersResponse,
+      studentsResponse,
+      pendingResponse,
+      specificSchoolData,
+    ] = await Promise.all([
+      getAllUsersByTeacher(session.user.schoolId),
+      getAllUsersByStudent(session.user.schoolId),
+      getPendingUsers(session.user.schoolId),
+      getSchool(session.user.schoolId),
+    ]);
+
     specificSchool = specificSchoolData?.message;
     teachersData = teachersResponse;
     studentsData = studentsResponse;
