@@ -235,7 +235,7 @@ const ResearchProposalForm = ({
   const handleFileUpload = async (): Promise<string | null> => {
     if (file) {
       console.log("Starting file upload...");
-      return edgestore.myProtectedFiles
+      return edgestore.publicFiles
         .upload({
           file,
           onProgressChange: (progress) => {
@@ -286,6 +286,12 @@ const ResearchProposalForm = ({
                   value={authorInput}
                   onChange={(e) => setAuthorInput(e.target.value)}
                   type="text"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      authorFormSubmit();
+                      e.preventDefault();
+                    }
+                  }}
                 />
                 <Button
                   type="button"
