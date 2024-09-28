@@ -12,6 +12,7 @@ interface PaperIdProps {
 
 const PaperId = async ({ params }: PaperIdProps) => {
   const session = await auth();
+  let isPublic: boolean = true;
 
   if (!session?.user) {
     return <div>no session found</div>;
@@ -27,9 +28,15 @@ const PaperId = async ({ params }: PaperIdProps) => {
     return <PaperNotFound />;
   }
 
+  if (paper.user.schoolId !== session.user.schoolId) {
+    if (!paper.isPublic) {
+      isPublic = false;
+    }
+  }
+
   return (
     <div className="">
-      <PaperDetails paper1={paper} session={session} />
+      <PaperDetails paper1={paper} session={session} isPublic={isPublic} />
     </div>
   );
 };

@@ -25,20 +25,40 @@ import { Separator } from "@/components/ui/separator";
 
 import CommentSection from "./CommentSection";
 import { Session } from "next-auth";
-import Link from "next/link";
+import { getDownloadUrl } from "@edgestore/react/utils";
 
 interface PaperDetailsProps {
   paper1: any;
   session: Session;
+  isPublic: boolean;
 }
 
-export default function PaperDetails({ paper1, session }: PaperDetailsProps) {
+export default function PaperDetails({
+  paper1,
+  session,
+  isPublic,
+}: PaperDetailsProps) {
   const handleCite = () => {
     // Implement citation functionality
   };
 
   const handleSave = () => {
     // Implement save functionality
+  };
+
+  const handleDownloadPDF = async () => {
+    if (paper1.file) {
+      const fileUrl = getDownloadUrl(paper1.file, `${paper1.title}.pdf`);
+
+      const a = document.createElement("a");
+      a.href = fileUrl;
+
+      document.body.appendChild(a);
+
+      a.click();
+
+      document.body.removeChild(a);
+    }
   };
 
   const formatAuthorName = (name: string) => {
@@ -235,18 +255,17 @@ export default function PaperDetails({ paper1, session }: PaperDetailsProps) {
                 {paper1.uniqueViews} views
               </div>
 
-              {paper1.file ? (
-                <Link target="_blank" href={paper1.file}>
-                  <Button
-                    variant="default"
-                    className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all"
-                  >
-                    Download PDF
-                  </Button>
-                </Link>
+              {paper1.file && isPublic ? (
+                <Button
+                  variant="default"
+                  className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all"
+                  onClick={handleDownloadPDF}
+                >
+                  Download PDF
+                </Button>
               ) : (
                 <Badge className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all">
-                  No PDF available
+                  {!isPublic ? "Paper is Private" : "No PDF available"}
                 </Badge>
               )}
             </div>

@@ -86,19 +86,6 @@ export const getPaperDetails = async (
     const paper = await db.researchPaper.findFirst({
       where: {
         id: paperId,
-        OR: [
-          { isPublic: true },
-          {
-            AND: [
-              { isPublic: false },
-              {
-                user: {
-                  schoolId: schoolId,
-                },
-              },
-            ],
-          },
-        ],
       },
       include: {
         user: {
@@ -129,16 +116,12 @@ export const getPaperDetails = async (
     });
 
     if (paper) {
-      // **Add this block to count unique views and record a new view**
-      // Count unique views
       const uniqueViews = await db.paperView.count({
         where: { paperId: paper.id },
       });
 
-      // Add uniqueViews to the paper object
       (paper as any).uniqueViews = uniqueViews;
 
-      // Check if the user has already viewed the paper
       const existingView = await db.paperView.findUnique({
         where: {
           userId_paperId: {
@@ -148,7 +131,6 @@ export const getPaperDetails = async (
         },
       });
 
-      // If not, create a new PaperView record
       if (!existingView) {
         await db.paperView.create({
           data: {
@@ -157,11 +139,9 @@ export const getPaperDetails = async (
           },
         });
 
-        // Increment the uniqueViews count
         (paper as any).uniqueViews += 1;
       }
 
-      // Process comments as before
       paper.comments = paper.comments.map((comment) => ({
         ...comment,
         likesCount: comment._count.Likes,
