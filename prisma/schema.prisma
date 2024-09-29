@@ -37,6 +37,7 @@ model User {
   Comment       Comment[]
   Likes         Like[]
   PaperView     PaperView[]
+  PaperPurchase PaperPurchase[]
 }
 
 model Account {
@@ -94,7 +95,7 @@ model School {
 }
 
 model ResearchPaper {
-  id                 String      @id @default(cuid())
+  id                 String          @id @default(cuid())
   title              String
   researchAdviser    String
   researchConsultant String
@@ -106,16 +107,17 @@ model ResearchPaper {
   references         String
   file               String?
   grade              String?
-  isPublic           Boolean     @default(false)
-  views              Int         @default(0)
-  createdAt          DateTime    @default(now())
-  updatedAt          DateTime    @updatedAt
+  isPublic           Boolean         @default(false)
+  views              Int             @default(0)
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
   userId             String
-  user               User        @relation(fields: [userId], references: [id])
+  user               User            @relation(fields: [userId], references: [id])
   comments           Comment[]
   authors            Author[]
   keywords           String[]
   PaperView          PaperView[]
+  PaperPurchase      PaperPurchase[]
 }
 
 model Author {
@@ -159,5 +161,18 @@ model PaperView {
   user  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   paper ResearchPaper @relation(fields: [paperId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, paperId]) // Ensures a user can only have one view per paper
+  @@unique([userId, paperId])
+}
+
+model PaperPurchase {
+  id          String        @id @default(cuid())
+  userId      String
+  paperId     String
+  paper       ResearchPaper @relation(fields: [paperId], references: [id], onDelete: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  paymentLink String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@unique([userId, paperId])
 }
