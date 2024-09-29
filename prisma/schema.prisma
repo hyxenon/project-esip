@@ -108,6 +108,7 @@ model ResearchPaper {
   file               String?
   grade              String?
   isPublic           Boolean         @default(false)
+  price              Int?
   views              Int             @default(0)
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
