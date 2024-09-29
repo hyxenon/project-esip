@@ -52,6 +52,7 @@ export default function PaperDetails({
   };
 
   const paymentOnClick = async () => {
+    const priceAmount = paper1.price * 100;
     const url = "https://api.paymongo.com/v1/links";
     const options = {
       method: "POST",
@@ -60,8 +61,11 @@ export default function PaperDetails({
         "content-type": "application/json",
         authorization: "Basic c2tfdGVzdF9iQXZrQnRYemNBOEVjSHlxYTl1YVNTOFE6",
       },
+
       body: JSON.stringify({
-        data: { attributes: { amount: 10000, description: paper1.title } },
+        data: {
+          attributes: { amount: priceAmount, description: paper1.title },
+        },
       }),
     };
 
@@ -297,12 +301,18 @@ export default function PaperDetails({
                   <p>Processing</p>
                   <ClipLoader size={20} color="#FEFAE0" />
                 </Badge>
-              ) : (
+              ) : paper1.price < 100 ? (
                 <Badge className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all">
-                  {!isPublic ? "Paper is Private" : "No PDF available"}
+                  Paper is private, not for sale.
                 </Badge>
+              ) : (
+                <Button
+                  onClick={paymentOnClick}
+                  className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all"
+                >
+                  PDF file available for {paper1.price} pesos
+                </Button>
               )}
-              <Button onClick={paymentOnClick}>Payment</Button>
             </div>
           </div>
 
