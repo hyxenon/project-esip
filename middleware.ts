@@ -2,7 +2,6 @@ import NextAuth from "next-auth";
 import authConfig from "./auth.config";
 import { auth as authv } from "@/auth";
 import {
-  DEFAULT_LOGIN_REDIRECT,
   DEFAULT_LOGIN_REDIRECT_ADMIN,
   DEFAULT_LOGIN_REDIRECT_STUDENT,
   DEFAULT_LOGIN_REDIRECT_TEACHER,

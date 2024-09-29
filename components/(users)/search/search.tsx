@@ -59,7 +59,7 @@ export default function SearchComponent({ queryTitle }: SearchComponentProps) {
   return (
     <div
       className={`py-12 px-4 sm:px-6 lg:px-8 ${
-        queryTitle ? "py-2" : "lg:mt-16"
+        queryTitle ? "py-2" : "lg:mt-24"
       }`}
     >
       <div className="max-w-3xl mx-auto">
@@ -102,7 +102,7 @@ export default function SearchComponent({ queryTitle }: SearchComponentProps) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Papers</SelectItem>
-                  <SelectItem value="research">Research Paper</SelectItem>
+                  <SelectItem value="paper">Research Paper</SelectItem>
                   <SelectItem value="proposal">Research Proposal</SelectItem>
                 </SelectContent>
               </Select>

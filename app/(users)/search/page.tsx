@@ -12,19 +12,29 @@ const page = async ({
     query?: string;
     paperType?: string;
     categories?: string;
+    page?: string;
   };
 }) => {
   let searchPaperResults: ResearchPaperModel[] = [];
-
+  let totalPages = 1;
+  const currentPage = searchParams?.page ? parseInt(searchParams?.page) : 1;
+  const pageSize = 10;
   if (searchParams?.query) {
-    searchPaperResults = await searchPaper({ searchParams });
+    const { searchPaperResults: results, totalPages: total } =
+      await searchPaper(pageSize, { searchParams });
+    searchPaperResults = results;
+    totalPages = total;
   }
 
   return (
     <div className="">
       <SearchComponent queryTitle={searchParams?.query} />
       {searchParams?.query && (
-        <SearchResultsComponent papers={searchPaperResults} />
+        <SearchResultsComponent
+          papers={searchPaperResults}
+          currentPage={currentPage}
+          totalPages={totalPages}
+        />
       )}
     </div>
   );
