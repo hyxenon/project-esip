@@ -16,7 +16,7 @@ const AddPaper = async ({
     paperData = paper || null;
   }
   return (
-    <div className="flex flex-col py-4 gap-8 px-3 md:px-8 lg:py-4 lg:px-16 xl:px-28">
+    <div className="flex flex-col py-4 gap-8 px-3 md:px-8 lg:py-4 lg:px-16 xl:px-28 container">
       <AddPaperForm
         isEdit={searchParams?.edit === "true" ? true : false}
         paperId={searchParams?.paperId}

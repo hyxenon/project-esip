@@ -116,7 +116,7 @@ const TeacherDashboard = async ({
   ];
 
   return (
-    <div className="py-4 px-3 md:px-8 lg:py-4 lg:px-16 xl:px-24  min-h-screen">
+    <div className="py-4 px-3 md:px-8 lg:py-4 lg:px-16 xl:px-24  min-h-screen mb-8">
       <Header jsonData={jsonData} />
       {/* Charts component */}
       <ChartsContainer dashboardData={dashboardData} />

@@ -281,6 +281,7 @@ const ResearchPaperForm = ({
                     {...field}
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -349,6 +350,7 @@ const ResearchPaperForm = ({
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -371,6 +373,7 @@ const ResearchPaperForm = ({
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -414,6 +417,7 @@ const ResearchPaperForm = ({
                         </SelectContent>
                       </Select>
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -466,6 +470,7 @@ const ResearchPaperForm = ({
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -486,6 +491,7 @@ const ResearchPaperForm = ({
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -505,6 +511,7 @@ const ResearchPaperForm = ({
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />

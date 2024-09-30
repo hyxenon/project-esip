@@ -37,3 +37,6 @@ const nextConfig = {
     ],
   },
 };
+
+// Don't forget to export the config
+export default nextConfig;

@@ -273,6 +273,7 @@ const ResearchProposalForm = ({
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -342,6 +343,7 @@ const ResearchProposalForm = ({
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -364,6 +366,7 @@ const ResearchProposalForm = ({
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -407,6 +410,7 @@ const ResearchProposalForm = ({
                       </SelectContent>
                     </Select>
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -458,6 +462,7 @@ const ResearchProposalForm = ({
                     {...field}
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -477,6 +482,7 @@ const ResearchProposalForm = ({
                     {...field}
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />

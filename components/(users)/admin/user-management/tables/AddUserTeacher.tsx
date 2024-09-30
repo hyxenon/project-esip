@@ -85,7 +85,7 @@ export function AddUserTeacher({ selectedSchool }: AddUserTeacherProps) {
           Add Teacher
         </Button>
       </DialogTrigger>
-      <DrawerContent>
+      <DrawerContent className="px-4">
         <DrawerHeader className="text-left">
           <DrawerTitle>Add Teacher</DrawerTitle>
         </DrawerHeader>
@@ -265,11 +265,11 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
           <div className="grid grid-cols-2">
             <div className="flex flex-col gap-4">
               <FormLabel>Role</FormLabel>
-              <p>Teacher</p>
+              <p className="text-sm">Teacher</p>
             </div>
             <div className="flex flex-col gap-4">
               <FormLabel>School</FormLabel>
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <Image
                   src={
                     selectedSchool
@@ -282,7 +282,7 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
                   height={30}
                   className="w-7 h-7 rounded-full"
                 />
-                <p>{selectedSchool.schoolName}</p>
+                <p className="text-sm">{selectedSchool.schoolName}</p>
               </div>
             </div>
           </div>
