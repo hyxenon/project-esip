@@ -34,4 +34,4 @@ export const apiAuthPrefix = "/api/auth";
 export const DEFAULT_LOGIN_REDIRECT = "/settings";
 export const DEFAULT_LOGIN_REDIRECT_ADMIN = "/admin";
 export const DEFAULT_LOGIN_REDIRECT_TEACHER = "/teacher";
-export const DEFAULT_LOGIN_REDIRECT_STUDENT = "/settings";
+export const DEFAULT_LOGIN_REDIRECT_STUDENT = "/search";

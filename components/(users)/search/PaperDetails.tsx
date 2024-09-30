@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -25,20 +25,73 @@ import { Separator } from "@/components/ui/separator";
 
 import CommentSection from "./CommentSection";
 import { Session } from "next-auth";
-import Link from "next/link";
+import { getDownloadUrl } from "@edgestore/react/utils";
+import { ClipLoader } from "react-spinners";
+import { handlePurchase } from "@/actions/paymongo.action";
 
 interface PaperDetailsProps {
   paper1: any;
   session: Session;
+  isPublic: boolean;
+  isPaid: boolean;
 }
 
-export default function PaperDetails({ paper1, session }: PaperDetailsProps) {
+export default function PaperDetails({
+  paper1,
+  session,
+  isPublic,
+  isPaid,
+}: PaperDetailsProps) {
+  const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
   const handleCite = () => {
     // Implement citation functionality
   };
 
   const handleSave = () => {
     // Implement save functionality
+  };
+
+  const paymentOnClick = async () => {
+    const priceAmount = paper1.price * 100;
+    const url = "https://api.paymongo.com/v1/links";
+    const options = {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        authorization: "Basic c2tfdGVzdF9iQXZrQnRYemNBOEVjSHlxYTl1YVNTOFE6",
+      },
+
+      body: JSON.stringify({
+        data: {
+          attributes: { amount: priceAmount, description: paper1.title },
+        },
+      }),
+    };
+
+    fetch(url, options)
+      .then((res) => res.json())
+      .then(async (json) => {
+        window.open(json.data.attributes.checkout_url, "_blank");
+        setIsPaymentLoading(true);
+        await handlePurchase(session.user?.id!, paper1.id, json.data.id);
+      })
+      .catch((err) => console.error("error:" + err));
+  };
+
+  const handleDownloadPDF = async () => {
+    if (paper1.file) {
+      const fileUrl = getDownloadUrl(paper1.file, `${paper1.title}.pdf`);
+
+      const a = document.createElement("a");
+      a.href = fileUrl;
+
+      document.body.appendChild(a);
+
+      a.click();
+
+      document.body.removeChild(a);
+    }
   };
 
   const formatAuthorName = (name: string) => {
@@ -118,8 +171,8 @@ export default function PaperDetails({ paper1, session }: PaperDetailsProps) {
   };
 
   return (
-    <div className="container mx-auto p-4  min-h-screen">
-      <Card className="mb-8 shadow-lg border-t-4 border-t-primary">
+    <div className="container mx-auto p-4 lg:mt-12  min-h-screen">
+      <Card className="mb-8 shadow-lg border-t-4 border-t-[#606C38]">
         <CardHeader className="space-y-6">
           <div className="space-y-2">
             <CardTitle className="text-4xl font-bold text-gray-800 leading-tight">
@@ -235,19 +288,30 @@ export default function PaperDetails({ paper1, session }: PaperDetailsProps) {
                 {paper1.uniqueViews} views
               </div>
 
-              {paper1.file ? (
-                <Link target="_blank" href={paper1.file}>
-                  <Button
-                    variant="default"
-                    className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all"
-                  >
-                    Download PDF
-                  </Button>
-                </Link>
-              ) : (
-                <Badge className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all">
-                  No PDF available
+              {paper1.file && (isPublic || isPaid) ? (
+                <Button
+                  variant="default"
+                  className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all"
+                  onClick={handleDownloadPDF}
+                >
+                  Download PDF
+                </Button>
+              ) : isPaymentLoading ? (
+                <Badge className="flex gap-2 items-center bg-[#BC6C25] hover:bg-[#BC6C25]">
+                  <p>Processing</p>
+                  <ClipLoader size={20} color="#FEFAE0" />
                 </Badge>
+              ) : paper1.price < 100 ? (
+                <Badge className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all">
+                  Paper is private, not for sale.
+                </Badge>
+              ) : (
+                <Button
+                  onClick={paymentOnClick}
+                  className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all"
+                >
+                  PDF file available for {paper1.price} pesos
+                </Button>
               )}
             </div>
           </div>

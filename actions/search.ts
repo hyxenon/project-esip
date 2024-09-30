@@ -3,11 +3,19 @@ import { db } from "@/lib/db";
 import { ResearchPaperModel } from "@/models/models";
 import { revalidatePath } from "next/cache";
 
-export const searchPaper = async ({
-  searchParams,
-}: {
-  searchParams: { query?: string; paperType?: string; categories?: string };
-}) => {
+export const searchPaper = async (
+  perPage: number = 10,
+  {
+    searchParams,
+  }: {
+    searchParams: {
+      query?: string;
+      paperType?: string;
+      categories?: string;
+      page?: string;
+    };
+  }
+) => {
   const searchQuery = searchParams.query || "";
   const paperType = searchParams.paperType || "all";
   const categoryFilter = searchParams.categories
@@ -15,6 +23,8 @@ export const searchPaper = async ({
     : [];
 
   const conditions: any[] = [];
+  const currentPage = searchParams.page ? parseInt(searchParams.page) : 1;
+  const skip = (currentPage - 1) * perPage;
 
   // Add title search condition
   if (searchQuery) {
@@ -68,13 +78,26 @@ export const searchPaper = async ({
         },
       },
     },
+    skip,
+    take: perPage,
   });
 
-  return papers.map((paper) => ({
-    ...paper,
-    abstract: paper.abstract as string | null,
-    uniqueViews: paper._count.PaperView,
-  })) as ResearchPaperModel[];
+  const totalPapers = await db.researchPaper.count({
+    where: {
+      AND: conditions.length > 0 ? conditions : undefined,
+    },
+  });
+
+  const totalPages = Math.ceil(totalPapers / perPage);
+
+  return {
+    searchPaperResults: papers.map((paper) => ({
+      ...paper,
+      abstract: paper.abstract as string | null, // Safely cast abstract
+      uniqueViews: paper._count.PaperView, // Get the count of views
+    })),
+    totalPages, // Return total pages for pagination
+  };
 };
 
 export const getPaperDetails = async (
@@ -86,19 +109,6 @@ export const getPaperDetails = async (
     const paper = await db.researchPaper.findFirst({
       where: {
         id: paperId,
-        OR: [
-          { isPublic: true },
-          {
-            AND: [
-              { isPublic: false },
-              {
-                user: {
-                  schoolId: schoolId,
-                },
-              },
-            ],
-          },
-        ],
       },
       include: {
         user: {
@@ -129,16 +139,12 @@ export const getPaperDetails = async (
     });
 
     if (paper) {
-      // **Add this block to count unique views and record a new view**
-      // Count unique views
       const uniqueViews = await db.paperView.count({
         where: { paperId: paper.id },
       });
 
-      // Add uniqueViews to the paper object
       (paper as any).uniqueViews = uniqueViews;
 
-      // Check if the user has already viewed the paper
       const existingView = await db.paperView.findUnique({
         where: {
           userId_paperId: {
@@ -148,7 +154,6 @@ export const getPaperDetails = async (
         },
       });
 
-      // If not, create a new PaperView record
       if (!existingView) {
         await db.paperView.create({
           data: {
@@ -157,11 +162,9 @@ export const getPaperDetails = async (
           },
         });
 
-        // Increment the uniqueViews count
         (paper as any).uniqueViews += 1;
       }
 
-      // Process comments as before
       paper.comments = paper.comments.map((comment) => ({
         ...comment,
         likesCount: comment._count.Likes,

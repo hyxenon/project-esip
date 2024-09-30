@@ -3,9 +3,11 @@
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { useEdgeStore } from "@/lib/edgestore";
@@ -68,6 +70,7 @@ const formSchema = z.object({
   isPublic: z.string(),
   file: z.string().optional(),
   grade: z.string().optional(),
+  price: z.string().optional(),
   keywords: z.string().optional(),
 });
 
@@ -110,6 +113,8 @@ const ResearchPaperForm = ({
       references: "",
       isPublic: "false",
       keywords: "",
+      abstract: "",
+      price: "",
     },
   });
 
@@ -127,6 +132,7 @@ const ResearchPaperForm = ({
       form.setValue("references", paper.references);
       form.setValue("grade", paper.grade ?? "");
       form.setValue("isPublic", paper.isPublic ? "true" : "false");
+      form.setValue("price", String(paper.price));
 
       setSelectedDateRange({
         from: new Date(paper.date),
@@ -178,6 +184,7 @@ const ResearchPaperForm = ({
           userId: paper.userId,
           file: file ? uploadedUrl : paper.file,
           keywords: keywordsArray,
+          price: values.isPublic === "true" ? null : Number(values.price),
         };
 
         if (uploadedUrl && paper.file) {
@@ -209,8 +216,8 @@ const ResearchPaperForm = ({
             userId: sessionData?.user?.id,
             file: uploadedUrl || undefined,
             keywords: keywordsArray,
+            price: values.isPublic === "true" ? null : Number(values.price),
           };
-
           addResearchProposalPaper(data).then((paper) => {
             form.reset();
             setAuthors([]);
@@ -235,7 +242,7 @@ const ResearchPaperForm = ({
   const handleFileUpload = async (): Promise<string | null> => {
     if (file) {
       console.log("Starting file upload...");
-      return edgestore.myProtectedFiles
+      return edgestore.publicFiles
         .upload({
           file,
           onProgressChange: (progress) => {
@@ -274,6 +281,7 @@ const ResearchPaperForm = ({
                     {...field}
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -286,6 +294,12 @@ const ResearchPaperForm = ({
                     value={authorInput}
                     onChange={(e) => setAuthorInput(e.target.value)}
                     type="text"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        authorFormSubmit();
+                        e.preventDefault();
+                      }
+                    }}
                   />
                   <Button
                     type="button"
@@ -336,6 +350,7 @@ const ResearchPaperForm = ({
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -358,6 +373,7 @@ const ResearchPaperForm = ({
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -401,6 +417,7 @@ const ResearchPaperForm = ({
                         </SelectContent>
                       </Select>
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -453,6 +470,7 @@ const ResearchPaperForm = ({
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -473,6 +491,7 @@ const ResearchPaperForm = ({
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -492,77 +511,104 @@ const ResearchPaperForm = ({
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          <div className="">
-            <div className="flex items-end gap-2">
-              <div>
-                <Label htmlFor="file">File</Label>
-                <Input
-                  ref={fileInputRef}
-                  onChange={(e) => {
-                    setFile(e.target.files?.[0]);
-                  }}
-                  id="file"
-                  type="file"
-                  accept="application/pdf"
-                  className="border-gray-300"
-                />
-              </div>
-              <FormField
-                control={form.control}
-                name="grade"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Grade</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="90"
-                        className="border-gray-300"
-                        type="number"
-                        max={100}
-                        min={0}
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+          <FormField
+            control={form.control}
+            name="grade"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Grade</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="90"
+                    className="border-gray-300"
+                    type="number"
+                    max={100}
+                    min={0}
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Grade of the paper. (optional)
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="isPublic"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Visibility</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value === "true" ? "true" : "false"}
+                    value={field.value}
+                    className="flex flex-col space-y-1"
+                  >
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value={"true"} />
+                      </FormControl>
+                      <FormLabel className="font-normal">Public</FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value={"false"} />
+                      </FormControl>
+                      <FormLabel className="font-normal">Private</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
-              <FormField
-                control={form.control}
-                name="isPublic"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Visibility</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value === "true" ? "true" : "false"}
-                        value={field.value}
-                        className="flex flex-col space-y-1"
-                      >
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value={"true"} />
-                          </FormControl>
-                          <FormLabel className="font-normal">Public</FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value={"false"} />
-                          </FormControl>
-                          <FormLabel className="font-normal">Private</FormLabel>
-                        </FormItem>
-                      </RadioGroup>
-                    </FormControl>
-                  </FormItem>
-                )}
+          {form.getValues("isPublic") === "false" && (
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="border-gray-300"
+                      type="number"
+                      min={100}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Price of the paper minimum 100 pesos. (optional)
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
+          <div className="flex items-end gap-2">
+            <div>
+              <Label htmlFor="file">File</Label>
+              <Input
+                ref={fileInputRef}
+                onChange={(e) => {
+                  setFile(e.target.files?.[0]);
+                }}
+                id="file"
+                type="file"
+                accept="application/pdf"
+                className="border-gray-300"
               />
             </div>
           </div>
+
           {isEdit && paper?.file && (
             <div className="flex items-center gap-2">
               <p className="font-medium">Current File:</p>
@@ -577,6 +623,7 @@ const ResearchPaperForm = ({
               )}
             </div>
           )}
+
           <Button
             disabled={isLoading}
             type="submit"
