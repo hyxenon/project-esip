@@ -49,10 +49,28 @@ export const getAllPapers = async (schoolId: string, category?: string) => {
       user: true,
       authors: true,
       comments: true,
+      _count: {
+        select: {
+          PaperView: true,
+        },
+      },
     },
+    orderBy: [
+      {
+        researchType: "asc",
+      },
+      {
+        PaperView: { _count: "desc" },
+      },
+    ],
   });
 
-  return { message: papers };
+  const resultPapers = papers.map((paper) => ({
+    ...paper,
+    uniqueViews: paper._count.PaperView, // Include unique view count for each paper
+  }));
+
+  return { message: resultPapers };
 };
 
 export const getPaper = async (paperId: string) => {
