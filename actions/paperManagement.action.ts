@@ -16,6 +16,8 @@ export const addResearchProposalPaper = async (data: ResearchPaperModel) => {
       introduction: data.introduction,
       references: data.references,
       file: data.file,
+      wonCompetition: data.wonCompetition,
+      wonCompetitonFile: data.wonCompetitonFile,
       isPublic: data.isPublic,
       price: data.price,
       grade: data.grade,

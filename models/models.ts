@@ -43,6 +43,8 @@ export type ResearchPaperModel = {
   file?: string | null;
   grade?: string | null;
   price?: number | null;
+  wonCompetition?: string;
+  wonCompetitonFile?: string | null;
   views?: number;
   isPublic: boolean;
   createdAt?: Date;

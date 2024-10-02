@@ -1,6 +1,19 @@
 "use client";
 
 import {
+  addResearchProposalPaper,
+  updatePaper,
+} from "@/actions/paperManagement.action";
+import { Button } from "@/components/ui/button";
+import { CalendarDatePicker } from "@/components/ui/calendar-picker";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   Form,
   FormControl,
   FormDescription,
@@ -9,25 +22,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useToast } from "@/components/ui/use-toast";
-import { useEdgeStore } from "@/lib/edgestore";
-import { AuthorPaper, ResearchPaperModel } from "@/models/models";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "next-auth/react";
-import { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { v4 as uuidv4 } from "uuid";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { IoMdClose } from "react-icons/io";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -35,40 +32,47 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { CalendarDatePicker } from "@/components/ui/calendar-picker";
 import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  addResearchProposalPaper,
-  updatePaper,
-} from "@/actions/paperManagement.action";
+import { useToast } from "@/components/ui/use-toast";
+import { useEdgeStore } from "@/lib/edgestore";
+import { AuthorPaper, ResearchPaperModel } from "@/models/models";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { IoMdClose } from "react-icons/io";
+import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
+import { SingleImageDropzone } from "../../admin/school-management/SingleImageDropzone";
+import Image from "next/image";
 
 const formSchema = z.object({
-  title: z.string().min(1, {
+  title: z.string().trim().min(1, {
     message: "Title is required.",
   }),
-  researchAdviser: z.string().min(1, {
+  researchAdviser: z.string().trim().min(1, {
     message: "Research Adviser is required.",
   }),
-  researchConsultant: z.string().min(1, {
+  researchConsultant: z.string().trim().min(1, {
     message: "Research Consultant is required.",
   }),
-  researchCategory: z.string().min(1, {
+  researchCategory: z.string().trim().min(1, {
     message: "Research Category is required.",
   }),
-  introduction: z.string().min(1, {
+  introduction: z.string().trim().min(1, {
     message: "Introduction is required.",
   }),
-  abstract: z.string().min(1, {
+  abstract: z.string().trim().min(1, {
     message: "Abstract is required.",
   }),
-  references: z.string().min(1, {
+  references: z.string().trim().min(1, {
     message: "References is required.",
   }),
   isPublic: z.string(),
   file: z.string().optional(),
+  wonCompetition: z.string().optional(),
+  wonCompetitonFile: z.string().optional(),
   grade: z.string().optional(),
   price: z.string().optional(),
   keywords: z.string().optional(),
@@ -93,12 +97,23 @@ const ResearchPaperForm = ({
     to: new Date(),
   });
   const [file, setFile] = useState<File>();
+  const [wonCompetitionFile, setWonCompetitionFile] = useState<File>();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { edgestore } = useEdgeStore();
   const [progress, setProgress] = useState<number>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [authors, setAuthors] = useState<AuthorPaper[]>([]);
   const [authorInput, setAuthorInput] = useState<string>("");
+  const [changeImage, setChangeImage] = useState<boolean>(false);
+
+  const [wonCompetitionValue, setWonCompetitionValue] = useState<string>(
+    paper?.wonCompetition ? paper.wonCompetition : "none"
+  );
+
+  const handleSelectChange = (value: string) => {
+    setWonCompetitionValue(value);
+  };
+
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -107,7 +122,7 @@ const ResearchPaperForm = ({
       title: "",
       researchAdviser: "",
       introduction: "",
-      researchCategory: "",
+      researchCategory: undefined,
       researchConsultant: "",
       file: "",
       references: "",
@@ -133,6 +148,10 @@ const ResearchPaperForm = ({
       form.setValue("grade", paper.grade ?? "");
       form.setValue("isPublic", paper.isPublic ? "true" : "false");
       form.setValue("price", String(paper.price));
+      form.setValue(
+        "wonCompetitonFile",
+        paper.wonCompetitonFile ? paper.wonCompetitonFile : undefined
+      );
 
       setSelectedDateRange({
         from: new Date(paper.date),
@@ -171,7 +190,8 @@ const ResearchPaperForm = ({
         : [];
 
     if (isEdit && paperId && paper && !proposalToPaper) {
-      handleFileUpload().then((uploadedUrl) => {
+      console.log(wonCompetitionValue);
+      handleFileUpload().then(({ fileUrl, wonCompetitionFileUrl }) => {
         const data: ResearchPaperModel = {
           ...values,
           researchAdviser: values.researchAdviser.toLowerCase(),
@@ -182,12 +202,26 @@ const ResearchPaperForm = ({
           date: selectedDateRange.from,
           authors: authors,
           userId: paper.userId,
-          file: file ? uploadedUrl : paper.file,
+          file: fileUrl ? fileUrl : paper.file,
           keywords: keywordsArray,
-          price: values.isPublic === "true" ? null : Number(values.price),
+          price:
+            values.isPublic === "true"
+              ? null
+              : Number(values.price) < 100
+              ? null
+              : Number(values.price),
+          wonCompetition: wonCompetitionValue,
+          wonCompetitonFile:
+            wonCompetitionValue !== "none"
+              ? wonCompetitionFileUrl
+                ? wonCompetitionFileUrl
+                : values.wonCompetitonFile
+              : null,
         };
 
-        if (uploadedUrl && paper.file) {
+        console.log(data.wonCompetitonFile);
+
+        if (fileUrl && paper.file) {
           edgestore.myProtectedFiles.delete({
             url: paper.file,
           });
@@ -205,7 +239,7 @@ const ResearchPaperForm = ({
         setIsLoading(false);
       });
     } else {
-      handleFileUpload().then((uploadedUrl) => {
+      handleFileUpload().then(({ fileUrl, wonCompetitionFileUrl }) => {
         if (sessionData?.user?.id) {
           const data: ResearchPaperModel = {
             ...values,
@@ -214,18 +248,22 @@ const ResearchPaperForm = ({
             date: selectedDateRange.from,
             authors: authors,
             userId: sessionData?.user?.id,
-            file: uploadedUrl || undefined,
+            file: fileUrl || undefined,
             keywords: keywordsArray,
             price: values.isPublic === "true" ? null : Number(values.price),
+            wonCompetition: wonCompetitionValue,
+            wonCompetitonFile:
+              wonCompetitionValue !== "none" ? wonCompetitionFileUrl : null,
           };
+
           addResearchProposalPaper(data).then((paper) => {
             form.reset();
             setAuthors([]);
             setProgress(0);
             if (fileInputRef.current) {
-              fileInputRef.current.value = ""; // Reset the input
+              fileInputRef.current.value = "";
             }
-            setFile(undefined); // Reset the file state if needed
+            setFile(undefined);
           });
 
           toast({
@@ -239,23 +277,34 @@ const ResearchPaperForm = ({
     }
   };
 
-  const handleFileUpload = async (): Promise<string | null> => {
-    if (file) {
-      console.log("Starting file upload...");
-      return edgestore.publicFiles
-        .upload({
-          file,
-          onProgressChange: (progress) => {
-            setProgress(progress);
-          },
-        })
-        .then((res) => {
-          return res.url; // Return the URL as a string
-        });
-    } else {
-      console.log("No file selected for upload.");
-      return null; // Return null if no file was uploaded
-    }
+  const handleFileUpload = async (): Promise<{
+    fileUrl: string | null;
+    wonCompetitionFileUrl: string | null;
+  }> => {
+    const fileUploadPromise = file
+      ? edgestore.publicFiles
+          .upload({
+            file,
+            onProgressChange: (progress) => setProgress(progress),
+          })
+          .then((res) => res.url)
+      : Promise.resolve(null);
+
+    const wonCompetitionFileUploadPromise = wonCompetitionFile
+      ? edgestore.publicFiles
+          .upload({
+            file: wonCompetitionFile,
+            onProgressChange: (progress) => setProgress(progress),
+          })
+          .then((res) => res.url)
+      : Promise.resolve(null);
+
+    const [fileUrl, wonCompetitionFileUrl] = await Promise.all([
+      fileUploadPromise,
+      wonCompetitionFileUploadPromise,
+    ]);
+
+    return { fileUrl, wonCompetitionFileUrl };
   };
 
   return (
@@ -593,41 +642,118 @@ const ResearchPaperForm = ({
             />
           )}
 
-          <div className="flex items-end gap-2">
-            <div>
-              <Label htmlFor="file">File</Label>
-              <Input
-                ref={fileInputRef}
-                onChange={(e) => {
-                  setFile(e.target.files?.[0]);
-                }}
-                id="file"
-                type="file"
-                accept="application/pdf"
-                className="border-gray-300"
-              />
-            </div>
+          <div className="flex flex-col gap-3">
+            <Label htmlFor="file">Research Paper File</Label>
+            <Input
+              ref={fileInputRef}
+              onChange={(e) => {
+                setFile(e.target.files?.[0]);
+              }}
+              id="file"
+              type="file"
+              accept="application/pdf"
+              className="border-gray-300"
+            />
+            {isEdit && paper?.file && (
+              <div className="flex items-center gap-2">
+                <p className="font-medium text-sm">Current File:</p>
+                {isEdit && paper?.file && (
+                  <Link
+                    className="underline text-sm font-medium text-[#BC6C25] hover:text-[#DDA15E]"
+                    target="_blank"
+                    href={paper.file}
+                  >
+                    View File
+                  </Link>
+                )}
+              </div>
+            )}
           </div>
 
-          {isEdit && paper?.file && (
-            <div className="flex items-center gap-2">
-              <p className="font-medium">Current File:</p>
-              {isEdit && paper?.file && (
-                <Link
-                  className="underline text-sm font-medium text-[#BC6C25] hover:text-[#DDA15E]"
-                  target="_blank"
-                  href={paper.file}
-                >
-                  View File
-                </Link>
-              )}
-            </div>
-          )}
+          <div className="flex flex-col gap-3">
+            <FormLabel>Competition Award Level</FormLabel>
+            <Select
+              defaultValue={wonCompetitionValue}
+              onValueChange={handleSelectChange}
+              value={wonCompetitionValue}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={wonCompetitionValue} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">None</SelectItem>
+                <SelectItem value="division">Division</SelectItem>
+                <SelectItem value="regional">Regional</SelectItem>
+                <SelectItem value="national">National</SelectItem>
+                <SelectItem value="international">International</SelectItem>
+              </SelectContent>
+            </Select>
+            {wonCompetitionValue !== "none" && !paper?.wonCompetitonFile ? (
+              <>
+                <SingleImageDropzone
+                  width={200}
+                  height={200}
+                  value={wonCompetitionFile}
+                  onChange={(wonCompetitionFile) => {
+                    setWonCompetitionFile(wonCompetitionFile);
+                  }}
+                />
+                <FormDescription>
+                  Please upload the certification of the award.
+                </FormDescription>
+              </>
+            ) : (
+              <>
+                {!changeImage ? (
+                  <>
+                    {paper?.wonCompetitonFile && (
+                      <>
+                        <Image
+                          src={
+                            paper?.wonCompetitonFile
+                              ? paper.wonCompetitonFile
+                              : ""
+                          }
+                          alt="Image alt"
+                          width={200}
+                          height={200}
+                          className="mt-4"
+                        />
+                        <Button
+                          variant={"outline"}
+                          type="button"
+                          className="w-[200px]"
+                          size={"sm"}
+                          onClick={() => setChangeImage(true)}
+                        >
+                          Change picture
+                        </Button>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <SingleImageDropzone
+                      width={200}
+                      height={200}
+                      value={wonCompetitionFile}
+                      onChange={(wonCompetitionFile) => {
+                        setWonCompetitionFile(wonCompetitionFile);
+                      }}
+                    />
+                    <FormDescription>
+                      Please upload the certification of the award.
+                    </FormDescription>
+                  </>
+                )}
+              </>
+            )}
+          </div>
 
           <Button
             disabled={isLoading}
             type="submit"
-            className="bg-[#606C38] hover:bg-[#283618]"
+            className="bg-[#606C38] hover:bg-[#283618] mt-8"
           >
             {isLoading ? (
               <p>{progress}% loading...</p>
