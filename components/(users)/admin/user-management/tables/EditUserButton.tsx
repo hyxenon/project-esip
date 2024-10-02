@@ -190,7 +190,12 @@ function ProfileForm({ id }: ProfileFormProps) {
               className="rounded-full"
             />
             {session?.user?.role === "ADMIN" && (
-              <Button type="button" size={"sm"} className="mt-2 mb-4">
+              <Button
+                variant={"outline"}
+                type="button"
+                size={"sm"}
+                className="mt-3 mb-4"
+              >
                 Change Profile Picture
               </Button>
             )}
@@ -225,6 +230,7 @@ function ProfileForm({ id }: ProfileFormProps) {
                       type="email"
                       placeholder="johndoe@gmail.com"
                       className="border-gray-400"
+                      disabled={true}
                     />
                   </FormControl>
                 </FormItem>

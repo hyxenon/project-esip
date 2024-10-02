@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ResearchPaperModel } from "@/models/models";
 import Link from "next/link";
-import React from "react";
 
 const PaperManagement = async ({
   searchParams,
@@ -70,7 +69,7 @@ const PaperManagement = async ({
           <CardHeader>
             <div className="flex justify-end">
               <Link href={"paper-management/add-paper"}>
-                <Button className="bg-[#606C38] hover:bg-[#606C38]">
+                <Button className="bg-[#BC6C25] hover:bg-[#A85A1D] text-[#FEFAE0]">
                   Add Paper
                 </Button>
               </Link>
