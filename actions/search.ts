@@ -1,6 +1,5 @@
 "use server";
 import { db } from "@/lib/db";
-import { ResearchPaperModel } from "@/models/models";
 import { revalidatePath } from "next/cache";
 
 export const searchPaper = async (
@@ -80,6 +79,14 @@ export const searchPaper = async (
     },
     skip,
     take: perPage,
+    orderBy: [
+      {
+        researchType: "asc",
+      },
+      {
+        PaperView: { _count: "desc" },
+      },
+    ],
   });
 
   const totalPapers = await db.researchPaper.count({

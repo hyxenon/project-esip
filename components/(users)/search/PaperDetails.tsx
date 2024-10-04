@@ -322,9 +322,15 @@ export default function PaperDetails({
                 <h3 className="text-2xl font-semibold mb-4 text-gray-800">
                   Abstract
                 </h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {paper1.abstract}
-                </p>
+                <div className="text-gray-700 leading-relaxed">
+                  {paper1.abstract
+                    .split("\n")
+                    .map((paragraph: string, index: number) => (
+                      <p key={index} className="mb-8">
+                        {paragraph}
+                      </p>
+                    ))}
+                </div>
               </section>
             )}
 
@@ -333,9 +339,15 @@ export default function PaperDetails({
                 <h3 className="text-2xl font-semibold mb-4 text-gray-800">
                   Introduction
                 </h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {paper1.introduction}
-                </p>
+                <div className="text-gray-700 leading-relaxed">
+                  {paper1.introduction
+                    .split("\n")
+                    .map((paragraph: string, index: number) => (
+                      <p key={index} className="mb-8">
+                        {paragraph}
+                      </p>
+                    ))}
+                </div>
               </section>
             )}
 
@@ -344,7 +356,15 @@ export default function PaperDetails({
                 <h3 className="text-2xl font-semibold mb-4 text-gray-800">
                   References
                 </h3>
-                <p>{paper1.references}</p>
+                <div className="leading-relaxed">
+                  {paper1.references
+                    .split("\n")
+                    .map((paragraph: string, index: number) => (
+                      <p key={index} className="mb-2">
+                        {paragraph}
+                      </p>
+                    ))}
+                </div>
               </section>
             )}
           </div>

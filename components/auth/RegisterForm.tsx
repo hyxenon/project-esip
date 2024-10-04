@@ -50,8 +50,8 @@ const formSchema = z
       message: "Minimum 6 characters required",
     }),
     confirmPassword: z.string(),
-    firstName: z.string().min(1, { message: "First name is required." }),
-    lastName: z.string().min(1, { message: "Last name is required." }),
+    firstName: z.string().trim().min(1, { message: "First name is required." }),
+    lastName: z.string().trim().min(1, { message: "Last name is required." }),
     role: z.string().min(1, { message: "Role is required." }),
     schoolId: z.string({
       required_error: "Please select your school.",

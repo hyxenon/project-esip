@@ -24,7 +24,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -81,7 +80,7 @@ export function AddUserTeacher({ selectedSchool }: AddUserTeacherProps) {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#606C38] hover:bg-[#283618]" variant="default">
+        <Button className="bg-[#BC6C25] hover:bg-[#A85A1D]" variant="default">
           Add Teacher
         </Button>
       </DialogTrigger>
@@ -113,8 +112,11 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
         message: "Minimum 6 characters required",
       }),
       confirmPassword: z.string(),
-      firstName: z.string().min(1, { message: "First name is required." }),
-      lastName: z.string().min(1, { message: "Last name is required." }),
+      firstName: z
+        .string()
+        .trim()
+        .min(1, { message: "First name is required." }),
+      lastName: z.string().trim().min(1, { message: "Last name is required." }),
       role: z.string().min(1, { message: "Role is required." }),
       schoolId: z.string({
         required_error: "Please select your school.",
@@ -251,8 +253,9 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
             <PasswordField name="confirmPassword" title="Confirm Password" />
 
             <Button
-              className="w-[9rem] mt-4 hover:bg-[#283618] bg-[#606C38]"
+              className=" mt-2 "
               type="button"
+              variant={"outline"}
               onClick={() => {
                 const ranPass = randomPasswordGenerator();
                 form.setValue("password", ranPass);

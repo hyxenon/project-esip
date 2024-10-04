@@ -260,7 +260,7 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
   },
 
   {
-    accessorKey: "views",
+    accessorKey: "uniqueViews",
     header: ({ column }) => {
       return (
         <Button
@@ -271,6 +271,10 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
+    },
+    cell: ({ row }) => {
+      const data = row.original;
+      return <p>{data.uniqueViews}</p>;
     },
   },
   {

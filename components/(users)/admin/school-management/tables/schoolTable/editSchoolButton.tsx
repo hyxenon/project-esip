@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -36,7 +35,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { editSchool, getSchool } from "@/actions/schoolManagement";
 import Image from "next/image";
 import { SchoolModel } from "../../SchoolForm";
-import { useSchoolContext } from "@/context/SchoolContext";
 import { SingleImageDropzone } from "../../SingleImageDropzone";
 import { Progress } from "@/components/ui/progress";
 
@@ -213,6 +211,7 @@ function ProfileForm({ schoolId }: ProfileFormProps) {
                       type="email"
                       placeholder="mnhs@gmail.com"
                       className="border-gray-400 "
+                      disabled={true}
                     />
                   </FormControl>
                 </FormItem>
@@ -380,6 +379,8 @@ function ProfileForm({ schoolId }: ProfileFormProps) {
                             />
                             <Button
                               type="button"
+                              variant={"outline"}
+                              className="mt-2 w-[100px]"
                               onClick={() => setChangeLogo(true)}
                             >
                               Change Logo

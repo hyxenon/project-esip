@@ -16,6 +16,8 @@ export const addResearchProposalPaper = async (data: ResearchPaperModel) => {
       introduction: data.introduction,
       references: data.references,
       file: data.file,
+      wonCompetition: data.wonCompetition,
+      wonCompetitonFile: data.wonCompetitonFile,
       isPublic: data.isPublic,
       price: data.price,
       grade: data.grade,
@@ -49,10 +51,28 @@ export const getAllPapers = async (schoolId: string, category?: string) => {
       user: true,
       authors: true,
       comments: true,
+      _count: {
+        select: {
+          PaperView: true,
+        },
+      },
     },
+    orderBy: [
+      {
+        researchType: "asc",
+      },
+      {
+        PaperView: { _count: "desc" },
+      },
+    ],
   });
 
-  return { message: papers };
+  const resultPapers = papers.map((paper) => ({
+    ...paper,
+    uniqueViews: paper._count.PaperView, // Include unique view count for each paper
+  }));
+
+  return { message: resultPapers };
 };
 
 export const getPaper = async (paperId: string) => {

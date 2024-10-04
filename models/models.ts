@@ -43,6 +43,8 @@ export type ResearchPaperModel = {
   file?: string | null;
   grade?: string | null;
   price?: number | null;
+  wonCompetition?: string | null;
+  wonCompetitonFile?: string | null;
   views?: number;
   isPublic: boolean;
   createdAt?: Date;
@@ -133,16 +135,16 @@ export const AddSchoolSchema = z.object({
   email: z.string().email({
     message: "Email is required",
   }),
-  schoolName: z.string().min(1, {
+  schoolName: z.string().trim().min(1, {
     message: "Enter your school name",
   }),
-  streetAddress: z.string().min(1, {
+  streetAddress: z.string().trim().min(1, {
     message: "Enter your street address",
   }),
-  city: z.string().min(1, {
+  city: z.string().trim().min(1, {
     message: "Enter your school city",
   }),
-  province: z.string().min(1, {
+  province: z.string().trim().min(1, {
     message: "Enter your school province",
   }),
   postalCode: z.string().regex(/^\d{4}$/, {

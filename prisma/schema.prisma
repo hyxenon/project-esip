@@ -106,6 +106,8 @@ model ResearchPaper {
   abstract           String?
   references         String
   file               String?
+  wonCompetition     String?         @default("none")
+  wonCompetitonFile  String?
   grade              String?
   isPublic           Boolean         @default(false)
   price              Int?

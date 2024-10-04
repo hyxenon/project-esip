@@ -47,16 +47,16 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Link from "next/link";
 
 const formSchema = z.object({
-  title: z.string().min(1, {
+  title: z.string().trim().min(1, {
     message: "Title is required.",
   }),
-  researchAdviser: z.string().min(1, {
+  researchAdviser: z.string().trim().min(1, {
     message: "Research Adviser is required.",
   }),
-  researchConsultant: z.string().min(1, {
+  researchConsultant: z.string().trim().min(1, {
     message: "Research Consultant is required.",
   }),
-  researchCategory: z.string().min(1, {
+  researchCategory: z.string().trim().min(1, {
     message: "Research Category is required.",
   }),
   introduction: z.string().min(1, {
