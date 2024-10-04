@@ -3,7 +3,6 @@ import { searchPaper } from "@/actions/search";
 import SearchComponent from "@/components/(users)/search/search";
 import SearchResultsComponent from "@/components/(users)/search/SearchResultsComponent";
 import { ResearchPaperModel } from "@/models/models";
-import React from "react";
 
 const page = async ({
   searchParams,

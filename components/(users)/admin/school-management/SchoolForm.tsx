@@ -2,7 +2,6 @@ import { columns } from "./tables/schoolTable/columns";
 import { DataTable } from "./tables/schoolTable/data-table";
 import { AddSchoolButton } from "./tables/schoolTable/addSchoolButton";
 
-import { Skeleton } from "@/components/ui/skeleton";
 import { getSchools } from "@/actions/schoolManagement";
 
 export interface SchoolModel {

@@ -75,7 +75,7 @@ const PaperManagement = async ({
               </Link>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-2 md:px-6">
             <DataTable columns={columns} data={papers} />
           </CardContent>
         </Card>

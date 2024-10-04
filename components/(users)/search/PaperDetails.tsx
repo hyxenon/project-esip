@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -171,7 +171,7 @@ export default function PaperDetails({
   };
 
   return (
-    <div className="container mx-auto p-4 lg:mt-12  min-h-screen">
+    <div className="px-1 md:container py-2 lg:mt-12  min-h-screen">
       <Card className="mb-8 shadow-lg border-t-4 border-t-[#606C38]">
         <CardHeader className="space-y-6">
           <div className="space-y-2">
@@ -213,7 +213,7 @@ export default function PaperDetails({
             ))}
           </div>
         </CardHeader>
-        <CardContent className="space-y-8">
+        <CardContent className="space-y-8 px-0 md:px-4">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gray-50 p-4 rounded-lg">
             <div className="flex flex-wrap items-center gap-2">
               <Button
@@ -318,7 +318,7 @@ export default function PaperDetails({
 
           <div className="space-y-8">
             {paper1.abstract && (
-              <section className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <section className="bg-white px-2 md:p-6 md:rounded-lg md:shadow-sm md:border md:border-gray-100">
                 <h3 className="text-2xl font-semibold mb-4 text-gray-800">
                   Abstract
                 </h3>
@@ -335,7 +335,7 @@ export default function PaperDetails({
             )}
 
             {paper1.introduction && (
-              <section className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <section className="bg-white px-2 md:p-6 md:rounded-lg md:shadow-sm md:border md:border-gray-100">
                 <h3 className="text-2xl font-semibold mb-4 text-gray-800">
                   Introduction
                 </h3>
@@ -352,7 +352,7 @@ export default function PaperDetails({
             )}
 
             {paper1.references && (
-              <section className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <section className="bg-white px-2 md:p-6 md:rounded-lg md:shadow-sm md:border md:border-gray-100">
                 <h3 className="text-2xl font-semibold mb-4 text-gray-800">
                   References
                 </h3>

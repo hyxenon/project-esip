@@ -27,7 +27,7 @@ const TeacherUserManagementTable = ({
 }: TeacherTableProps) => {
   return (
     <Card className="w-full bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 mt-8">
-      <CardContent className="flex flex-col">
+      <CardContent className="flex flex-col px-2 md:px-6">
         <div className="flex justify-end mt-8">
           {role === "TEACHER" && (
             <AddUserTeacher selectedSchool={specificSchool} />
