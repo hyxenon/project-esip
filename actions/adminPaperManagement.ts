@@ -31,7 +31,12 @@ export const getAllResearchPapers = async (
           select: {
             id: true,
             name: true,
-            schoolId: true,
+            school: {
+              select: {
+                schoolName: true,
+                image: true,
+              },
+            },
           },
         },
         authors: true,

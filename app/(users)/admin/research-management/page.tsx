@@ -42,6 +42,15 @@ const ResearchManagement = async ({
     papers = papersData;
   }
 
+  const totalResearchProposals = papers.filter(
+    (paper) => paper.researchType === "proposal"
+  ).length;
+
+  // Count papers with researchType === "Paper"
+  const totalResearchPapers = papers.filter(
+    (paper) => paper.researchType === "paper"
+  ).length;
+
   return (
     <div className="w-full h-screen px-4 md:px-8 py-4">
       <Sheet>
@@ -54,15 +63,15 @@ const ResearchManagement = async ({
       </Sheet>
 
       <div className="grid grid-cols-2 gap-2 xl:grid-cols-3 mt-4">
-        <TotalPaperCard count={0} />
-        <TotalResearchProposal count={0} />
-        <TotalPapersCard count={0} />
+        <TotalPaperCard count={papers.length} />
+        <TotalResearchProposal count={totalResearchProposals} />
+        <TotalPapersCard count={totalResearchPapers} />
       </div>
       <SchoolSelect
         schoolsData={schoolsResponse.message}
         managementType="paper"
       />
-      <div className="mt-8">
+      <div className="mt-8 pb-8">
         <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
           <CardHeader></CardHeader>
           <CardContent className="px-2 md:px-6">

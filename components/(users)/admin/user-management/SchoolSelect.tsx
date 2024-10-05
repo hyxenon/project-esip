@@ -56,7 +56,7 @@ const SchoolSelect = ({ schoolsData, managementType }: SchoolSelectProps) => {
         }
       }
     }
-  }, [selectedSchool, router]);
+  }, [selectedSchool, router, managementType]);
 
   useEffect(() => {
     const fetchSchool = async () => {

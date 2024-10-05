@@ -22,8 +22,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 
-import { useRouter } from "next/navigation";
 import DeletePaperBtn from "../../teacher/paper-management/DeletePaperBtn";
+import Image from "next/image";
 
 const options: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -40,7 +40,6 @@ const ResearchPaperActions: React.FC<ResearchPaperActionsProps> = ({
   data,
 }) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const router = useRouter();
 
   return (
     <>
@@ -113,6 +112,46 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
       );
     },
   },
+
+  {
+    accessorKey: "user",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          School
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const data = row.original;
+      const schoolImage = data?.user?.school?.image || ""; // Access the school image
+      const schoolName = data?.user?.school?.schoolName || "Unknown School"; // Fallback if no school name
+
+      return (
+        <div className="flex items-center gap-2">
+          {schoolImage ? (
+            <Image
+              src={schoolImage}
+              alt={`${schoolName} logo`}
+              className="rounded-full"
+              height={25}
+              width={25}
+            />
+          ) : (
+            <span className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+              {schoolName[0]}{" "}
+            </span>
+          )}
+          <p>{schoolName}</p>
+        </div>
+      );
+    },
+  },
+
   {
     accessorKey: "researchType",
     header: ({ column }) => {
