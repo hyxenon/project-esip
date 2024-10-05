@@ -17,6 +17,7 @@ import { useState } from "react";
 import DeleteUserButton from "../DeleteUserButton";
 import EditUserButton from "../EditUserButton";
 import { Badge } from "@/components/ui/badge";
+import ViewUserDetails from "@/components/(users)/ViewUserDetails";
 
 export type User = {
   id: string;
@@ -38,6 +39,7 @@ type UserActionsProps = {
 const UserActions: React.FC<UserActionsProps> = ({ user }) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isViewOpen, setIsViewOpen] = useState(false);
 
   return (
     <>
@@ -52,6 +54,11 @@ const UserActions: React.FC<UserActionsProps> = ({ user }) => {
         setIsOpen={setIsEditOpen}
         id={user.id}
       />
+      <ViewUserDetails
+        isOpen={isViewOpen}
+        setIsOpen={setIsViewOpen}
+        user={user}
+      />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -61,7 +68,9 @@ const UserActions: React.FC<UserActionsProps> = ({ user }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem>View User</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setIsViewOpen(true)}>
+            View User
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
             Edit User
           </DropdownMenuItem>

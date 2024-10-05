@@ -398,7 +398,7 @@ function ProfileForm({ schoolId }: ProfileFormProps) {
 
           <div className="flex items-center justify-center w-full">
             <Button
-              className="bg-[#606C38] hover:bg-[#283618] w-full"
+              className="bg-[#BC6C25] hover:bg-[#DDA15E] w-full"
               type="submit"
             >
               Edit School
