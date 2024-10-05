@@ -50,7 +50,7 @@ const page = async () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <PasswordInformation />
+            <PasswordInformation session={session} />
           </CardContent>
         </Card>
       </div>
