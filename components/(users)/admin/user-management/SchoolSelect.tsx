@@ -29,9 +29,10 @@ interface SchoolModelSelect {
 
 interface SchoolSelectProps {
   schoolsData: SchoolModel[];
+  managementType: string;
 }
 
-const SchoolSelect = ({ schoolsData }: SchoolSelectProps) => {
+const SchoolSelect = ({ schoolsData, managementType }: SchoolSelectProps) => {
   const [open, setOpen] = useState(false);
   const [selectedSchool, setSelectedSchool] =
     useState<SchoolModelSelect | null>(null);
@@ -42,9 +43,17 @@ const SchoolSelect = ({ schoolsData }: SchoolSelectProps) => {
   useEffect(() => {
     if (selectedSchool) {
       if (selectedSchool.id === "all") {
-        router.push(`/admin/user-management`);
+        if (managementType === "user") {
+          router.push(`/admin/user-management`);
+        } else {
+          router.push(`/admin/research-management`);
+        }
       } else {
-        router.push(`/admin/user-management?id=${selectedSchool.id}`);
+        if (managementType === "user") {
+          router.push(`/admin/user-management?id=${selectedSchool.id}`);
+        } else {
+          router.push(`/admin/research-management?id=${selectedSchool.id}`);
+        }
       }
     }
   }, [selectedSchool, router]);

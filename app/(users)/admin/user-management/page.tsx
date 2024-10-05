@@ -70,7 +70,10 @@ const UserManagement = async ({
           <PiStudentFill className="h-5 w-5 text-[#283618]" />
         </TotalCards>
       </div>
-      <SchoolSelect schoolsData={schoolsResponse.message} />
+      <SchoolSelect
+        schoolsData={schoolsResponse.message}
+        managementType="user"
+      />
       {/* Tabs */}
       <div className="flex gap-8 mt-8">
         <UserTabs
