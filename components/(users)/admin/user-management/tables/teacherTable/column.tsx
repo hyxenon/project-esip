@@ -98,7 +98,11 @@ export const columns: ColumnDef<User>[] = [
       return (
         <div className="flex items-center gap-2">
           <Image
-            src={user.image ? user.image : "https://github.com/shadcn.png"}
+            src={
+              user.image
+                ? user.image
+                : `https://api.dicebear.com/6.x/initials/svg?seed=${user.name}`
+            }
             alt="logo"
             width={40}
             height={40}
