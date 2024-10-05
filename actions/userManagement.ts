@@ -318,3 +318,34 @@ export const deletePendingUser = async (userId: string) => {
     return { success: false, error: "Failed to delete user." };
   }
 };
+
+export const changeProfilePicture = async (
+  userId: string,
+  pictureUrl: string
+) => {
+  try {
+    const exisitingUser = await db.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!exisitingUser) {
+      throw new Error("User not found");
+    }
+
+    const lastUrl = exisitingUser.image;
+
+    const updatedUser = await db.user.update({
+      where: { id: userId },
+      data: {
+        image: pictureUrl,
+      },
+    });
+
+    revalidatePath("/profile");
+    return lastUrl;
+  } catch (e: any) {
+    return console.error("Error fetching user: ", e);
+  }
+};

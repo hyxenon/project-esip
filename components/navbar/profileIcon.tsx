@@ -22,7 +22,7 @@ const ProfileIcon = () => {
             src={
               session?.user?.image
                 ? session.user.image
-                : "https://github.com/shadcn.png"
+                : `https://api.dicebear.com/6.x/initials/svg?seed=${session?.user?.name}`
             }
             alt="@shadcn"
           />

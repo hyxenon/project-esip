@@ -53,7 +53,7 @@ const RecentUsersCard = async ({ session }: { session: Session }) => {
 
           {/* Students Tab Content */}
           <TabsContent value="students" className="h-full space-y-4">
-            {recentStudents.length !== 0 ? (
+            {recentStudents.length === 0 ? (
               <p className="text-gray-500 text-center mt-8">
                 No students found.
               </p>

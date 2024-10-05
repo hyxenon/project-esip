@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/(users)/navbar";
 
 import { auth } from "@/auth";
+import SideNav from "@/components/(users)/admin/sidenav";
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -20,10 +21,19 @@ export default async function ProfileLayout({
     return <div>no session found</div>;
   }
 
+  if (session.user.role !== "ADMIN") {
+    return (
+      <>
+        <Navbar role={session.user.role} />
+        <div className="pb-8">{children}</div>
+      </>
+    );
+  }
+
   return (
-    <>
-      <Navbar role={session.user.role} />
-      <div className="">{children}</div>
-    </>
+    <div className="flex h-full">
+      <SideNav role="ADMIN" />
+      <div className="flex-1 overflow-y-auto bg-white pb-8">{children}</div>
+    </div>
   );
 }

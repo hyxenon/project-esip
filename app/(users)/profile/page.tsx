@@ -25,6 +25,7 @@ const page = async () => {
               ? session.user.image
               : `https://api.dicebear.com/6.x/initials/svg?seed=${session.user.name}`
           }
+          session={session}
         />
         <Card className="rounded-none md:rounded-xl bg-white shadow-md px-0">
           <CardHeader>

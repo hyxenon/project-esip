@@ -16,12 +16,12 @@ import NavLink from "@/components/navbar/NavLink";
 
 import logo from "../../../assets/authForm/authLogo.svg";
 
-import React from "react";
 import Image from "next/image";
 import { MdDashboard } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { GiArchiveResearch } from "react-icons/gi";
 import { CiLogout } from "react-icons/ci";
+import { ImProfile } from "react-icons/im";
 
 interface MobileMenuProps {
   role?: string;
@@ -30,7 +30,7 @@ interface MobileMenuProps {
 const MobileMenu = ({ role }: MobileMenuProps) => {
   const { data: session } = useSession();
   return (
-    <SheetContent side={"left"}>
+    <SheetContent side={"left"} className="px-1">
       <SheetHeader className="h-full">
         <SheetTitle>
           <div className="flex items-center">
@@ -168,6 +168,15 @@ const MobileMenu = ({ role }: MobileMenuProps) => {
 
             {/* Footer */}
             <div className="mt-auto space-y-2">
+              <NavLink
+                href="/profile"
+                className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+                activeClassName="bg-gray-200"
+              >
+                <ImProfile className="text-[#606C38]" />
+                <p className="font-semibold text-[#283618]">Profile</p>
+              </NavLink>
+
               <div className="flex items-center gap-2 hover:bg-gray-200 cursor-pointer py-1 px-4 rounded-md transition-all">
                 <CiLogout className="text-red-500" />
                 <p
@@ -181,7 +190,11 @@ const MobileMenu = ({ role }: MobileMenuProps) => {
                 <Avatar className="px-0 w-8 h-8">
                   <AvatarImage
                     className=""
-                    src="https://github.com/shadcn.png"
+                    src={
+                      session?.user?.image
+                        ? session.user.image
+                        : `https://api.dicebear.com/6.x/initials/svg?seed=${session?.user?.name}`
+                    }
                     alt="@shadcn"
                   />
                   <AvatarFallback>CN</AvatarFallback>
