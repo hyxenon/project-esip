@@ -32,7 +32,7 @@ const SearchResultsComponent = ({
   };
 
   return (
-    <div className="px-4 md:container space-y-4 py-8">
+    <div className="px-4 md:container space-y-8 py-8 md:mt-8">
       {papers.length > 0 ? (
         papers.map((paper) => <PaperCard key={paper.id} paper={paper} />)
       ) : (

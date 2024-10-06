@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Users } from "lucide-react";
-import React from "react";
 import { PieChartCard } from "./PieChartCard";
 import ResearchCategory from "./ResearchCategory";
 
@@ -68,7 +67,7 @@ const ChartsContainer = async ({ dashboardData }: ChartsContainerProps) => {
           <CardTitle className="text-sm font-medium text-gray-600">
             Total Users
           </CardTitle>
-          <Users className="h-4 w-4 text-blue-500" />
+          <Users className="h-5 w-5 text-[#BC6C25]" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-gray-800">
@@ -92,7 +91,7 @@ const ChartsContainer = async ({ dashboardData }: ChartsContainerProps) => {
           <CardTitle className="text-sm font-medium text-gray-600">
             Total Papers
           </CardTitle>
-          <FileText className="h-4 w-4 text-green-500" />
+          <FileText className="h-5 w-5 text-[#BC6C25]" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-gray-800">

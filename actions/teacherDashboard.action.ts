@@ -85,7 +85,7 @@ export const getRecentUsers = async (schoolId: string) => {
     orderBy: {
       createdAt: "desc",
     },
-    take: 10,
+    take: 9,
   });
 
   return { recentTeachers, recentStudents };

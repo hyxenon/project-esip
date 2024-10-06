@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { User } from "./admin/user-management/tables/teacherTable/column";
+import { Badge } from "../ui/badge";
 
 interface ViewUserDetailslProps {
   isOpen: boolean;
@@ -67,19 +68,30 @@ interface ProfileFormProps {
 
 function ProfileForm({ user }: ProfileFormProps) {
   return (
-    <div className="px-2 h-[500px]">
-      <div className="flex items-center justify-center">
+    <div className="px-8 py-8 flex items-center mt-4 gap-12">
+      <div className="flex flex-col items-center">
         <Image
+          className="rounded-full"
           src={
             user.image
               ? user.image
               : `https://api.dicebear.com/6.x/initials/svg?seed=${user.name}`
           }
-          alt="User Profile Picture"
-          width={70}
-          height={70}
-          className="rounded-full"
+          alt="Profile Picture"
+          width={150}
+          height={150}
         />
+        <div className="mt-6 ml-2 text-sm flex gap-2">
+          <p>Role:</p>
+          <Badge className="px-6 bg-[#606C38] hover:bg-[#283618]">
+            {user.role}
+          </Badge>
+        </div>
+      </div>
+      <div className="flex flex-col space-y-1.5 flex-1">
+        <h1 className="font-semibold text-xl mb-4">{user.name}</h1>
+        <p className="text-sm">Email: {user.email}</p>
+        <p className="text-sm">School: {user.school?.schoolName}</p>
       </div>
     </div>
   );

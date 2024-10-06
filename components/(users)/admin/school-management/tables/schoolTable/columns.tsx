@@ -19,7 +19,6 @@ import StatusChange from "./statusChange";
 import { Badge } from "@/components/ui/badge";
 import SchoolDetails from "../../SchoolDetails";
 
-// This type is used to define the shape of our data.
 export type School = {
   email: string;
   schoolName: string;
@@ -35,7 +34,6 @@ export type School = {
   status: string;
 };
 
-// Props type for the SchoolActions component
 type SchoolActionsProps = {
   school: School;
 };

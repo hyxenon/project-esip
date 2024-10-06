@@ -182,11 +182,11 @@ function ProfileForm({ id }: ProfileFormProps) {
               src={
                 userData?.image
                   ? userData.image
-                  : "https://github.com/shadcn.png"
+                  : `https://api.dicebear.com/6.x/initials/svg?seed=${userData?.name}`
               }
               alt="profile pic"
-              width={70}
-              height={70}
+              width={100}
+              height={100}
               className="rounded-full"
             />
             {session?.user?.role === "ADMIN" && (

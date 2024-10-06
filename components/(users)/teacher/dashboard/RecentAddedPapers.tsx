@@ -59,7 +59,7 @@ const RecentAddedPapers = async ({
           <CardTitle className="text-xl font-semibold text-gray-700">
             Recently Added Papers
           </CardTitle>
-          <Bell className="h-5 w-5 text-blue-500" />
+          <Bell className="h-5 w-5 text-[#BC6C25]" />
         </div>
         <CardDescription>Papers added this school year.</CardDescription>
       </CardHeader>

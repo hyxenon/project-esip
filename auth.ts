@@ -80,7 +80,7 @@ export const {
         session.user.schoolId = token.schoolId;
       }
 
-      if (token.isPending && session.user) {
+      if (typeof token.isPending !== "undefined" && session.user) {
         session.user.isPending = token.isPending;
       }
 
@@ -96,6 +96,7 @@ export const {
       token.role = existingUser.role;
       token.schoolId = existingUser.schoolId;
       token.image = existingUser.image;
+      token.isPending = existingUser.isPending ?? undefined;
 
       return token;
     },

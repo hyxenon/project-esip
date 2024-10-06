@@ -18,7 +18,7 @@ const page = async () => {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="w-full md:container mt-8 space-y-4">
+      <div className="w-full md:container mt-8 space-y-12">
         <ProfilePictureInformation
           imgURL={
             session.user.image

@@ -340,6 +340,7 @@ function ProfileForm({ schoolId }: ProfileFormProps) {
                             <p className="text-sm">{progress}%</p>
                             <Button
                               className="mt-2"
+                              variant={"outline"}
                               type="button"
                               onClick={async () => {
                                 if (file) {

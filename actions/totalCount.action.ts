@@ -2,6 +2,25 @@
 
 import { db } from "@/lib/db";
 
+export const getTotalCountsSchoolDetails = async (schooldId: string) => {
+  const totalUsers = await db.user.count({
+    where: {
+      schoolId: schooldId,
+      isPending: false,
+    },
+  });
+
+  const totalPapers = await db.researchPaper.count({
+    where: {
+      user: {
+        schoolId: schooldId,
+      },
+    },
+  });
+
+  return { totalUsers, totalPapers };
+};
+
 export const getTotalCounts = async () => {
   try {
     const totalSchools = await db.school.count();

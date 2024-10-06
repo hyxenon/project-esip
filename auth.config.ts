@@ -29,7 +29,15 @@ export default {
 
           const passwordsMatch = await bcrypt.compare(password, user.password);
 
-          if (passwordsMatch) return user;
+          if (passwordsMatch) {
+            // Fix the type of `isPending` to ensure it is either `boolean` or `undefined`
+            const userWithCorrectType = {
+              ...user,
+              isPending: user.isPending === null ? undefined : user.isPending,
+            };
+
+            return userWithCorrectType;
+          }
         }
         return null;
       },
