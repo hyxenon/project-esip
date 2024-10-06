@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import NavLink from "@/components/navbar/NavLink";
 import { signOut, useSession } from "next-auth/react";
 import { CiLogout } from "react-icons/ci";
+import Link from "next/link";
 
 interface SideNavProps {
   role?: string;
@@ -83,28 +84,35 @@ export const UserInformation = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="flex items-center gap-3 p-2 rounded-md">
-      <Avatar className="w-10 h-10">
-        <AvatarImage
-          src={session?.user?.image || "https://github.com/shadcn.png"}
-          alt={session?.user?.name || "User Avatar"}
-        />
-        <AvatarFallback>{session?.user?.name?.charAt(0) || "U"}</AvatarFallback>
-      </Avatar>
-      <div className="flex flex-col">
-        <p className="text-sm font-semibold text-[#FEFAE0]">
-          {session?.user?.name}
-        </p>
-        <p className="text-xs font-light text-[#FEFAE0]">
-          {session?.user?.email}
-        </p>
-        <p className="text-xs font-light text-[#FEFAE0]">
-          {session?.user?.role
-            ?.toLowerCase()
-            .replace(/^\w/, (c) => c.toUpperCase())}
-        </p>
+    <Link href={"/profile"}>
+      <div className="flex items-center gap-3 p-2 rounded-md cursor-pointer">
+        <Avatar className="w-10 h-10">
+          <AvatarImage
+            src={
+              session?.user?.image ||
+              `https://api.dicebear.com/6.x/initials/svg?seed=${session?.user?.name}`
+            }
+            alt={session?.user?.name || "User Avatar"}
+          />
+          <AvatarFallback>
+            {session?.user?.name?.charAt(0) || "U"}
+          </AvatarFallback>
+        </Avatar>
+        <div className="flex flex-col">
+          <p className="text-sm font-semibold text-[#FEFAE0]">
+            {session?.user?.name}
+          </p>
+          <p className="text-xs font-light text-[#FEFAE0]">
+            {session?.user?.email}
+          </p>
+          <p className="text-xs font-light text-[#FEFAE0]">
+            {session?.user?.role
+              ?.toLowerCase()
+              .replace(/^\w/, (c) => c.toUpperCase())}
+          </p>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

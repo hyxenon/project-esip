@@ -25,15 +25,14 @@ import {
 import { ResearchPaperModel } from "@/models/models";
 import {
   BookmarkIcon,
-  BookOpenIcon,
   CalendarIcon,
   DownloadIcon,
   EyeIcon,
-  MapIcon,
   UsersIcon,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { LuBookOpen, LuBookOpenCheck } from "react-icons/lu";
 
 interface PaperCardProps {
   paper: ResearchPaperModel;
@@ -116,14 +115,40 @@ const PaperCard = ({ paper }: PaperCardProps) => {
   };
 
   return (
-    <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+    <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-t-[#606C38]">
       <CardHeader>
         <CardTitle className="text-xl font-bold text-[#283618] hover:underline cursor-pointer">
           <Link href={`/search/${paper.id}`}>{paper.title}</Link>
         </CardTitle>
-        <div className="flex items-center text-sm text-gray-600 mt-2">
-          {paper.authors && paper.authors.length > 0 && (
-            <div className="flex flex-wrap items-center text-sm text-gray-600 mt-2">
+        <div className="flex items-center text-sm text-gray-600 pt-3 -ml-1">
+          <Image
+            src={paper.user.school.image}
+            alt="school logo"
+            height={24}
+            width={24}
+            className="rounded-full mr-2"
+          />
+          {paper.user.school.schoolName}
+        </div>
+        <div className="flex items-center text-sm text-gray-600 capitalize">
+          {paper.researchType === "proposal" ? (
+            <LuBookOpen className="text-[#BC6C25] mr-2" />
+          ) : (
+            <LuBookOpenCheck className="text-[#283618] mr-2" />
+          )}
+          <p
+            className={`capitalize ${
+              paper.researchType === "proposal"
+                ? "text-[#BC6C25]"
+                : "text-[#283618]"
+            }`}
+          >
+            Research {paper.researchType}
+          </p>
+        </div>
+        <div className="flex items-center text-sm text-gray-600">
+          {paper.authors && paper.authors.length > 0 ? (
+            <div className="flex flex-wrap items-center text-sm text-gray-600">
               <UsersIcon className="w-4 h-4 mr-2" />
               {paper.authors.map((author, index) => (
                 <span
@@ -135,19 +160,16 @@ const PaperCard = ({ paper }: PaperCardProps) => {
                 </span>
               ))}
             </div>
+          ) : (
+            <div className="flex flex-wrap items-center">
+              <UsersIcon className="w-4 h-4 mr-2" />
+              <p>No authors.</p>
+            </div>
           )}
         </div>
         <div className="flex items-center text-sm text-gray-600">
           <CalendarIcon className="w-4 h-4 mr-2" />
           {paper.date.toLocaleDateString("en-US", options)}
-        </div>
-        <div className="flex items-center text-sm text-gray-600 capitalize">
-          <BookOpenIcon className="w-4 h-4 mr-2" />
-          Research {paper.researchType}
-        </div>
-        <div className="flex items-center text-sm text-gray-600">
-          <MapIcon className="w-4 h-4 mr-2" />
-          {paper.user.school.schoolName}
         </div>
       </CardHeader>
       <CardContent>

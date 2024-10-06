@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useMediaQuery } from "react-responsive"; // Import useMediaQuery
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -384,7 +384,7 @@ export default function CommentSection({
                     placeholder="Write a reply..."
                     className="flex-1 bg-gray-100"
                   />
-                  <Button type="submit" size="sm" className="p-2">
+                  <Button type="submit" size="sm" className="p-2 bg-[#BC6C25]">
                     <Send className="h-4 w-4" />
                     <span className="sr-only">Send reply</span>
                   </Button>
@@ -465,7 +465,12 @@ export default function CommentSection({
             className="flex-1"
             disabled={loading}
           />
-          <Button type="submit" size="sm" className="p-2" disabled={loading}>
+          <Button
+            type="submit"
+            size="sm"
+            className="p-2 bg-[#BC6C25]"
+            disabled={loading}
+          >
             <Send className="h-4 w-4" />
             <span className="sr-only">Post comment</span>
           </Button>

@@ -1,4 +1,3 @@
-import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   DropdownMenu,
@@ -10,6 +9,7 @@ import {
 } from "../ui/dropdown-menu";
 import { CiLogout } from "react-icons/ci";
 import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 
 const ProfileIcon = () => {
   const { data: session } = useSession();
@@ -22,7 +22,7 @@ const ProfileIcon = () => {
             src={
               session?.user?.image
                 ? session.user.image
-                : "https://github.com/shadcn.png"
+                : `https://api.dicebear.com/6.x/initials/svg?seed=${session?.user?.name}`
             }
             alt="@shadcn"
           />
@@ -36,7 +36,12 @@ const ProfileIcon = () => {
           <p>{session?.user?.email}</p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <Link href={"/profile"}>
+          <DropdownMenuItem className="cursor-pointer">
+            Profile
+          </DropdownMenuItem>
+        </Link>
+
         <DropdownMenuItem>
           <div
             onClick={() => signOut()}

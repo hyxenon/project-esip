@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 
-import React, { useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import {
   Form,
   FormControl,
@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { NewPasswordSchema, ResetSchema } from "@/models/models";
+import { NewPasswordSchema } from "@/models/models";
 import { FormSuccess } from "../form-success";
 
 import { FormError } from "../form-error";
@@ -49,7 +49,7 @@ const NewPasswordForm = () => {
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-32">
         <div className="space-y-4">
           <FormField
             control={form.control}
@@ -67,7 +67,11 @@ const NewPasswordForm = () => {
         </div>
         <FormError message={error} />
         <FormSuccess message={success} />
-        <Button disabled={isPending} className="w-full" type="submit">
+        <Button
+          disabled={isPending}
+          className="w-full bg-[#BC6C25] hover:bg-[#DDA15E] text-[#FEFAE0] transition-all"
+          type="submit"
+        >
           Reset password
         </Button>
       </form>

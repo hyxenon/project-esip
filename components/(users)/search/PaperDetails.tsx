@@ -1,11 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   CalendarIcon,
-  BookOpenIcon,
   UsersIcon,
   BookmarkIcon,
   DownloadIcon,
@@ -22,12 +21,14 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-
+import { FaLock } from "react-icons/fa";
 import CommentSection from "./CommentSection";
 import { Session } from "next-auth";
 import { getDownloadUrl } from "@edgestore/react/utils";
 import { ClipLoader } from "react-spinners";
 import { handlePurchase } from "@/actions/paymongo.action";
+import { LuBookOpen, LuBookOpenCheck } from "react-icons/lu";
+import Image from "next/image";
 
 interface PaperDetailsProps {
   paper1: any;
@@ -171,13 +172,25 @@ export default function PaperDetails({
   };
 
   return (
-    <div className="container mx-auto p-4 lg:mt-12  min-h-screen">
+    <div className="px-1 md:container py-2 lg:mt-12  min-h-screen">
       <Card className="mb-8 shadow-lg border-t-4 border-t-[#606C38]">
         <CardHeader className="space-y-6">
           <div className="space-y-2">
             <CardTitle className="text-4xl font-bold text-gray-800 leading-tight">
               {paper1.title}
             </CardTitle>
+            <div className="flex flex-wrap gap-2 items-center">
+              <Image
+                src={paper1.user.school.image}
+                alt="school logo"
+                height={30}
+                width={30}
+                className="rounded-full -ml-1.5"
+              />
+              <p className="text-sm text-gray-600">
+                {paper1.user.school.schoolName}
+              </p>
+            </div>
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
               {paper1.authors && paper1.authors.length > 0 && (
                 <div className="flex items-center">
@@ -196,8 +209,20 @@ export default function PaperDetails({
                 {new Date(paper1.date).toLocaleDateString("en-US", options)}
               </div>
               <div className="flex items-center capitalize">
-                <BookOpenIcon className="w-4 h-4 mr-2 text-primary" />
-                Research {paper1.researchType}
+                {paper1.researchType === "proposal" ? (
+                  <LuBookOpen className="text-[#BC6C25] mr-2" />
+                ) : (
+                  <LuBookOpenCheck className="text-[#283618] mr-2" />
+                )}
+                <p
+                  className={`capitalize ${
+                    paper1.researchType === "proposal"
+                      ? "text-[#BC6C25]"
+                      : "text-[#283618]"
+                  }`}
+                >
+                  Research {paper1.researchType}
+                </p>
               </div>
             </div>
           </div>
@@ -206,14 +231,14 @@ export default function PaperDetails({
               <Badge
                 key={index}
                 variant="secondary"
-                className="bg-primary/10 text-primary hover:bg-primary/20 transition-colors capitalize"
+                className="bg-[#606C38] text-white hover:bg-[#BC6C25] transition-colors capitalize"
               >
                 {keyword}
               </Badge>
             ))}
           </div>
         </CardHeader>
-        <CardContent className="space-y-8">
+        <CardContent className="space-y-8 px-0 md:px-4">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gray-50 p-4 rounded-lg">
             <div className="flex flex-wrap items-center gap-2">
               <Button
@@ -283,8 +308,8 @@ export default function PaperDetails({
               </Dialog>
             </div>
             <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm">
-              <div className="flex items-center text-gray-600">
-                <EyeIcon className="w-4 h-4 mr-2 text-primary" />
+              <div className="flex items-center text-[#606C38]">
+                <EyeIcon className="w-4 h-4 mr-2 " />
                 {paper1.uniqueViews} views
               </div>
 
@@ -302,15 +327,18 @@ export default function PaperDetails({
                   <ClipLoader size={20} color="#FEFAE0" />
                 </Badge>
               ) : paper1.price < 100 ? (
-                <Badge className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all">
-                  Paper is private, not for sale.
+                <Badge className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all py-2 px-4">
+                  Private Paper
                 </Badge>
               ) : (
                 <Button
                   onClick={paymentOnClick}
                   className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all"
                 >
-                  PDF file available for {paper1.price} pesos
+                  <span>
+                    <FaLock className="mr-2" />
+                  </span>
+                  Purchase File
                 </Button>
               )}
             </div>
@@ -318,7 +346,7 @@ export default function PaperDetails({
 
           <div className="space-y-8">
             {paper1.abstract && (
-              <section className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <section className="bg-white px-2 md:p-6 md:rounded-lg md:shadow-sm md:border md:border-gray-100">
                 <h3 className="text-2xl font-semibold mb-4 text-gray-800">
                   Abstract
                 </h3>
@@ -335,7 +363,7 @@ export default function PaperDetails({
             )}
 
             {paper1.introduction && (
-              <section className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <section className="bg-white px-2 md:p-6 md:rounded-lg md:shadow-sm md:border md:border-gray-100">
                 <h3 className="text-2xl font-semibold mb-4 text-gray-800">
                   Introduction
                 </h3>
@@ -352,7 +380,7 @@ export default function PaperDetails({
             )}
 
             {paper1.references && (
-              <section className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <section className="bg-white px-2 md:p-6 md:rounded-lg md:shadow-sm md:border md:border-gray-100">
                 <h3 className="text-2xl font-semibold mb-4 text-gray-800">
                   References
                 </h3>

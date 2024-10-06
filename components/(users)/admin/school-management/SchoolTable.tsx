@@ -1,5 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import React from "react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 interface SchoolTableProps {
   children: any;
@@ -10,7 +9,9 @@ const SchoolTable = ({ children, cardTitle }: SchoolTableProps) => {
   return (
     <Card className="w-full bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 mt-8">
       <CardHeader className="font-bold text-xl">{cardTitle}</CardHeader>
-      <CardContent className="flex flex-col">{children}</CardContent>
+      <CardContent className="flex flex-col px-2 md:px-6">
+        {children}
+      </CardContent>
     </Card>
   );
 };

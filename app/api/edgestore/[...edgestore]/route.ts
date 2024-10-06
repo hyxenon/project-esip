@@ -37,7 +37,10 @@ const es = initEdgeStore.context<Context>().create();
  * This is the main router for the Edge Store buckets.
  */
 const edgeStoreRouter = es.router({
-  publicFiles: es.fileBucket(),
+  publicFiles: es.fileBucket().beforeDelete(({ ctx, fileInfo }) => {
+    console.log("beforeDelete", ctx, fileInfo);
+    return true; // allow delete
+  }),
   myProtectedFiles: es
     .fileBucket()
     .path(({ ctx }) => [{ owner: ctx.schoolId }])

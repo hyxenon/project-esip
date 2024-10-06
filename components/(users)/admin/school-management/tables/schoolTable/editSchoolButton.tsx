@@ -340,6 +340,7 @@ function ProfileForm({ schoolId }: ProfileFormProps) {
                             <p className="text-sm">{progress}%</p>
                             <Button
                               className="mt-2"
+                              variant={"outline"}
                               type="button"
                               onClick={async () => {
                                 if (file) {
@@ -398,7 +399,7 @@ function ProfileForm({ schoolId }: ProfileFormProps) {
 
           <div className="flex items-center justify-center w-full">
             <Button
-              className="bg-[#606C38] hover:bg-[#283618] w-full"
+              className="bg-[#BC6C25] hover:bg-[#DDA15E] w-full"
               type="submit"
             >
               Edit School

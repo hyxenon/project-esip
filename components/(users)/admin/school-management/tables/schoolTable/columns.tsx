@@ -17,8 +17,8 @@ import { EditSchoolButton } from "./editSchoolButton";
 import DeleteSchoolButton from "./deleteSchoolButton";
 import StatusChange from "./statusChange";
 import { Badge } from "@/components/ui/badge";
+import SchoolDetails from "../../SchoolDetails";
 
-// This type is used to define the shape of our data.
 export type School = {
   email: string;
   schoolName: string;
@@ -34,7 +34,6 @@ export type School = {
   status: string;
 };
 
-// Props type for the SchoolActions component
 type SchoolActionsProps = {
   school: School;
 };
@@ -47,6 +46,7 @@ const options: Intl.DateTimeFormatOptions = {
 
 const SchoolActions: React.FC<SchoolActionsProps> = ({ school }) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isViewOpen, setIsViewOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isStatusChangeOpen, setStatusChangeOpen] = useState(false);
 
@@ -70,6 +70,11 @@ const SchoolActions: React.FC<SchoolActionsProps> = ({ school }) => {
         schoolName={school.schoolName}
         status={school.status}
       />
+      <SchoolDetails
+        isOpen={isViewOpen}
+        setIsOpen={setIsViewOpen}
+        school={school}
+      />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -79,7 +84,13 @@ const SchoolActions: React.FC<SchoolActionsProps> = ({ school }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem>View School Details</DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              setIsViewOpen(true);
+            }}
+          >
+            View Details
+          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
               setIsEditOpen(true);

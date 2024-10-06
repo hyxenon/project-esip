@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 
-import React, { useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import {
   Form,
   FormControl,
@@ -46,8 +46,8 @@ const ResetForm = () => {
   };
   return (
     <AuthFormWrapper>
-      <div className="flex flex-col border border-gray-200 w-[400px] px-16 py-8 shadow-2xl">
-        <h1 className="font-bold mb-8">Forgot your password?</h1>
+      <div className="flex flex-col border border-gray-200 w-[400px] px-16 py-8 shadow-2xl mt-24 bg-white">
+        <h1 className="font-bold mb-8 text-[#606C38]">Forgot your password?</h1>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="space-y-4">
@@ -67,7 +67,11 @@ const ResetForm = () => {
             </div>
             <FormError message={error} />
             <FormSuccess message={success} />
-            <Button disabled={isPending} className="w-full" type="submit">
+            <Button
+              disabled={isPending}
+              className="w-full bg-[#BC6C25] hover:bg-[#DDA15E] transition-all text-[#FEFAE0]"
+              type="submit"
+            >
               Send reset email
             </Button>
           </form>

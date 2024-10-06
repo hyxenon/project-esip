@@ -1,4 +1,3 @@
-import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 interface RecentUserCardProps {
@@ -22,7 +21,14 @@ const RecentUserCard = ({
   return (
     <div className="flex items-center gap-4">
       <Avatar className="h-9 w-9 sm:flex">
-        <AvatarImage src={image} alt="Avatar" />
+        <AvatarImage
+          src={
+            image
+              ? image
+              : `https://api.dicebear.com/6.x/initials/svg?seed=${name}`
+          }
+          alt="Avatar"
+        />
         <AvatarFallback>{name[0]}</AvatarFallback>
       </Avatar>
       <div className="grid gap-1">

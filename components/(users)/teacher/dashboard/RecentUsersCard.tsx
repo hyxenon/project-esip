@@ -9,8 +9,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RecentUserCard from "../../RecentUserCard";
 import { Session } from "next-auth";
+import { Users } from "lucide-react";
 
-const RecentUsersCard = async ({ session }: { session: Session }) => {
+const RecentUsersCard = async ({ session }: { session?: Session }) => {
   const { recentTeachers, recentStudents } = await getRecentUsers(
     session?.user?.schoolId!
   );
@@ -18,9 +19,11 @@ const RecentUsersCard = async ({ session }: { session: Session }) => {
   return (
     <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold text-gray-700">
+        <CardTitle className="text-xl flex justify-between items-center font-semibold text-gray-700">
           Recent Users
+          <Users className="h-5 w-5 text-[#BC6C25]" />
         </CardTitle>
+
         <CardDescription>Users added in the last 3 months.</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-8">
@@ -53,7 +56,7 @@ const RecentUsersCard = async ({ session }: { session: Session }) => {
 
           {/* Students Tab Content */}
           <TabsContent value="students" className="h-full space-y-4">
-            {recentStudents.length !== 0 ? (
+            {recentStudents.length === 0 ? (
               <p className="text-gray-500 text-center mt-8">
                 No students found.
               </p>

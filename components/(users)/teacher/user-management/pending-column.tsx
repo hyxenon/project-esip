@@ -86,7 +86,7 @@ export const pendingColumn: ColumnDef<PendingUserModel>[] = [
       return (
         <div className="flex items-center gap-2">
           <Image
-            src={"https://github.com/shadcn.png"}
+            src={`https://api.dicebear.com/6.x/initials/svg?seed=${user.name}`}
             alt="logo"
             width={40}
             height={40}
@@ -153,7 +153,10 @@ export const pendingColumn: ColumnDef<PendingUserModel>[] = [
     cell: ({ row }) => {
       const user = row.original;
       return (
-        <Badge variant={"outline"} className="border-[#606C38]">
+        <Badge
+          variant={"outline"}
+          className="bg-[#606C38] text-white tracking-wider"
+        >
           {user.role}
         </Badge>
       );

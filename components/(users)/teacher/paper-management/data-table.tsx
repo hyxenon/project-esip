@@ -49,11 +49,13 @@ import { useRouter } from "next/navigation";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  type?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  type,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -80,7 +82,20 @@ export function DataTable<TData, TValue>({
 
   const handleCategoryChange = (value: string) => {
     setCategory(value);
-    router.push(`/teacher/paper-management?category=${value}`);
+
+    const currentParams = new URLSearchParams(window.location.search);
+
+    currentParams.set("category", value);
+
+    const updatedQueryString = currentParams.toString();
+
+    const pathname =
+      type === "admin"
+        ? "/admin/research-management"
+        : "/teacher/paper-management";
+
+    // Push the updated URL with new query parameters
+    router.push(`${pathname}?${updatedQueryString}`);
   };
 
   return (

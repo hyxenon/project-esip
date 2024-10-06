@@ -11,6 +11,7 @@ export const newPassword = async (
   token: string | null
 ) => {
   if (!token) {
+    console.log(token);
     return { error: "Missing token!" };
   }
 
@@ -54,4 +55,38 @@ export const newPassword = async (
   });
 
   return { success: "Password updated!" };
+};
+
+export const checkCurrentPassword = async (
+  userId: string,
+  currentPassword: string,
+  newPassword: string
+) => {
+  try {
+    const user = await db.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (user) {
+    } else {
+      throw new Error("User does not exist!");
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user?.password!);
+
+    if (isMatch) {
+      await db.user.update({
+        where: { id: userId },
+        data: {
+          password: await bcrypt.hash(newPassword, 10),
+        },
+      });
+
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error: any) {
+    return console.error(error);
+  }
 };

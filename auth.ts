@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession } from "next-auth";
+import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import authConfig from "./auth.config";
 
@@ -10,6 +10,7 @@ declare module "@auth/core/types" {
     role: "ADMIN" | "TEACHER" | "STUDENT";
     schoolId: string | null;
     image?: string | null;
+    isPending?: boolean;
   }
 }
 
@@ -18,6 +19,7 @@ declare module "@auth/core/jwt" {
     role: "ADMIN" | "TEACHER" | "STUDENT";
     schoolId: string | null;
     image?: string | null;
+    isPending?: boolean;
   }
 }
 
@@ -54,6 +56,8 @@ export const {
 
         // TODO: Add 2FA check
 
+        if (user.isPending === true) return false;
+
         return true;
       }
 
@@ -76,6 +80,10 @@ export const {
         session.user.schoolId = token.schoolId;
       }
 
+      if (typeof token.isPending !== "undefined" && session.user) {
+        session.user.isPending = token.isPending;
+      }
+
       return session;
     },
     async jwt({ token }) {
@@ -88,6 +96,7 @@ export const {
       token.role = existingUser.role;
       token.schoolId = existingUser.schoolId;
       token.image = existingUser.image;
+      token.isPending = existingUser.isPending ?? undefined;
 
       return token;
     },

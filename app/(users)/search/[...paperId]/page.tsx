@@ -3,7 +3,6 @@ import { getPaperDetails } from "@/actions/search";
 import { auth } from "@/auth";
 import PaperDetails from "@/components/(users)/search/PaperDetails";
 import PaperNotFound from "@/components/PaperNotFound";
-import React from "react";
 
 interface PaperIdProps {
   params: {
