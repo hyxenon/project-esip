@@ -27,6 +27,16 @@ export const getRecentAddedPapers = async (
     },
     include: {
       authors: true,
+      user: {
+        include: {
+          school: {
+            select: {
+              image: true,
+              schoolName: true,
+            },
+          },
+        },
+      },
     },
     skip,
     take: perPage,
@@ -81,7 +91,7 @@ export const getRecentUsers = async (schoolId: string) => {
   return { recentTeachers, recentStudents };
 };
 
-export const getPopularPapers = async (schoolId: string) => {
+export const getPopularPapers = async (schoolId?: string) => {
   const popularPapers = await db.researchPaper.findMany({
     where: {
       user: {
@@ -106,7 +116,7 @@ export const getPopularPapers = async (schoolId: string) => {
   return filteredPapers;
 };
 
-export const getPopularKeywords = async (schoolId: string) => {
+export const getPopularKeywords = async (schoolId?: string) => {
   const researchPapers = await db.researchPaper.findMany({
     where: {
       user: {

@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RecentUserCard from "../../RecentUserCard";
 import { Session } from "next-auth";
 
-const RecentUsersCard = async ({ session }: { session: Session }) => {
+const RecentUsersCard = async ({ session }: { session?: Session }) => {
   const { recentTeachers, recentStudents } = await getRecentUsers(
     session?.user?.schoolId!
   );

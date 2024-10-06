@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Bell, FileText, UsersIcon } from "lucide-react";
-import React from "react";
 import {
   Pagination,
   PaginationContent,
@@ -17,6 +16,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Session } from "next-auth";
+import Image from "next/image";
 
 const options: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -27,9 +27,11 @@ const options: Intl.DateTimeFormatOptions = {
 const RecentAddedPapers = async ({
   page,
   session,
+  role,
 }: {
   page?: string;
-  session: Session;
+  session?: Session;
+  role?: string;
 }) => {
   const currentPage = page ? parseInt(page) : 1;
   const pageSize = 5;
@@ -78,7 +80,7 @@ const RecentAddedPapers = async ({
                     {paper.researchCategory}
                   </p>
                   <span className="flex flex-wrap text-sm text-gray-600 capitalize items-center">
-                    <UsersIcon className="w-4 h-4 mr-2" />
+                    <UsersIcon className="w-4 h-4 mr-1" />
                     {paper.authors && paper.authors?.length > 0
                       ? paper.authors.map((author, index) => (
                           <span
@@ -92,11 +94,25 @@ const RecentAddedPapers = async ({
                       : "No Author"}
                   </span>
                   <div className="flex gap-0.5 mt-1 items-center">
-                    <FileText className="h-4 w-4 text-[#DDA15E]" />
+                    <FileText className="h-4 w-4 mr-1 text-[#DDA15E]" />
                     <p className="text-xs text-gray-500 capitalize">
                       Research {paper.researchType}
                     </p>
                   </div>
+                  {role === "admin" && (
+                    <div className="flex gap-0.5 mt-1 items-center">
+                      <Image
+                        src={paper.user.school?.image!}
+                        width={16}
+                        height={16}
+                        alt="school logo"
+                        className="mr-1"
+                      />
+                      <p className="text-xs text-gray-500 capitalize">
+                        {paper.user.school?.schoolName}
+                      </p>
+                    </div>
+                  )}
 
                   <p className="text-xs text-gray-500 mt-1">
                     Submitted on:{" "}

@@ -37,11 +37,15 @@ export function PopularCharts({
   dataKeyY,
   barColor = "var(--color-views)", // Default color for bars
 }: ReusableChartProps) {
+  const hasNoViews = data.every((item) => item[dataKeyX] === 0); // Check if all views are 0
+
   return (
     <ChartContainer config={chartConfig}>
-      {data.length === 0 ? ( // Check if data is empty
+      {data.length === 0 || hasNoViews ? ( // Check if data is empty or has 0 views
         <div className="flex justify-center items-center h-48">
-          <p className="text-gray-500">No data available</p>
+          <p className="text-gray-500">
+            {hasNoViews ? "No views available." : "No data available"}
+          </p>
         </div>
       ) : (
         <ResponsiveContainer width="100%" height={400}>
