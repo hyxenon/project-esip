@@ -5,7 +5,6 @@ import { getUserByEmail } from "@/data/user";
 import { sendVerificationEmail } from "@/lib/mail";
 import { LoginSchema } from "@/models/models";
 import {
-  DEFAULT_LOGIN_REDIRECT,
   DEFAULT_LOGIN_REDIRECT_ADMIN,
   DEFAULT_LOGIN_REDIRECT_STUDENT,
   DEFAULT_LOGIN_REDIRECT_TEACHER,
@@ -65,7 +64,9 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
         case "CredentialsSignin":
           return { error: "Invalid Credentials" };
         default:
-          return { error: "Something went wrong" };
+          return {
+            error: "Account pending approval. Please contact your school.",
+          };
       }
     }
     throw error;

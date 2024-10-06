@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession } from "next-auth";
+import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import authConfig from "./auth.config";
 
@@ -10,6 +10,7 @@ declare module "@auth/core/types" {
     role: "ADMIN" | "TEACHER" | "STUDENT";
     schoolId: string | null;
     image?: string | null;
+    isPending?: boolean;
   }
 }
 
@@ -18,6 +19,7 @@ declare module "@auth/core/jwt" {
     role: "ADMIN" | "TEACHER" | "STUDENT";
     schoolId: string | null;
     image?: string | null;
+    isPending?: boolean;
   }
 }
 
@@ -54,6 +56,8 @@ export const {
 
         // TODO: Add 2FA check
 
+        if (user.isPending === true) return false;
+
         return true;
       }
 
@@ -74,6 +78,10 @@ export const {
 
       if (token.schoolId && session.user) {
         session.user.schoolId = token.schoolId;
+      }
+
+      if (token.isPending && session.user) {
+        session.user.isPending = token.isPending;
       }
 
       return session;
