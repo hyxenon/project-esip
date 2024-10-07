@@ -127,13 +127,32 @@ function ProfileForm({ school, totalUsers, totalPapers }: ProfileFormProps) {
         </div>
       </div>
       <div className="flex flex-col space-y-1.5 flex-1">
-        <h1 className="font-semibold text-xl mb-4">{school.schoolName}</h1>
-        <p className="text-sm">Email: {school.email}</p>
-        <p className="text-sm">Province: {school.province}</p>
-        <p className="text-sm">City: {school.city}</p>
-        <p className="text-sm">Street Address: {school.streetAddress}</p>
-        <p className="text-sm">Zip Postal Code: {school.postalCode}</p>
-        <p className="text-sm">Contact No.: {school.contactNumber}</p>
+        <h1 className="font-bold text-xl mb-4">{school.schoolName}</h1>
+        <p className="text-sm">
+          <span className="font-semibold">Email:</span> {school.email}
+        </p>
+        <p className="text-sm">
+          <span className="font-semibold">Province:</span> {school.province}
+        </p>
+        <p className="text-sm">
+          <span className="font-semibold">City:</span> {school.city}
+        </p>
+        <p className="text-sm">
+          <span className="font-semibold">Street Address:</span>{" "}
+          {school.streetAddress}
+        </p>
+        <p className="text-sm">
+          <span className="font-semibold">Zip Postal Code:</span>{" "}
+          {school.postalCode}
+        </p>
+        <p className="text-sm">
+          <span className="font-semibold">Contact Number:</span>{" "}
+          {school.contactNumber}
+        </p>
+        <p className="text-sm">
+          <span className="font-semibold">Created at:</span>{" "}
+          {school.createdAt.toDateString()}
+        </p>
       </div>
     </div>
   );

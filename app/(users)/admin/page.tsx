@@ -6,7 +6,6 @@ import { getTotalCounts } from "@/actions/totalCount.action";
 import MobileMenu from "@/components/(users)/admin/mobileMenu";
 import { SkeletonCard } from "@/components/(users)/SkeletonCard";
 import { PopularCharts } from "@/components/(users)/teacher/dashboard/PopularCharts";
-import TopPopularBarChart from "@/components/(users)/teacher/dashboard/PopularPapers";
 import TotalCards from "@/components/(users)/TotalCards";
 
 import { Button } from "@/components/ui/button";
@@ -16,6 +15,14 @@ import { FaChalkboardTeacher } from "react-icons/fa";
 import { FaAlignLeft } from "react-icons/fa6";
 import { PiStudentFill } from "react-icons/pi";
 import { RiSchoolLine } from "react-icons/ri";
+
+const TopPopularBarChart = dynamic(
+  () => import("@/components/(users)/teacher/dashboard/PopularPapers"),
+  {
+    loading: () => <SkeletonCard />,
+    ssr: false,
+  }
+);
 
 const RecentAddedPapers = dynamic(
   () => import("@/components/(users)/teacher/dashboard/RecentAddedPapers"),

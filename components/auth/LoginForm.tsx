@@ -61,7 +61,7 @@ const LoginForm = () => {
   return (
     <AuthFormWrapper>
       {/* Login Form */}
-      <div className="min-w-[480px] xl:w-[800px] h-[450px] flex flex-col lg:flex-row gap-0.5 bg-white mt-8 z-50">
+      <div className="xl:w-[800px] h-[450px] flex flex-col lg:flex-row gap-0.5 bg-white mt-8 z-50">
         <div className="bg-[#283618] hidden lg:flex items-center justify-center px-12 border border-gray-300 shadow-2xl">
           <Image draggable="false" src={searchBg} alt="" />
         </div>

@@ -68,8 +68,8 @@ interface ProfileFormProps {
 
 function ProfileForm({ user }: ProfileFormProps) {
   return (
-    <div className="px-8 py-8 flex items-center mt-4 gap-12">
-      <div className="flex flex-col items-center">
+    <div className="px-4 py-8 flex flex-col items-center gap-4 sm:px-8 sm:flex-row sm:items-start sm:gap-12 mt-4">
+      <div className="flex flex-col items-center sm:items-start">
         <Image
           className="rounded-full"
           src={
@@ -78,20 +78,26 @@ function ProfileForm({ user }: ProfileFormProps) {
               : `https://api.dicebear.com/6.x/initials/svg?seed=${user.name}`
           }
           alt="Profile Picture"
-          width={150}
-          height={150}
+          width={100} // Adjusted for mobile view
+          height={100} // Adjusted for mobile view
         />
-        <div className="mt-6 ml-2 text-sm flex gap-2">
+        <div className="mt-4 text-sm flex gap-2">
           <p>Role:</p>
-          <Badge className="px-6 bg-[#606C38] hover:bg-[#283618]">
+          <Badge className="px-4 py-1 bg-[#606C38] hover:bg-[#283618]">
             {user.role}
           </Badge>
         </div>
       </div>
-      <div className="flex flex-col space-y-1.5 flex-1">
-        <h1 className="font-semibold text-xl mb-4">{user.name}</h1>
-        <p className="text-sm">Email: {user.email}</p>
-        <p className="text-sm">School: {user.school?.schoolName}</p>
+      <div className="flex flex-col items-center text-center sm:items-start sm:text-left flex-1">
+        <h1 className="font-bold text-lg sm:text-xl mb-2">{user.name}</h1>
+        <p className="text-sm">
+          <span className="font-semibold">Email: </span>
+          {user.email}
+        </p>
+        <p className="text-sm">
+          <span className="font-semibold">School: </span>
+          {user.school?.schoolName}
+        </p>
       </div>
     </div>
   );
