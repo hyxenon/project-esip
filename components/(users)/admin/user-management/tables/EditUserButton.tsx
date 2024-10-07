@@ -238,7 +238,7 @@ function ProfileForm({ id }: ProfileFormProps) {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-x-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
             <FormField
               control={form.control}
               name="role"
@@ -273,7 +273,7 @@ function ProfileForm({ id }: ProfileFormProps) {
               control={form.control}
               name="schoolId"
               render={({ field }) => (
-                <FormItem className="flex flex-col">
+                <FormItem className="flex flex-col mt-4 md:mt-0">
                   <FormLabel>School</FormLabel>
                   <Popover modal={true}>
                     <PopoverTrigger asChild>
