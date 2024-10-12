@@ -1,27 +1,144 @@
-import Image from "next/image";
-import leftBg from "../assets/welcomePage/leftBg.svg";
-import rightBg from "../assets/welcomePage/rightBg.svg";
-import bigLogo from "../assets/welcomePage/bigLogo.svg";
-import { Gothic_A1 } from "next/font/google";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
+import { Poppins } from "next/font/google";
+import Image from "next/image";
 
-const copperPlate = Gothic_A1({
-  weight: "900",
+const poppins = Poppins({
   subsets: ["latin"],
-});
-
-const copperPlateRegular = Gothic_A1({
-  weight: "500",
-  subsets: ["latin"],
+  weight: "400",
 });
 
 const WelcomePage = () => {
   return (
-    <div className="h-screen flex relative">
-      <Button className="absolute z-50 left-0 right-0 bottom-20 m-auto w-[150px] bg-[#283618] hover:bg-[#1f2a13]">
-        <Link href={"/login"}>LOGIN HERE</Link>
-      </Button>
+    <div className="min-h-screen flex flex-col mx-auto max-w-[1920px]">
+      <div className="flex flex-col items-center mt-4 -z-10">
+        <h1
+          className={`text-3xl sm:text-4xl md:text-5xl lg:text-7xl  2xl:text-9xl tracking-widest ${poppins} text-[#283618] opacity-5 font-bold`}
+        >
+          FOR EDUCATION
+        </h1>
+        <h2
+          className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl  2xl:text-8xl tracking-widest ${poppins} text-[#283618] opacity-5 font-bold`}
+        >
+          WE STRIVE
+        </h2>
+      </div>
+      <div className="hidden lg:flex mt-4 2xl:-mt-24">
+        <Image
+          src={"/landingImg1.svg"}
+          alt="bg image"
+          width={100}
+          height={100}
+          className="lg:w-[250px] 2xl:w-[450px] 2xl:-ml-6"
+        />
+        <div className="flex lg:flex-col 2xl:flex-col justify-between">
+          <div className="bg-dot lg:px-4 lg:py-8 2xl:px-12 2xl:py-8">
+            <h1 className="text-2xl lg:text-5xl 2xl:text-7xl tracking-[.3em] opacity-80 text-[#283618] font-bold">
+              WELCOME to
+            </h1>
+            <h2 className="text-xl lg:text-4xl 2xl:text-5xl font-bold mt-4 tracking-[.2em] text-[#BC6C25]">
+              PROJECT E-SIP
+            </h2>
+          </div>
+          <div className="hidden lg:flex items-center gap-x-4">
+            <div className="bg-[#606C38] opacity-90 lg:px-4 lg:py-2 2xl:px-8 2xl:py-4 rounded-full max-w-[500px]">
+              <p className="text-gray-100 font-semibold">
+                Explore a space where innovative ideas meet seamless
+              </p>
+              <p className="text-gray-100 font-semibold">
+                collaboration of voice and knowledge
+              </p>
+            </div>
+            <div className="w-[70px] h-[70px] bg-[#606C38] rounded-full mt-24"></div>
+            <div className="w-[30px] h-[30px] bg-[#283618] rounded-full mt-36"></div>
+          </div>
+        </div>
+      </div>
+      <div className="hidden lg:flex mt-8 lg:justify-end 2xl:justify-end 2xl:-mt-[23rem]">
+        <div className="flex flex-col gap-y-6 w-[300px] text-xl">
+          <h1 className="text-gray-500 font-semibold">
+            Elevating Student Interaction and Participation
+          </h1>
+          <h1 className="text-gray-500 font-semibold">
+            Through innovative tools and an inclusive environment;
+          </h1>
+          <h1 className="text-gray-500 font-semibold">
+            E-SIP fosters active student participation, creative expression, and
+            meaningful connections.
+          </h1>
+          <h1 className="text-gray-500 text-center font-semibold">
+            Come and Join Us!
+          </h1>
+          <Separator className="bg-gray-200" />
+          <Button className="bg-[#BC6C25] lg:text-xl lg:py-4  2xl:text-2xl font-bold 2xl:py-6 rounded-xl">
+            Log - In
+          </Button>
+        </div>
+        <Image
+          src={"/landingImg2.svg"}
+          alt="bg image"
+          width={100}
+          height={100}
+          className=" lg:w-[250px] 2xl:w-[490px]"
+        />
+      </div>
+      {/* Mobile View Only */}
+      <div className="flex items-center lg:hidden mt-4">
+        <Image
+          src={"/landingImg1.svg"}
+          alt="bg image"
+          width={100}
+          height={100}
+          className="sm:w-[150px] md:w-[200px]"
+        />
+        <div className="flex w-full justify-between">
+          <div className="bg-dot w-full px-2 py-4 sm:px-8 sm:py-12">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl tracking-[.3em] opacity-80 text-[#283618] font-bold">
+              WELCOME to
+            </h1>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mt-4 tracking-[.2em] text-[#BC6C25]">
+              PROJECT E-SIP
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div className="mt-4 lg:hidden">
+        <div className="bg-[#606C38] opacity-90 px-8 py-4">
+          <p className="text-gray-100 font-semibold">
+            Explore a space where innovative ideas meet seamless
+          </p>
+          <p className="text-gray-100 font-semibold">
+            collaboration of voice and knowledge
+          </p>
+        </div>
+        <div className="space-y-4 px-2 mt-4">
+          <p className="text-gray-500 font-semibold">
+            Elevating Student Interaction and Participation
+          </p>
+          <p className="text-gray-500 font-semibold">
+            Through innovative tools and an inclusive environment;
+          </p>
+          <p className="text-gray-500 font-semibold">
+            E-SIP fosters active student participation, creative expression, and
+            meaningful connections.
+          </p>
+          <div className="flex justify-between items-center">
+            <div className="flex flex-col gap-y-2">
+              <p className="text-gray-500 font-bold">Come and Join Us!</p>
+              <Button className="bg-[#BC6C25] text-xl font-bold rounded-xl">
+                Log - In
+              </Button>
+            </div>
+            <Image
+              src={"/landingImg2.svg"}
+              alt="bg image"
+              width={120}
+              height={120}
+              className="sm:w-[150px] md:w-[200px]"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
