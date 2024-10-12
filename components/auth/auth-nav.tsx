@@ -1,4 +1,3 @@
-import React from "react";
 import logo from "../../assets/authForm/authLogo.svg";
 import Image from "next/image";
 import { Lalezar } from "next/font/google";

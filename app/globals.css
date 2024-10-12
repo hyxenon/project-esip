@@ -306,5 +306,9 @@ body,
   height: 52px;
 }
 
+.bg-dot {
+  background-image: url('/dotBG.svg');
+}
+
 /* ======================== Liveblocks Override */
 
