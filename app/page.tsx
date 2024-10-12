@@ -18,12 +18,12 @@ const WelcomePage = () => {
       <div className="min-h-screen flex flex-col mx-auto max-w-[1920px]">
         <div className="flex flex-col items-center mt-4 ">
           <h1
-            className={`text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl tracking-widest ${poppins} text-[#283618] opacity-10 font-bold`}
+            className={`text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl tracking-widest ${poppins} text-[#283618] opacity-5 font-bold`}
           >
             FOR EDUCATION
           </h1>
           <h2
-            className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-widest ${poppins} text-[#283618] opacity-10 font-bold`}
+            className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-widest ${poppins} text-[#283618] opacity-5 font-bold`}
           >
             WE STRIVE
           </h2>
