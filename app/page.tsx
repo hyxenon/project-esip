@@ -62,8 +62,8 @@ const WelcomePage = () => {
           </div>
         </div>
         <div
-          className={`hidden lg:flex mt-8 lg:justify-end ${
-            isDesktop ? "-mt-80" : "2xl:-mt-64"
+          className={`hidden lg:flex lg:justify-end ${
+            isDesktop ? "-mt-80" : "2xl:-mt-64 mt-8"
           }`}
         >
           <div className="flex flex-col gap-y-6 w-[300px] text-xl">
@@ -93,7 +93,7 @@ const WelcomePage = () => {
             width={100}
             height={100}
             className={` ${
-              isDesktop ? "w-[450px]" : "lg:w-[250px] xl:w-[300px]"
+              isDesktop ? "w-[400px]" : "lg:w-[250px] xl:w-[300px]"
             }`}
           />
         </div>
