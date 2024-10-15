@@ -6,8 +6,10 @@ import TotalPaperCard from "@/components/(users)/teacher/paper-management/TotalP
 
 import TotalPapersCard from "@/components/(users)/teacher/paper-management/TotalPapersCard";
 import TotalResearchProposal from "@/components/(users)/teacher/paper-management/TotalResearchProposal";
+import PaperHistory from "@/components/PaperHistory";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import Unauthorized from "@/components/UnAuthorized";
 import { ResearchPaperModel } from "@/models/models";
 import Link from "next/link";
 
@@ -23,6 +25,10 @@ const PaperManagement = async ({
 
   if (!schoolId) {
     return <div>No school ID found for the user.</div>;
+  }
+
+  if (session?.user?.role !== "TEACHER") {
+    return <Unauthorized />;
   }
 
   const categoryMapping: { [key: string]: string } = {
@@ -53,9 +59,12 @@ const PaperManagement = async ({
 
   return (
     <div className="flex flex-col py-4 px-3 md:px-8 lg:py-4 lg:px-16 xl:px-28">
-      <h4 className="scroll-m-20 text-2xl font-semibold tracking-tight lg:mt-4 text-[#283618]">
-        Paper Management
-      </h4>
+      <div className="flex justify-between">
+        <h4 className="scroll-m-20 text-2xl font-semibold tracking-tight lg:mt-4 text-[#283618]">
+          Paper Management
+        </h4>
+        <PaperHistory />
+      </div>
 
       <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 mt-4">
         {/* <CurrentPaperCard cardTitle="Research Proposals" data={data} />

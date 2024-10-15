@@ -7,6 +7,7 @@ import { User } from "@/components/(users)/admin/user-management/tables/teacherT
 import { parseStringify } from "@/lib/utils";
 import { liveblocks } from "@/lib/liveblocks";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
 
 export const getAllUsersByTeacher = async (filter: string): Promise<User[]> => {
   try {
@@ -261,6 +262,17 @@ export const updateUser = async (
       },
     });
 
+    // Add History
+    const session = await auth();
+
+    await db.userHistory.create({
+      data: {
+        action: "EDIT",
+        performedById: session?.user?.id!,
+        targetName: updateUser.name,
+      },
+    });
+
     revalidatePath("/admin/user-management");
     return updatedUser;
   } catch (error) {
@@ -285,6 +297,17 @@ export const acceptPendingUser = async (userId: string) => {
       include: { school: true },
     });
 
+    // Add History
+    const session = await auth();
+
+    await db.userHistory.create({
+      data: {
+        action: "CREATE",
+        performedById: session?.user?.id!,
+        targetName: updateUser.name,
+      },
+    });
+
     revalidatePath("/teacher/user-management");
     return { success: true };
   } catch (error) {
@@ -295,8 +318,18 @@ export const acceptPendingUser = async (userId: string) => {
 
 export const deleteUser = async (userId: string) => {
   try {
-    await db.user.delete({
+    const deletedUser = await db.user.delete({
       where: { id: userId },
+    });
+    // Add History
+    const session = await auth();
+
+    await db.userHistory.create({
+      data: {
+        action: "DELETE",
+        performedById: session?.user?.id!,
+        targetName: deletedUser.name!,
+      },
     });
     revalidatePath("/admin/user-management");
     return { success: true };
