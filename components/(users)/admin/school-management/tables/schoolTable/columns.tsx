@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,8 +14,8 @@ import Image from "next/image";
 import { useState } from "react";
 import { EditSchoolButton } from "./editSchoolButton";
 import DeleteSchoolButton from "./deleteSchoolButton";
-import StatusChange from "./statusChange";
 import { Badge } from "@/components/ui/badge";
+import StatusChange from "./statusChange";
 import SchoolDetails from "../../SchoolDetails";
 
 export type School = {
