@@ -269,7 +269,7 @@ export const updateUser = async (
       data: {
         action: "EDIT",
         performedById: session?.user?.id!,
-        targetName: updateUser.name,
+        targetName: updatedUser.name!,
       },
     });
 
@@ -304,7 +304,7 @@ export const acceptPendingUser = async (userId: string) => {
       data: {
         action: "CREATE",
         performedById: session?.user?.id!,
-        targetName: updateUser.name,
+        targetName: updatedUser.name!,
       },
     });
 

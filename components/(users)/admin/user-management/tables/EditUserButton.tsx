@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -360,12 +361,14 @@ function ProfileForm({ id }: ProfileFormProps) {
           </div>
 
           <div className="flex items-center justify-center w-full ">
-            <Button
-              className="bg-[#BC6C25] hover:bg-[#A85A1D] w-full mt-8 text-[#FEFAE0]"
-              type="submit"
-            >
-              Edit User
-            </Button>
+            <DialogClose asChild>
+              <Button
+                className="bg-[#BC6C25] hover:bg-[#A85A1D] w-full mt-8 text-[#FEFAE0]"
+                type="submit"
+              >
+                Edit User
+              </Button>
+            </DialogClose>
           </div>
         </div>
       </form>
