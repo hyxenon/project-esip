@@ -1,5 +1,4 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import React from "react";
 
 import TeacherUserManagementTable from "./TeacherUserManagementTable";
 import { User } from "../../admin/user-management/tables/teacherTable/column";

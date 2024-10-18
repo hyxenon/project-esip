@@ -98,7 +98,7 @@ const WelcomePage = () => {
           />
         </div>
         {/* Mobile View Only */}
-        <div className="flex items-center lg:hidden mt-4">
+        <div className="flex items-center lg:hidden">
           <Image
             src={"/landingImg1.svg"}
             alt="bg image"
@@ -155,6 +155,67 @@ const WelcomePage = () => {
               />
             </div>
           </div>
+        </div>
+      </div>
+      <div className="min-h-screen py-8 relative">
+        <Image
+          src={"/landingPageImg3.svg"}
+          width={10}
+          height={10}
+          alt="background image"
+          className="w-[100px] absolute z-0"
+        />
+        <Image
+          src={"/landingPageImg4.svg"}
+          width={10}
+          height={10}
+          alt="background image"
+          className="w-[50px] absolute right-0 bottom-12 z-0"
+        />
+        <div className="flex flex-col items-center gap-4 relative z-10">
+          <h1
+            className={`mb-4 font-bold text-[#283618] opacity-80 text-3xl ${poppins} tracking-wider`}
+          >
+            Features
+          </h1>
+          {/* <ResearchLibraryCard />
+          <FlexibleCard />
+          <CollaborativeCard />
+          <MessengerCard />
+          <PayToViewCard /> */}
+        </div>
+      </div>
+      <div className="gap-16 pb-8 lg:py-16 bg-white flex flex-col lg:flex-row mx-auto max-w-[1920px]">
+        <div className="max-w-[1024px] lg:bg-[url('/dotted-bg.svg')] lg:p-8">
+          <div className="bg-[#606C38] py-4 px-8 rounded-r-full">
+            <h1 className="font-bold text-gray-100">
+              Be Part of a Growing Community
+            </h1>
+          </div>
+          <p className="mt-16 lg:px-16 text-justify px-4 font-bold text-lg lg:text-2xl text-gray-600">
+            PROJECT E-SIP is more than just a tool—it’s a movement to inspire
+            and connect the brightest young minds. Join a network of schools
+            sharing their knowledge, collaborating on projects, and pushing the
+            boundaries of what students can achieve.
+          </p>
+          <div className="flex gap-4 px-4 mt-8 lg:px-16">
+            <div className="w-[30px] h-[30px] bg-[#283618] rounded-full"></div>
+            <div className="w-[30px] h-[30px] bg-[#606C38] rounded-full"></div>
+            <div className="w-[30px] h-[30px] bg-[#DDA15E] rounded-full"></div>
+          </div>
+        </div>
+        <div className="flex flex-col items-center w-full lg:px-16 2xl:py-8">
+          <Image
+            src={"/landingPageImage5.svg"}
+            alt="bg image"
+            height={50}
+            width={50}
+            className="w-[300px] h-[300px] lg:w-[500px] lg:h-[500px]"
+          />
+          {/* <div className="flex w-full items-end flex-col">
+            <div className="w-[50px] h-[50px] bg-[#606C38] rounded-full"></div>
+            <div className="w-[30px] h-[30px] bg-[#283618] rounded-full"></div>
+          </div> */}
         </div>
       </div>
     </div>

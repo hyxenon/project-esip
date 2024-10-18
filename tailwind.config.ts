@@ -51,6 +51,15 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        backgroundImage: {
+          "research-library": "url('/researchLibrary.png')",
+          researchLibraryHover: "url('/researchLibraryHover.png')",
+          flexible: "url('/flexible.png')",
+          collaborative: "url('/collaborative.png')",
+          messenger: "url('/messenger.png')",
+          payToView: "url('/payToView.png')",
+          bgDotted: "url('/dotted-bg.svg')",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

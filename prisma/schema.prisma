@@ -38,6 +38,10 @@ model User {
   Likes         Like[]
   PaperView     PaperView[]
   PaperPurchase PaperPurchase[]
+
+  // History relations
+  performedUserHistories  UserHistory[]  @relation("PerformedUserHistory")
+  performedPaperHistories PaperHistory[] @relation("PerformedPaperHistory")
 }
 
 model Account {
@@ -178,4 +182,34 @@ model PaperPurchase {
   updatedAt   DateTime      @updatedAt
 
   @@unique([userId, paperId])
+}
+
+model UserHistory {
+  id            String         @id @default(cuid())
+  action        UserActionType
+  performedById String
+  performedBy   User           @relation("PerformedUserHistory", fields: [performedById], references: [id])
+  targetName    String
+  createdAt     DateTime       @default(now())
+}
+
+model PaperHistory {
+  id              String          @id @default(cuid())
+  action          PaperActionType
+  performedById   String
+  performedBy     User            @relation("PerformedPaperHistory", fields: [performedById], references: [id])
+  targetPaperName String
+  createdAt       DateTime        @default(now())
+}
+
+enum UserActionType {
+  CREATE
+  EDIT
+  DELETE
+}
+
+enum PaperActionType {
+  CREATE
+  EDIT
+  DELETE
 }

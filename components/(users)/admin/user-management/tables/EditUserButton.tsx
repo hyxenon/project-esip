@@ -1,8 +1,8 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -31,7 +31,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import { useEdgeStore } from "@/lib/edgestore";
 
 import { useToast } from "@/components/ui/use-toast";
 
@@ -147,9 +146,6 @@ function ProfileForm({ id }: ProfileFormProps) {
     }
   }, [userData]);
 
-  const [file, setFile] = useState<File>();
-  const { edgestore } = useEdgeStore();
-  const [progress, setProgress] = useState<number>(0);
   const { toast } = useToast();
 
   const onSubmit = async (values: z.infer<typeof UserEditSchema>) => {
@@ -365,12 +361,14 @@ function ProfileForm({ id }: ProfileFormProps) {
           </div>
 
           <div className="flex items-center justify-center w-full ">
-            <Button
-              className="bg-[#BC6C25] hover:bg-[#A85A1D] w-full mt-8 text-[#FEFAE0]"
-              type="submit"
-            >
-              Edit User
-            </Button>
+            <DialogClose asChild>
+              <Button
+                className="bg-[#BC6C25] hover:bg-[#A85A1D] w-full mt-8 text-[#FEFAE0]"
+                type="submit"
+              >
+                Edit User
+              </Button>
+            </DialogClose>
           </div>
         </div>
       </form>

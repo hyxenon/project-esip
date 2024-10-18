@@ -1,4 +1,5 @@
 "use server";
+import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { ResearchPaperModel } from "@/models/models";
 import { revalidatePath } from "next/cache";
@@ -31,6 +32,17 @@ export const addResearchProposalPaper = async (data: ResearchPaperModel) => {
               })),
             }
           : undefined,
+    },
+  });
+
+  // Add History
+  const session = await auth();
+
+  await db.paperHistory.create({
+    data: {
+      action: "CREATE",
+      performedById: session?.user?.id!,
+      targetPaperName: researchProposalPaper.title,
     },
   });
 
@@ -139,6 +151,17 @@ export const updatePaper = async (
     data: updateData,
   });
 
+  // Add History
+  const session = await auth();
+
+  await db.paperHistory.create({
+    data: {
+      action: "EDIT",
+      performedById: session?.user?.id!,
+      targetPaperName: updatedPaper.title,
+    },
+  });
+
   // Delete removed authors from the database
   await db.author.deleteMany({
     where: {
@@ -156,6 +179,17 @@ export const deletePaper = async (paperId: string) => {
   const paper = await db.researchPaper.delete({
     where: {
       id: paperId,
+    },
+  });
+
+  // Add History
+  const session = await auth();
+
+  await db.paperHistory.create({
+    data: {
+      action: "DELETE",
+      performedById: session?.user?.id!,
+      targetPaperName: paper.title,
     },
   });
 

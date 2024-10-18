@@ -29,6 +29,24 @@ export type AuthorPaper = {
   name: string;
 };
 
+export type UserHistoryModel = {
+  id: string;
+  action: string;
+  performedById: string;
+  targetName: string;
+  createdAt: Date;
+  performedBy: any;
+};
+
+export type PaperHistoryModel = {
+  id: string;
+  action: string;
+  performedById: string;
+  performedBy: any;
+  targetPaperName: string;
+  createdAt: Date;
+};
+
 export type ResearchPaperModel = {
   id?: string;
   title: string;

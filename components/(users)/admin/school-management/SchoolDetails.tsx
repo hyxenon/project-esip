@@ -19,7 +19,6 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { getTotalCountsSchoolDetails } from "@/actions/totalCount.action";
 import { useEffect, useState } from "react";
-import { SkeletonCard } from "../../SkeletonCard";
 
 interface SchoolDetailsProps {
   isOpen: boolean;
@@ -30,7 +29,6 @@ const SchoolDetails = ({ isOpen, setIsOpen, school }: SchoolDetailsProps) => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [totalUsers, setTotalUsers] = useState<number>(0);
   const [totalPapers, setTotalPapers] = useState<number>(0);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (school.id) {
@@ -45,17 +43,12 @@ const SchoolDetails = ({ isOpen, setIsOpen, school }: SchoolDetailsProps) => {
         } catch (error) {
           console.error("Error fetching school details:", error);
         } finally {
-          setLoading(false);
         }
       };
 
       fetchData();
     }
   }, [school.id, isOpen]);
-
-  if (loading) {
-    return <SkeletonCard />;
-  }
 
   if (isDesktop) {
     return (

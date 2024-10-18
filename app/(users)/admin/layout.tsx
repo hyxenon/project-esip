@@ -3,7 +3,7 @@ import SideNav from "@/components/(users)/admin/sidenav";
 import type { Metadata } from "next";
 import { SchoolProvider } from "@/context/SchoolContext"; // Adjust the path based on your context location
 import { auth } from "@/auth";
-import Unauthorized from "@/components/UnAuthorized";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -18,7 +18,7 @@ export default async function AdminLayout({
   const session = await auth();
 
   if (session?.user?.role !== "ADMIN") {
-    return <Unauthorized />;
+    redirect("/");
   }
   return (
     <SchoolProvider>

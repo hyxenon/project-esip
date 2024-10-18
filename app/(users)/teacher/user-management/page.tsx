@@ -12,6 +12,7 @@ import { Users } from "lucide-react";
 import dynamic from "next/dynamic";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { PiStudentFill } from "react-icons/pi";
+import UserHistoryDialog from "@/components/UserHistory";
 
 const TotalCards = dynamic(() => import("@/components/(users)/TotalCards"), {
   loading: () => <SkeletonCard />,
@@ -60,9 +61,13 @@ const UserManagement = async () => {
 
   return (
     <div className="flex flex-col py-4 px-3 md:px-8 lg:py-4 lg:px-16 xl:px-28">
-      <h4 className="scroll-m-20 text-2xl font-semibold tracking-tight lg:mt-4 text-[#283618]">
-        User Management
-      </h4>
+      <div className="flex justify-between">
+        <h4 className="scroll-m-20 text-2xl font-semibold tracking-tight lg:mt-4 text-[#283618]">
+          User Management
+        </h4>
+        <UserHistoryDialog />
+      </div>
+
       <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 mt-4">
         <TotalCards
           cardTitle="Total Users"

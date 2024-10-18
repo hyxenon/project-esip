@@ -1,5 +1,7 @@
 import { getPaper } from "@/actions/paperManagement.action";
+import { auth } from "@/auth";
 import AddPaperForm from "@/components/(users)/teacher/paper-management/addPaperForm";
+import Unauthorized from "@/components/UnAuthorized";
 
 const AddPaper = async ({
   searchParams,
@@ -10,6 +12,10 @@ const AddPaper = async ({
     researchType?: string;
   };
 }) => {
+  const session = await auth();
+  if (session?.user?.role !== "TEACHER") {
+    return <Unauthorized />;
+  }
   let paperData: any;
   if (searchParams?.edit && searchParams.paperId) {
     const paper = await getPaper(searchParams.paperId);
