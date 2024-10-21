@@ -68,6 +68,12 @@ const ProfilePictureInformation = ({
                   },
                 });
 
+                await edgestore.publicFiles.confirmUpload({
+                  url: res.url,
+                });
+
+                console.log(res.url);
+
                 const lastUrl = await changeProfilePicture(
                   session.user?.id!,
                   res.url
