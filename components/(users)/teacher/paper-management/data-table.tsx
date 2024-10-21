@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -41,12 +41,15 @@ import {
 } from "@/components/ui/select";
 import PaginationTable from "../../admin/school-management/tables/paginationTable";
 
-const debounce = (func: Function, delay: number) => {
-  let timer: ReturnType<typeof setTimeout>;
-  return (...args: any[]) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => func(...args), delay);
-  };
+// Debounce utility to delay the URL query updates
+const useDebouncedFunction = (func: Function, delay: number) => {
+  return useMemo(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    return (...args: any[]) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => func(...args), delay);
+    };
+  }, [func, delay]);
 };
 
 interface DataTableProps<TData, TValue> {
@@ -93,8 +96,9 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
   });
 
-  const updateQueryParams = useCallback(
-    debounce((newParams: Record<string, string>) => {
+  // Memoize the query parameter update function with stable dependencies
+  const updateQueryParams = useDebouncedFunction(
+    (newParams: Record<string, string>) => {
       const currentParams = new URLSearchParams(window.location.search);
 
       let hasChanged = false;
@@ -115,32 +119,35 @@ export function DataTable<TData, TValue>({
           : "/teacher/paper-management";
 
       router.replace(`${pathname}?${updatedQueryString}`);
-    }, 300),
-    [router, type]
+    },
+    300
   );
 
+  // Handle author search input change
   const handleAuthorSearchInput = useCallback(
     (value: string) => {
-      setAuthorSearchTerm(value);
-      updateQueryParams({ authorSearchTerm: value });
+      setAuthorSearchTerm(value); // Update input value immediately for fast typing
+      updateQueryParams({ authorSearchTerm: value }); // Debounced URL update
     },
-    [updateQueryParams]
+    [updateQueryParams] // Include the updateQueryParams function as a dependency
   );
 
+  // Handle category filter change
   const handleCategoryChange = useCallback(
     (value: string) => {
       setCategory(value);
       updateQueryParams({ category: value });
     },
-    [setCategory, updateQueryParams]
+    [updateQueryParams] // Include the updateQueryParams function as a dependency
   );
 
+  // Handle author search checkbox toggle
   const handleAuthorSearchChange = useCallback(
     (isChecked: boolean) => {
       setAuthorSearch(isChecked);
       updateQueryParams({ authorSearch: isChecked ? "true" : "false" });
     },
-    [setAuthorSearch, updateQueryParams]
+    [updateQueryParams] // Include the updateQueryParams function as a dependency
   );
 
   return (

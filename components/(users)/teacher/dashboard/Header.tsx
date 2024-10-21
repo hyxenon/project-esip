@@ -26,7 +26,7 @@ const Header = ({
     };
 
     fetchSchoolData();
-  }, []);
+  }, [schoolId]);
   return (
     <div className="flex justify-between my-8 items-center">
       <div className="flex items-center gap-4">
