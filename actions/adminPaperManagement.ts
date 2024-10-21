@@ -4,7 +4,9 @@ import { db } from "@/lib/db";
 
 export const getAllResearchPapers = async (
   schoolId?: string,
-  category?: string
+  category?: string,
+  authorSearch?: boolean,
+  authorSearchValue?: string
 ) => {
   try {
     const researchPapers = await db.researchPaper.findMany({
@@ -16,6 +18,19 @@ export const getAllResearchPapers = async (
           category !== "all" && {
             researchCategory: category,
           }),
+        // If authorSearch is true, filter by author name
+        ...(authorSearch && authorSearchValue
+          ? {
+              authors: {
+                some: {
+                  name: {
+                    contains: authorSearchValue, // Perform partial match for the author's name
+                    mode: "insensitive", // Case-insensitive search
+                  },
+                },
+              },
+            }
+          : {}),
       },
       orderBy: [
         {

@@ -19,6 +19,8 @@ const ResearchManagement = async ({
   searchParams?: {
     id?: string;
     category?: string;
+    authorSearch?: string;
+    authorSearchTerm?: string;
   };
 }) => {
   const schoolsResponse = await getSchools();
@@ -33,12 +35,24 @@ const ResearchManagement = async ({
   };
 
   const category = categoryMapping[searchParams?.category || ""] || undefined;
+  const authorSearch = searchParams?.authorSearch === "true";
+  const authorSearchValue = searchParams?.authorSearchTerm || "";
 
   if (searchParams?.id === undefined) {
-    const papersData = await getAllResearchPapers(undefined, category);
+    const papersData = await getAllResearchPapers(
+      undefined,
+      category,
+      authorSearch,
+      authorSearchValue
+    );
     papers = papersData;
   } else {
-    const papersData = await getAllResearchPapers(searchParams.id, category);
+    const papersData = await getAllResearchPapers(
+      searchParams.id,
+      category,
+      authorSearch,
+      authorSearchValue
+    );
     papers = papersData;
   }
 

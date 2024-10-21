@@ -18,6 +18,8 @@ const PaperManagement = async ({
 }: {
   searchParams?: {
     category?: string;
+    authorSearch?: string;
+    authorSearchTerm?: string;
   };
 }) => {
   const session = await auth();
@@ -40,19 +42,24 @@ const PaperManagement = async ({
   };
 
   const category = categoryMapping[searchParams?.category || ""] || undefined;
+  const authorSearch = searchParams?.authorSearch === "true";
+  const authorSearchValue = searchParams?.authorSearchTerm || "";
 
-  const res = await getAllPapers(schoolId, category);
+  const res = await getAllPapers(
+    schoolId,
+    category,
+    authorSearch,
+    authorSearchValue
+  );
   const papers: ResearchPaperModel[] = res.message.map((paper: any) => ({
     ...paper,
     file: paper.file ?? undefined,
   }));
 
-  // Count papers with researchType === "proposal"
   const totalResearchProposals = papers.filter(
     (paper) => paper.researchType === "proposal"
   ).length;
 
-  // Count papers with researchType === "Paper"
   const totalResearchPapers = papers.filter(
     (paper) => paper.researchType === "paper"
   ).length;
@@ -67,8 +74,6 @@ const PaperManagement = async ({
       </div>
 
       <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 mt-4">
-        {/* <CurrentPaperCard cardTitle="Research Proposals" data={data} />
-        <CurrentPaperCard cardTitle="Research Papers" data={dataPapers} /> */}
         <TotalPaperCard count={papers.length} />
         <TotalResearchProposal count={totalResearchProposals} />
         <TotalPapersCard count={totalResearchPapers} />
@@ -85,7 +90,12 @@ const PaperManagement = async ({
             </div>
           </CardHeader>
           <CardContent className="px-2 md:px-6">
-            <DataTable columns={columns} data={papers} />
+            <DataTable
+              columns={columns}
+              data={papers}
+              authorSearchParams={searchParams?.authorSearch}
+              authorSearchValue={searchParams?.authorSearchTerm}
+            />
           </CardContent>
         </Card>
       </div>

@@ -1,8 +1,9 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
+import { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   ColumnDef,
   flexRender,
@@ -15,7 +16,6 @@ import {
   getFilteredRowModel,
   VisibilityState,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -24,16 +24,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-import { useState } from "react";
-
 import {
   Select,
   SelectContent,
@@ -44,23 +40,40 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import PaginationTable from "../../admin/school-management/tables/paginationTable";
-import { useRouter } from "next/navigation";
+
+const debounce = (func: Function, delay: number) => {
+  let timer: ReturnType<typeof setTimeout>;
+  return (...args: any[]) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => func(...args), delay);
+  };
+};
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   type?: string;
+  authorSearchParams?: string;
+  authorSearchValue?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   type,
+  authorSearchParams,
+  authorSearchValue,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [category, setCategory] = useState("all");
+  const [authorSearch, setAuthorSearch] = useState(
+    authorSearchParams === "true"
+  );
+  const [authorSearchTerm, setAuthorSearchTerm] = useState(
+    authorSearchValue || ""
+  );
   const router = useRouter();
 
   const table = useReactTable({
@@ -80,39 +93,82 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
   });
 
-  const handleCategoryChange = (value: string) => {
-    setCategory(value);
+  const updateQueryParams = useCallback(
+    debounce((newParams: Record<string, string>) => {
+      const currentParams = new URLSearchParams(window.location.search);
 
-    const currentParams = new URLSearchParams(window.location.search);
+      let hasChanged = false;
+      for (const key in newParams) {
+        if (currentParams.get(key) !== newParams[key]) {
+          currentParams.set(key, newParams[key]);
+          hasChanged = true;
+        }
+      }
 
-    currentParams.set("category", value);
+      if (!hasChanged) return;
 
-    const updatedQueryString = currentParams.toString();
+      const updatedQueryString = currentParams.toString();
 
-    const pathname =
-      type === "admin"
-        ? "/admin/research-management"
-        : "/teacher/paper-management";
+      const pathname =
+        type === "admin"
+          ? "/admin/research-management"
+          : "/teacher/paper-management";
 
-    // Push the updated URL with new query parameters
-    router.push(`${pathname}?${updatedQueryString}`);
-  };
+      router.replace(`${pathname}?${updatedQueryString}`);
+    }, 300),
+    [router, type]
+  );
+
+  const handleAuthorSearchInput = useCallback(
+    (value: string) => {
+      setAuthorSearchTerm(value);
+      updateQueryParams({ authorSearchTerm: value });
+    },
+    [updateQueryParams]
+  );
+
+  const handleCategoryChange = useCallback(
+    (value: string) => {
+      setCategory(value);
+      updateQueryParams({ category: value });
+    },
+    [setCategory, updateQueryParams]
+  );
+
+  const handleAuthorSearchChange = useCallback(
+    (isChecked: boolean) => {
+      setAuthorSearch(isChecked);
+      updateQueryParams({ authorSearch: isChecked ? "true" : "false" });
+    },
+    [setAuthorSearch, updateQueryParams]
+  );
 
   return (
     <>
-      {/* Filter and Radio Group */}
       <div className="flex items-center py-4">
-        <div className="flex flex-col gap-1 md:flex-row ">
-          <Input
-            placeholder="Search Paper..."
-            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("title")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <div className="flex flex-col gap-1 md:flex-row">
-            <Select defaultValue="all">
+        <div className="flex flex-col gap-1 md:flex-row">
+          {authorSearch ? (
+            <Input
+              placeholder="Search Author..."
+              className="max-w-sm"
+              value={authorSearchTerm}
+              onChange={(e) => handleAuthorSearchInput(e.target.value)} // Debounced search term update
+            />
+          ) : (
+            <Input
+              placeholder="Search Paper..."
+              value={
+                (table.getColumn("title")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("title")?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm"
+            />
+          )}
+
+          <div className="flex flex-col gap-2 md:flex-row">
+            <Select defaultValue="all" onValueChange={handleCategoryChange}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -148,9 +204,23 @@ export function DataTable<TData, TValue>({
                 </SelectGroup>
               </SelectContent>
             </Select>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="author"
+                checked={authorSearch}
+                onCheckedChange={handleAuthorSearchChange}
+              />
+              <label
+                htmlFor="author"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Author Search
+              </label>
+            </div>
           </div>
         </div>
-        {/* Columns Dropdown */}
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -174,6 +244,7 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
       {/* Table */}
       <div className="rounded-md border">
         <Table>
