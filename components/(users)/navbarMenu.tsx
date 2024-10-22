@@ -49,16 +49,9 @@ export function TeacherNavbarMenu() {
           <NavigationMenuTrigger>Tools</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <ListItem href="" title="Messenger">
+              <ListItem href="/messenger" title="Messenger">
                 Real-time chat functionality for users to communicate within the
                 app.
-              </ListItem>
-              <ListItem href="/grammar-checker" title="Grammar Checker">
-                Automatically check and correct grammar errors for your
-                research.
-              </ListItem>
-              <ListItem href="" title="AI Checker">
-                Determine the percentage of the paper created by AI.
               </ListItem>
             </ul>
           </NavigationMenuContent>

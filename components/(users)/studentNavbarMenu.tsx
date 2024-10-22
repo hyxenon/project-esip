@@ -28,13 +28,7 @@ export function StudentNavbarMenu() {
                 Real-time chat functionality for users to communicate within the
                 app.
               </ListItem>
-              <ListItem href="/grammar-checker" title="Grammar Checker">
-                Automatically check and correct grammar errors for your
-                research.
-              </ListItem>
-              <ListItem href="" title="AI Checker">
-                Determine the percentage of the paper created by AI.
-              </ListItem>
+
               <ListItem href="/student/livedocs" title="Live Docs">
                 Students can collaborate in their paper using Live Docs
               </ListItem>
