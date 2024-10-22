@@ -40,7 +40,9 @@ const UserHistoryDialog = () => {
           <FaHistory className="text-gray-600" />
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent
+        className={"lg:max-w-screen-lg overflow-y-scroll max-h-screen"}
+      >
         <DialogHeader>
           <DialogTitle>History Logs</DialogTitle>
         </DialogHeader>
