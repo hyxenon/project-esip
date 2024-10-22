@@ -32,6 +32,9 @@ export function StudentNavbarMenu() {
               <ListItem href="/student/livedocs" title="Live Docs">
                 Students can collaborate in their paper using Live Docs
               </ListItem>
+              <ListItem href="/text-converter" title="Image to Text">
+                Convert images with text into editable text format
+              </ListItem>
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>

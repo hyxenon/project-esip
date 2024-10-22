@@ -62,7 +62,7 @@ const Page = () => {
       )}
 
       <div className="container py-12">
-        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-center">
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-center text-[#606C38]">
           Image to Text Converter
         </h1>
         <div className="grid mt-12 gap-4 grid-cols-1 lg:grid-cols-2">
@@ -86,7 +86,7 @@ const Page = () => {
               </div>
             ) : (
               <div className="flex items-center justify-center flex-col py-8 md:py-12 lg:py-14 ">
-                <h2 className="scroll-m-20 pb-2 text-2xl font-semibold tracking-tight first:mt-0">
+                <h2 className="scroll-m-20 pb-2 text-2xl font-semibold tracking-tight first:mt-0 text-[#BC6C25]">
                   Choose an Image to convert to text
                 </h2>
                 <IoMdImage className="text-8xl" />
@@ -105,7 +105,10 @@ const Page = () => {
 
             {convertedText !== "" && (
               <div className="max-w-full flex flex-col gap-4 py-4 px-8 w-full overflow-y-auto max-h-[700px]">
-                <Button className="ml-auto" onClick={handleCopy}>
+                <Button
+                  className="ml-auto bg-[#BC6C25] hover:bg-[#DDA15E]"
+                  onClick={handleCopy}
+                >
                   Copy
                 </Button>
                 <p className="whitespace-pre-wrap break-words leading-relaxed text-left">

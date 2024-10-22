@@ -53,6 +53,9 @@ export function TeacherNavbarMenu() {
                 Real-time chat functionality for users to communicate within the
                 app.
               </ListItem>
+              <ListItem href="/text-converter" title="Image to Text">
+                Convert images with text into editable text format
+              </ListItem>
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
