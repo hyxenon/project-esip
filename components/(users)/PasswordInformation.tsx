@@ -22,11 +22,23 @@ const formSchema = z
     currentPassword: z.string().min(1, {
       message: "Enter your current password.",
     }),
-    newPassword: z.string().min(6, {
-      message: "New password must be at least 6 characters long.",
-    }),
-    confirmPassword: z.string().min(6, {
-      message: "Confirm password must be at least 6 characters long.",
+    newPassword: z
+      .string()
+      .min(8, {
+        message: "New password must be at least 8 characters long.",
+      })
+      .regex(/[A-Z]/, {
+        message: "New password must contain at least one uppercase letter.",
+      })
+      .regex(/[a-z]/, {
+        message: "New password must contain at least one lowercase letter.",
+      })
+      .regex(/[@$!%*#?&]/, {
+        message:
+          "New password must contain at least one special character such as @$!%*#?&.",
+      }),
+    confirmPassword: z.string().min(8, {
+      message: "Confirm password must be at least 8 characters long.",
     }),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
