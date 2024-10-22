@@ -1,8 +1,8 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import AuthFormWrapper from "./auth-form-wrapper";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 import { ClipLoader } from "react-spinners";
 import { newVerification } from "@/actions/auth/new-verification";
@@ -13,6 +13,7 @@ const NewVerificationForm = () => {
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
   const searchParams = useSearchParams();
+  const router = useRouter(); // Initialize router
 
   const token = searchParams.get("token");
 
@@ -27,6 +28,9 @@ const NewVerificationForm = () => {
     newVerification(token)
       .then((data) => {
         setSuccess(data.success);
+        if (data.success) {
+          router.push("/login"); // Navigate to /login if successful
+        }
         setError(data.error);
       })
       .catch(() => {

@@ -23,7 +23,7 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import DeletePaperBtn from "./DeletePaperBtn";
 import { useRouter } from "next/navigation";
-import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 const options: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -59,7 +59,10 @@ const ResearchPaperActions: React.FC<ResearchPaperActionsProps> = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem>View Details</DropdownMenuItem>
+          <Link href={`/search/${data.id}`} target="_blank">
+            <DropdownMenuItem>View Details</DropdownMenuItem>
+          </Link>
+
           <DropdownMenuItem
             onClick={() =>
               router.push(

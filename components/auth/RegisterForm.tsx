@@ -46,9 +46,21 @@ const jacques = Jacques_Francois({
 const formSchema = z
   .object({
     email: z.string().email({ message: "Email is required." }),
-    password: z.string().min(6, {
-      message: "Minimum 6 characters required",
-    }),
+    password: z
+      .string()
+      .min(8, {
+        message: "Password must be at least 8 characters long.",
+      })
+      .regex(/[A-Z]/, {
+        message: "Password must contain at least one uppercase letter.",
+      })
+      .regex(/[a-z]/, {
+        message: "Password must contain at least one lowercase letter.",
+      })
+      .regex(/[@$!%*#?&]/, {
+        message:
+          "Password must contain at least one special character such as @$!%*#?&.",
+      }),
     confirmPassword: z.string(),
     firstName: z.string().trim().min(1, { message: "First name is required." }),
     lastName: z.string().trim().min(1, { message: "Last name is required." }),

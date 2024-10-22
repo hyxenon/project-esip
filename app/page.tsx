@@ -1,4 +1,6 @@
 "use client";
+import ContactSection from "@/components/ContactSection";
+import FeatureCards from "@/components/FeaturesCard";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
@@ -157,35 +159,10 @@ const WelcomePage = () => {
           </div>
         </div>
       </div>
-      <div className="min-h-screen py-8 relative">
-        <Image
-          src={"/landingPageImg3.svg"}
-          width={10}
-          height={10}
-          alt="background image"
-          className="w-[100px] absolute z-0"
-        />
-        <Image
-          src={"/landingPageImg4.svg"}
-          width={10}
-          height={10}
-          alt="background image"
-          className="w-[50px] absolute right-0 bottom-12 z-0"
-        />
-        <div className="flex flex-col items-center gap-4 relative z-10">
-          <h1
-            className={`mb-4 font-bold text-[#283618] opacity-80 text-3xl ${poppins} tracking-wider`}
-          >
-            Features
-          </h1>
-          {/* <ResearchLibraryCard />
-          <FlexibleCard />
-          <CollaborativeCard />
-          <MessengerCard />
-          <PayToViewCard /> */}
-        </div>
+      <div className="min-h-screen">
+        <FeatureCards />
       </div>
-      <div className="gap-16 pb-8 lg:py-16 bg-white flex flex-col lg:flex-row mx-auto max-w-[1920px]">
+      <div className="gap-16 pb-8 bg-white flex flex-col lg:flex-row mx-auto max-w-[1920px]">
         <div className="max-w-[1024px] lg:bg-[url('/dotted-bg.svg')] lg:p-8">
           <div className="bg-[#606C38] py-4 px-8 rounded-r-full">
             <h1 className="font-bold text-gray-100">
@@ -212,12 +189,9 @@ const WelcomePage = () => {
             width={50}
             className="w-[300px] h-[300px] lg:w-[500px] lg:h-[500px]"
           />
-          {/* <div className="flex w-full items-end flex-col">
-            <div className="w-[50px] h-[50px] bg-[#606C38] rounded-full"></div>
-            <div className="w-[30px] h-[30px] bg-[#283618] rounded-full"></div>
-          </div> */}
         </div>
       </div>
+      <ContactSection />
     </div>
   );
 };

@@ -1,11 +1,4 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
 
 const TotalResearchProposal = ({ count }: { count: number }) => {
@@ -23,9 +16,6 @@ const TotalResearchProposal = ({ count }: { count: number }) => {
           <p className="text-xs text-muted-foreground">
             +35.1% from last month
           </p>
-          <Button variant={"outline"} size={"sm"}>
-            View more
-          </Button>
         </div>
       </CardContent>
     </Card>

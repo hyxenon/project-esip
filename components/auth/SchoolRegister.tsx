@@ -16,7 +16,6 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import Link from "next/link";
 
 const jacques = Jacques_Francois({
   weight: "400",
