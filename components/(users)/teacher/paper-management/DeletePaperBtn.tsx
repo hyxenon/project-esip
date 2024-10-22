@@ -27,19 +27,18 @@ const DeletePaperBtn = ({
   const { toast } = useToast();
 
   const handleDeletePaper = async () => {
-    const res = await deletePaper(id);
-
-    if (res) {
+    try {
+      const res = await deletePaper(id);
       toast({
         variant: "success",
         title: "Success",
         description: "Paper deleted successfully.",
       });
-    } else {
+    } catch (e: any) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to delete paper.",
+        description: "Failed to delete paper. Paper does not exist.",
       });
     }
   };
