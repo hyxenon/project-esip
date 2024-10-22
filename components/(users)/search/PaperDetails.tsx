@@ -346,7 +346,7 @@ export default function PaperDetails({
 
           <div className="space-y-8">
             {paper1.abstract && (
-              <section className="bg-white px-2 md:p-6 md:rounded-lg md:shadow-sm md:border md:border-gray-100">
+              <section className="bg-white px-2 md:p-6 md:rounded-lg md:shadow-sm md:border md:border-gray-100 text-justify">
                 <h3 className="text-2xl font-semibold mb-4 text-gray-800">
                   Abstract
                 </h3>
@@ -363,7 +363,7 @@ export default function PaperDetails({
             )}
 
             {paper1.introduction && (
-              <section className="bg-white px-2 md:p-6 md:rounded-lg md:shadow-sm md:border md:border-gray-100">
+              <section className="bg-white px-2 md:p-6 md:rounded-lg md:shadow-sm md:border md:border-gray-100 text-justify">
                 <h3 className="text-2xl font-semibold mb-4 text-gray-800">
                   Introduction
                 </h3>
@@ -380,15 +380,15 @@ export default function PaperDetails({
             )}
 
             {paper1.references && (
-              <section className="bg-white px-2 md:p-6 md:rounded-lg md:shadow-sm md:border md:border-gray-100">
-                <h3 className="text-2xl font-semibold mb-4 text-gray-800">
+              <section className="bg-white px-2 md:p-6 md:rounded-lg md:shadow-sm md:border md:border-gray-100 text-justify">
+                <h3 className="text-2xl font-semibold mb-4 text-gray-700">
                   References
                 </h3>
                 <div className="leading-relaxed">
                   {paper1.references
                     .split("\n")
                     .map((paragraph: string, index: number) => (
-                      <p key={index} className="mb-2">
+                      <p key={index} className="mb-4">
                         {paragraph}
                       </p>
                     ))}
