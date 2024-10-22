@@ -83,19 +83,20 @@ model PasswordResetToken {
 
 // School
 model School {
-  id            String   @id @default(cuid())
-  email         String
-  city          String
-  contactNumber String
-  postalCode    String
-  province      String
-  schoolName    String
-  streetAddress String
-  image         String?
-  status        String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  User          User[]
+  id              String   @id @default(cuid())
+  email           String
+  city            String
+  contactNumber   String
+  postalCode      String
+  province        String
+  schoolName      String
+  streetAddress   String
+  image           String?
+  status          String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  User            User[]
+  AIDataAnalytics String?
 }
 
 model ResearchPaper {
