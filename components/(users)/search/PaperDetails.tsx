@@ -313,7 +313,8 @@ export default function PaperDetails({
                 {paper1.uniqueViews} views
               </div>
 
-              {paper1.file && (isPublic || isPaid) ? (
+              {paper1.file &&
+              (isPublic || isPaid || session.user?.role === "ADMIN") ? (
                 <Button
                   variant="default"
                   className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all"

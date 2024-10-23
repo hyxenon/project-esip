@@ -55,11 +55,9 @@ const Page = () => {
 
   return (
     <div>
-      {session?.user?.role === "TEACHER" ? (
-        <Navbar role="TEACHER" />
-      ) : (
-        <Navbar role="STUDENT" />
-      )}
+      {session?.user?.role === "TEACHER" && <Navbar role="TEACHER" />}
+      {session?.user?.role === "STUDENT" && <Navbar role="STUDENT" />}
+      {session?.user?.role === "ADMIN" && <Navbar role="ADMIN" />}
 
       <div className="container py-12">
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-center text-[#606C38]">

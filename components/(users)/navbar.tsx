@@ -1,13 +1,12 @@
 "use client";
-
 import ProfileIcon from "@/components/navbar/profileIcon";
-import React from "react";
 import { TeacherNavbarMenu } from "./navbarMenu";
 import { Sheet, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { FaAlignLeft } from "react-icons/fa6";
 import MobileMenu from "./admin/mobileMenu";
 import { StudentNavbarMenu } from "./studentNavbarMenu";
+import { AdminNavbarMenu } from "./admin/AdminNavbarMenu";
 
 type NavbarProps = {
   role: string;
@@ -34,7 +33,9 @@ const Navbar = ({ role }: NavbarProps) => {
         </p>
       </div>
       <div className="hidden lg:flex flex-1">
-        {role == "TEACHER" ? <TeacherNavbarMenu /> : <StudentNavbarMenu />}
+        {role == "TEACHER" && <TeacherNavbarMenu />}
+        {role == "STUDENT" && <StudentNavbarMenu />}
+        {role == "ADMIN" && <AdminNavbarMenu />}
         <div className="ml-auto flex gap-1">
           <ProfileIcon />
         </div>

@@ -24,6 +24,7 @@ import { useState } from "react";
 
 import DeletePaperBtn from "../../teacher/paper-management/DeletePaperBtn";
 import Image from "next/image";
+import Link from "next/link";
 
 const options: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -58,7 +59,10 @@ const ResearchPaperActions: React.FC<ResearchPaperActionsProps> = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem>View Details</DropdownMenuItem>
+          <Link href={`/search/${data.id}`} target="_blank">
+            <DropdownMenuItem>View Details</DropdownMenuItem>
+          </Link>
+
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="text-red-500"
