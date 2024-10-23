@@ -19,6 +19,13 @@ export const getUserById = async (id: string) => {
       where: {
         id,
       },
+      include: {
+        school: {
+          select: {
+            status: true,
+          },
+        },
+      },
     });
     return user;
   } catch {

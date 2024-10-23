@@ -6,7 +6,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Admin",
+  title: "Project E-SIP Admin",
   description: "Admin View",
 };
 

@@ -24,15 +24,14 @@ export const addSchool = async (values: z.infer<typeof AddSchoolSchema>) => {
     throw new Error("Email already exists");
   }
 
-  // Check if school name already exists in School model
   const existingSchool = await db.school.findFirst({
     where: {
-      schoolName: values.schoolName,
+      OR: [{ schoolName: values.schoolName }, { email: values.email }],
     },
   });
 
   if (existingSchool) {
-    return { message: "School name already exists" };
+    throw new Error("School name or email already exists");
   }
 
   try {
