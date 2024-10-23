@@ -5,6 +5,7 @@ import Navbar from "@/components/(users)/navbar";
 import { SchoolProvider } from "@/context/SchoolContext";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { getSchool } from "@/actions/schoolManagement";
 
 export const metadata: Metadata = {
   title: "Project E-SIP",
@@ -21,6 +22,13 @@ export default async function TeacherLayout({
   if (session?.user?.role !== "TEACHER") {
     redirect("/");
   }
+
+  const school = await getSchool(session.user.schoolId!);
+
+  if (school?.message.status === "Inactive") {
+    redirect("/api/auth/signout");
+  }
+
   return (
     <SchoolProvider>
       <Navbar role="TEACHER" />

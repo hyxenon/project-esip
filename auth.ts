@@ -54,8 +54,10 @@ export const {
         // Prevent sign in without email verification
         if (!existingUser?.emailVerified) return false;
 
-        // TODO: Add 2FA check
+        // Prevent sign in if school is status is inactive
+        if (existingUser.school?.status === "Inactive") return false;
 
+        // Prevent sign in if user is pending
         if (user.isPending === true) return false;
 
         return true;
