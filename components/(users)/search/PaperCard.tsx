@@ -1,3 +1,4 @@
+import { savePaper, unsavePaper } from "@/actions/paperManagement.action";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,6 +23,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useToast } from "@/components/ui/use-toast";
 import { ResearchPaperModel } from "@/models/models";
 import {
   BookmarkIcon,
@@ -30,15 +32,19 @@ import {
   EyeIcon,
   UsersIcon,
 } from "lucide-react";
+import { Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { LuBookOpen, LuBookOpenCheck } from "react-icons/lu";
 
 interface PaperCardProps {
   paper: ResearchPaperModel;
+  session: Session;
+  userSavedPapers: string[];
 }
 
-const PaperCard = ({ paper }: PaperCardProps) => {
+const PaperCard = ({ paper, session, userSavedPapers }: PaperCardProps) => {
   const formatAuthorName = (name: string) => {
     const nameParts = name.split(" ");
     const lastName = nameParts.pop();
@@ -46,6 +52,15 @@ const PaperCard = ({ paper }: PaperCardProps) => {
 
     return `${initials} ${lastName}`;
   };
+
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+  useEffect(() => {
+    if (userSavedPapers.includes(paper.id!)) {
+      setIsSaved(true);
+    }
+  }, [userSavedPapers, paper.id]);
+
+  const { toast } = useToast();
 
   const formatAuthorNameWithInitials = (name: string) => {
     const nameParts = name.split(" ");
@@ -112,6 +127,32 @@ const PaperCard = ({ paper }: PaperCardProps) => {
     year: "numeric",
     month: "long",
     day: "numeric",
+  };
+
+  const handleSaveClick = async () => {
+    try {
+      if (isSaved) {
+        await unsavePaper(session?.user?.id!, paper.id!);
+        setIsSaved(false);
+        toast({
+          variant: "success",
+          title: "Paper unsaved successfully.",
+        });
+      } else {
+        await savePaper(session?.user?.id!, paper.id!);
+        setIsSaved(true);
+        toast({
+          variant: "success",
+          title: "Paper saved successfully.",
+        });
+      }
+    } catch (err: any) {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong.",
+        description: `Error saving paper: ${err.message}`,
+      });
+    }
   };
 
   return (
@@ -195,13 +236,17 @@ const PaperCard = ({ paper }: PaperCardProps) => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button onClick={handleSaveClick} variant="outline" size="sm">
                 <BookmarkIcon className="w-4 h-4 mr-2" />
-                Save
+                {isSaved ? "Unsave" : "Save"}
               </Button>
             </TooltipTrigger>
-            <TooltipContent>
-              <p>Save this paper to your library</p>
+            <TooltipContent className="bg-[#606C38]">
+              <p>
+                {isSaved
+                  ? "Remove from your library"
+                  : "Save this paper to your library"}
+              </p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

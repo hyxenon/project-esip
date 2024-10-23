@@ -8,7 +8,12 @@ import {
 } from "@/components/ui/sheet";
 
 import { IoDocumentSharp } from "react-icons/io5";
-import { FaFacebookMessenger, FaSchool, FaSearch } from "react-icons/fa";
+import {
+  FaFacebookMessenger,
+  FaSchool,
+  FaSearch,
+  FaStar,
+} from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { signOut, useSession } from "next-auth/react";
@@ -168,6 +173,14 @@ const MobileMenu = ({ role }: MobileMenuProps) => {
 
             {/* Footer */}
             <div className="mt-auto space-y-2">
+              <NavLink
+                href="/library"
+                className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
+                activeClassName="bg-gray-200"
+              >
+                <FaStar className="text-[#606C38]" />
+                <p className="font-semibold text-[#283618]">My Library</p>
+              </NavLink>
               <NavLink
                 href="/profile"
                 className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"

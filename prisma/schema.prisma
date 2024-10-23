@@ -42,6 +42,7 @@ model User {
   // History relations
   performedUserHistories  UserHistory[]  @relation("PerformedUserHistory")
   performedPaperHistories PaperHistory[] @relation("PerformedPaperHistory")
+  savedPapers             SavedPaper[]
 }
 
 model Account {
@@ -126,6 +127,18 @@ model ResearchPaper {
   keywords           String[]
   PaperView          PaperView[]
   PaperPurchase      PaperPurchase[]
+  savedByUsers       SavedPaper[]
+}
+
+model SavedPaper {
+  id        String        @id @default(cuid())
+  userId    String
+  paperId   String
+  createdAt DateTime      @default(now())
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  paper     ResearchPaper @relation(fields: [paperId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, paperId]) // Ensures a user can't save the same paper more than once
 }
 
 model Author {
