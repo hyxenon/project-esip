@@ -209,3 +209,87 @@ export const deletePaper = async (paperId: string) => {
 
   return { message: "Deleted Paper" };
 };
+
+export const savePaper = async (userId: string, paperId: string) => {
+  await db.savedPaper.create({
+    data: {
+      userId: userId,
+      paperId: paperId,
+    },
+  });
+};
+
+export const userSavedPapers = async (userId: string) => {
+  const userSavedPapers = await db.savedPaper.findMany({
+    where: {
+      userId: userId,
+    },
+    select: {
+      paperId: true,
+    },
+  });
+
+  const savedPaperIds = userSavedPapers.map((paper) => paper.paperId);
+
+  return savedPaperIds;
+};
+
+export const unsavePaper = async (userId: string, paperId: string) => {
+  await db.savedPaper.deleteMany({
+    where: {
+      userId,
+      paperId,
+    },
+  });
+  revalidatePath("/library");
+};
+
+export const userSavedPapersWithDetails = async (
+  userId: string,
+  perPage: number = 10,
+  currentPage: number = 1
+) => {
+  const skip = (currentPage - 1) * perPage;
+
+  const papers = await db.savedPaper.findMany({
+    where: {
+      userId: userId,
+    },
+    include: {
+      paper: {
+        include: {
+          authors: true,
+          user: {
+            include: {
+              school: true,
+            },
+          },
+          _count: {
+            select: {
+              PaperView: true,
+            },
+          },
+        },
+      },
+    },
+    skip,
+    take: perPage,
+  });
+
+  const totalSavedPapers = await db.savedPaper.count({
+    where: {
+      userId: userId,
+    },
+  });
+
+  const totalPages = Math.ceil(totalSavedPapers / perPage);
+
+  return {
+    searchPaperResults: papers.map((savedPaper) => ({
+      ...savedPaper.paper,
+      abstract: savedPaper.paper.abstract as string | null,
+      uniqueViews: savedPaper.paper._count.PaperView,
+    })),
+    totalPages,
+  };
+};

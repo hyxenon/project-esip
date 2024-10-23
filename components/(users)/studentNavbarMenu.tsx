@@ -14,7 +14,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaStar } from "react-icons/fa";
 
 export function StudentNavbarMenu() {
   return (
@@ -37,6 +37,16 @@ export function StudentNavbarMenu() {
               </ListItem>
             </ul>
           </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <Link href="/library" legacyBehavior passHref>
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              <div className="flex gap-1 items-center">
+                <FaStar />
+                My Library
+              </div>
+            </NavigationMenuLink>
+          </Link>
         </NavigationMenuItem>
 
         <NavigationMenuItem>

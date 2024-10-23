@@ -10,18 +10,22 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useSearchParams } from "next/navigation";
+import { Session } from "next-auth";
 
 interface SearchResultsComponentProps {
   papers: ResearchPaperModel[];
-
   totalPages: number;
   currentPage: number;
+  session: Session;
+  userSavedPapers: string[];
 }
 
 const SearchResultsComponent = ({
   papers,
   totalPages,
   currentPage,
+  session,
+  userSavedPapers,
 }: SearchResultsComponentProps) => {
   const searchParams = useSearchParams();
 
@@ -34,7 +38,14 @@ const SearchResultsComponent = ({
   return (
     <div className="px-4 md:container space-y-8 py-8 md:mt-8">
       {papers.length > 0 ? (
-        papers.map((paper) => <PaperCard key={paper.id} paper={paper} />)
+        papers.map((paper) => (
+          <PaperCard
+            key={paper.id}
+            paper={paper}
+            session={session}
+            userSavedPapers={userSavedPapers}
+          />
+        ))
       ) : (
         <h1 className="text-center">No Paper Found.</h1>
       )}
