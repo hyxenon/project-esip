@@ -5,7 +5,7 @@ import Navbar from "@/components/(users)/navbar";
 import { auth } from "@/auth";
 
 export const metadata: Metadata = {
-  title: "Search Paper",
+  title: "Search",
   description: "Search Paper",
 };
 

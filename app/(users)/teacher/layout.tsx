@@ -7,7 +7,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Teacher",
+  title: "Project E-SIP",
   description: "Teacher View",
 };
 
