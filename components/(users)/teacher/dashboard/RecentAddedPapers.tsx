@@ -35,6 +35,7 @@ const RecentAddedPapers = async ({
 }) => {
   const currentPage = page ? parseInt(page) : 1;
   const pageSize = 5;
+  const paginationSize = 3;
 
   const { papers, totalCount } = await getRecentAddedPapers(
     session?.user?.schoolId!,
@@ -51,6 +52,9 @@ const RecentAddedPapers = async ({
 
     return `${initials} ${lastName}`;
   };
+
+  const startPage = Math.max(1, currentPage - Math.floor(paginationSize / 2));
+  const endPage = Math.min(totalPages, startPage + paginationSize - 1);
 
   return (
     <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 lg:col-span-2">
@@ -126,17 +130,17 @@ const RecentAddedPapers = async ({
                 <PaginationContent>
                   {currentPage > 1 && (
                     <PaginationItem>
-                      <PaginationPrevious href={`?page=${1}`} />
+                      <PaginationPrevious href={`?page=1`} />
                     </PaginationItem>
                   )}
 
-                  {[...Array(totalPages)].map((_, index) => (
+                  {[...Array(endPage - startPage + 1)].map((_, index) => (
                     <PaginationItem key={index}>
                       <PaginationLink
-                        href={`?page=${index + 1}`}
-                        isActive={currentPage === index + 1}
+                        href={`?page=${startPage + index}`}
+                        isActive={currentPage === startPage + index}
                       >
-                        {index + 1}
+                        {startPage + index}
                       </PaginationLink>
                     </PaginationItem>
                   ))}

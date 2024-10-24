@@ -28,12 +28,16 @@ const SearchResultsComponent = ({
   userSavedPapers,
 }: SearchResultsComponentProps) => {
   const searchParams = useSearchParams();
+  const paginationSize = 5;
 
   const buildPaginationLink = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", page.toString());
     return `?${params.toString()}`;
   };
+
+  const startPage = Math.max(1, currentPage - Math.floor(paginationSize / 2));
+  const endPage = Math.min(totalPages, startPage + paginationSize - 1);
 
   return (
     <div className="px-4 md:container space-y-8 py-8 md:mt-8">
@@ -59,13 +63,13 @@ const SearchResultsComponent = ({
               </PaginationItem>
             )}
 
-            {[...Array(totalPages)].map((_, index) => (
+            {[...Array(endPage - startPage + 1)].map((_, index) => (
               <PaginationItem key={index}>
                 <PaginationLink
-                  href={buildPaginationLink(index + 1)}
-                  isActive={currentPage === index + 1}
+                  href={buildPaginationLink(startPage + index)}
+                  isActive={currentPage === startPage + index}
                 >
-                  {index + 1}
+                  {startPage + index}
                 </PaginationLink>
               </PaginationItem>
             ))}
