@@ -106,12 +106,12 @@ const SchoolActions: React.FC<SchoolActionsProps> = ({ school }) => {
           >
             {school.status === "Active" ? "Unsubscribe" : "Subscribe"}
           </DropdownMenuItem>
-          <DropdownMenuItem
+          {/* <DropdownMenuItem
             onClick={() => setIsDeleteOpen(true)}
             className="text-red-500"
           >
             Delete School
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

@@ -5,8 +5,8 @@ const PendingForm = () => {
   const data = [
     {
       id: "1",
-      name: "Jose Rizal High School",
-      email: "joserizal@gmail.com",
+      name: "Pending Test High School",
+      email: "pendingtest@gmail.com",
       image: "2",
     },
   ];
