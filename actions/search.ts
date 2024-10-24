@@ -25,19 +25,23 @@ export const searchPaper = async (
   const currentPage = searchParams.page ? parseInt(searchParams.page) : 1;
   const skip = (currentPage - 1) * perPage;
 
-  // Add title search condition
   if (searchQuery) {
+    const normalizedQuery = searchQuery
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase();
+
     conditions.push({
       OR: [
         {
           title: {
-            contains: searchQuery,
+            contains: normalizedQuery,
             mode: "insensitive",
           },
         },
         {
           keywords: {
-            hasSome: searchQuery.toLowerCase().split(" "), // Search based on keywords
+            hasSome: [normalizedQuery],
           },
         },
       ],
