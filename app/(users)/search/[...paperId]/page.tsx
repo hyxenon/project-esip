@@ -1,3 +1,4 @@
+import { userSavedPapers } from "@/actions/paperManagement.action";
 import { existingPurchase } from "@/actions/paymongo.action";
 import { getPaperDetails } from "@/actions/search";
 import { auth } from "@/auth";
@@ -62,6 +63,8 @@ const PaperId = async ({ params }: PaperIdProps) => {
     }
   }
 
+  const savedPaperIds = await userSavedPapers(session?.user?.id!);
+
   return (
     <div className="">
       <PaperDetails
@@ -69,6 +72,7 @@ const PaperId = async ({ params }: PaperIdProps) => {
         session={session}
         isPublic={isPublic}
         isPaid={isPaid}
+        userSavedPapers={savedPaperIds}
       />
     </div>
   );

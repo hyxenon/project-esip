@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -29,12 +29,15 @@ import { ClipLoader } from "react-spinners";
 import { handlePurchase } from "@/actions/paymongo.action";
 import { LuBookOpen, LuBookOpenCheck } from "react-icons/lu";
 import Image from "next/image";
+import { useToast } from "@/components/ui/use-toast";
+import { savePaper, unsavePaper } from "@/actions/paperManagement.action";
 
 interface PaperDetailsProps {
   paper1: any;
   session: Session;
   isPublic: boolean;
   isPaid: boolean;
+  userSavedPapers: string[];
 }
 
 export default function PaperDetails({
@@ -42,14 +45,42 @@ export default function PaperDetails({
   session,
   isPublic,
   isPaid,
+  userSavedPapers,
 }: PaperDetailsProps) {
   const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
-  const handleCite = () => {
-    // Implement citation functionality
-  };
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const { toast } = useToast();
 
-  const handleSave = () => {
-    // Implement save functionality
+  useEffect(() => {
+    if (userSavedPapers.includes(paper1.id)) {
+      setIsSaved(true);
+    }
+  }, [userSavedPapers, paper1.id]);
+
+  const handleSaveClick = async () => {
+    try {
+      if (isSaved) {
+        await unsavePaper(session?.user?.id!, paper1.id);
+        setIsSaved(false);
+        toast({
+          variant: "success",
+          title: "Paper unsaved successfully.",
+        });
+      } else {
+        await savePaper(session?.user?.id!, paper1.id);
+        setIsSaved(true);
+        toast({
+          variant: "success",
+          title: "Paper saved successfully.",
+        });
+      }
+    } catch (err: any) {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong.",
+        description: `Error saving paper: ${err.message}`,
+      });
+    }
   };
 
   const paymentOnClick = async () => {
@@ -244,11 +275,11 @@ export default function PaperDetails({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={handleSave}
+                onClick={handleSaveClick}
                 className="bg-white hover:bg-primary/10 transition-colors"
               >
                 <BookmarkIcon className="w-4 h-4 mr-2 text-primary" />
-                Save
+                {isSaved ? "Unsave" : "Save"}
               </Button>
 
               <Dialog>
@@ -329,18 +360,30 @@ export default function PaperDetails({
                 </Badge>
               ) : paper1.price < 100 ? (
                 <Badge className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all py-2 px-4">
-                  Private Paper
+                  {!paper1.file && !isPublic && <FaLock className="mr-2" />}
+
+                  {!paper1.file && isPublic
+                    ? "No PDF available"
+                    : "Private Paper"}
                 </Badge>
               ) : (
-                <Button
-                  onClick={paymentOnClick}
-                  className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all"
-                >
-                  <span>
-                    <FaLock className="mr-2" />
-                  </span>
-                  Purchase File
-                </Button>
+                <>
+                  {paper1.file ? (
+                    <Button
+                      onClick={paymentOnClick}
+                      className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all"
+                    >
+                      <span>
+                        <FaLock className="mr-2" />
+                      </span>
+                      Purchase File
+                    </Button>
+                  ) : (
+                    <Badge className="bg-[#BC6C25] hover:bg-[#DDA15E] transition-all py-2 px-4">
+                      No PDF file
+                    </Badge>
+                  )}
+                </>
               )}
             </div>
           </div>
