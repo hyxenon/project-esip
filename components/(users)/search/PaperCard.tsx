@@ -1,4 +1,5 @@
 import { savePaper, unsavePaper } from "@/actions/paperManagement.action";
+import { BiCategory } from "react-icons/bi";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -211,6 +212,10 @@ const PaperCard = ({ paper, session, userSavedPapers }: PaperCardProps) => {
         <div className="flex items-center text-sm text-gray-600">
           <CalendarIcon className="w-4 h-4 mr-2" />
           {paper.date.toLocaleDateString("en-US", options)}
+        </div>
+        <div className="flex items-center text-sm text-gray-600">
+          <BiCategory className="w-4 h-4 mr-2" />
+          <span className="capitalize">{paper.researchCategory}</span>
         </div>
       </CardHeader>
       <CardContent>
