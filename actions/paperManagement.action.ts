@@ -23,7 +23,9 @@ export const addResearchProposalPaper = async (data: ResearchPaperModel) => {
       price: data.price,
       grade: data.grade,
       userId: data.userId,
-      keywords: data.keywords,
+      keywords: data.keywords
+        ? data.keywords.map((keyword) => keyword.toLowerCase())
+        : [],
       authors:
         data.authors && data.authors.length > 0
           ? {
@@ -123,18 +125,23 @@ export const updatePaper = async (
   paperId: string,
   data: ResearchPaperModel
 ) => {
-  const { authors, ...rest } = data;
+  const { authors, keywords, ...rest } = data;
+
+  const authorsList = authors || [];
+  const normalizedKeywords = keywords
+    ? keywords.map((keyword) => keyword.toLowerCase())
+    : [];
 
   const currentAuthors = await db.author.findMany({
     where: { researchPaperId: paperId },
   });
 
   const removedAuthors = currentAuthors.filter(
-    (current) => !authors!.some((newAuthor) => newAuthor.id === current.id)
+    (current) => !authorsList.some((newAuthor) => newAuthor.id === current.id)
   );
 
   const connectedAuthors = await Promise.all(
-    authors!.map(async (author) => {
+    authorsList.map(async (author) => {
       const existingAuthor = await db.author.findUnique({
         where: { id: author.id },
       });
@@ -155,6 +162,7 @@ export const updatePaper = async (
 
   const updateData: any = {
     ...rest,
+    keywords: normalizedKeywords,
     grade: data.grade === "" ? null : data.grade,
     authors: {
       set: connectedAuthors,
@@ -176,15 +184,18 @@ export const updatePaper = async (
     },
   });
 
-  await db.author.deleteMany({
-    where: {
-      id: {
-        in: removedAuthors.map((author) => author.id),
+  if (removedAuthors.length > 0) {
+    await db.author.deleteMany({
+      where: {
+        id: {
+          in: removedAuthors.map((author) => author.id),
+        },
       },
-    },
-  });
+    });
+  }
 
   revalidatePath("/teacher/paper-management/add-paper");
+
   return updatedPaper;
 };
 
