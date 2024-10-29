@@ -4,14 +4,6 @@ import { LuBookOpen } from "react-icons/lu";
 import { LuBookOpenCheck } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -19,11 +11,14 @@ import {
 } from "@/components/ui/tooltip";
 import { ResearchPaperModel } from "@/models/models";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 import DeletePaperBtn from "./DeletePaperBtn";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { FaRegEdit, FaRegEye } from "react-icons/fa";
+import { MdDeleteForever } from "react-icons/md";
+import { RiFolderTransferLine } from "react-icons/ri";
 
 const options: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -50,48 +45,83 @@ const ResearchPaperActions: React.FC<ResearchPaperActionsProps> = ({
         name={data.title}
         id={data.id!}
       />
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <Link href={`/search/${data.id}`} target="_blank">
-            <DropdownMenuItem>View Details</DropdownMenuItem>
-          </Link>
+      <div className="flex items-center justify-center">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link href={`/search/${data.id}`} target="_blank">
+                <Button variant={"ghost"} className="p-2">
+                  <FaRegEye className="text-[#283618] w-4 h-4" />
+                </Button>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>View Paper</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
-          <DropdownMenuItem
-            onClick={() =>
-              router.push(
-                `/teacher/paper-management/add-paper?edit=true&paperId=${data.id}`
-              )
-            }
-          >
-            Edit
-          </DropdownMenuItem>
-          {data.researchType === "proposal" && (
-            <DropdownMenuItem
-              onClick={() =>
-                router.push(
-                  `/teacher/paper-management/add-paper?edit=true&paperId=${data.id}&researchType=paper`
-                )
-              }
-            >
-              Add Research Paper
-            </DropdownMenuItem>
-          )}
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className="text-red-500"
-            onClick={() => setIsDeleteOpen(true)}
-          >
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant={"ghost"}
+                className="p-2"
+                onClick={() =>
+                  router.push(
+                    `/teacher/paper-management/add-paper?edit=true&paperId=${data.id}`
+                  )
+                }
+              >
+                <FaRegEdit className="text-[#BC6C25] w-4 h-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Edit Paper</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        {data.researchType === "proposal" && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant={"ghost"}
+                  className="p-2"
+                  onClick={() =>
+                    router.push(
+                      `/teacher/paper-management/add-paper?edit=true&paperId=${data.id}&researchType=paper`
+                    )
+                  }
+                >
+                  <RiFolderTransferLine />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Proposal to Paper</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                className="p-2"
+                variant={"ghost"}
+                onClick={() => setIsDeleteOpen(true)}
+              >
+                <MdDeleteForever className="w-4 h-4 text-red-500" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Delete Paper</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
     </>
   );
 };
@@ -126,10 +156,12 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <p className="cursor-pointer">{truncateParagraph(data.title)}</p>
+              <Link target="_blank" href={`/search/${data.id}`}>
+                {truncateParagraph(data.title)}
+              </Link>
             </TooltipTrigger>
             <TooltipContent className="bg-[#283618]">
-              <p>{data.title}</p>
+              {data.title}
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -192,25 +224,6 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
       return <p className="capitalize">{data.researchCategory}</p>;
     },
   },
-  // {
-  //   accessorKey: "researchAdviser",
-  //   header: ({ column }) => {
-  //     return (
-  //       <Button
-  //         variant="ghost"
-  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-  //       >
-  //         Adviser
-  //         <ArrowUpDown className="ml-2 h-4 w-4" />
-  //       </Button>
-  //     );
-  //   },
-  //   cell: ({ row }) => {
-  //     const data = row.original;
-
-  //     return <p className="capitalize">{data.researchAdviser}</p>;
-  //   },
-  // },
   {
     accessorKey: "date",
     header: ({ column }) => {
@@ -282,6 +295,9 @@ export const columns: ColumnDef<ResearchPaperModel>[] = [
   },
   {
     id: "actions",
+    header: ({ column }) => {
+      return <p className="text-center">Actions</p>;
+    },
     cell: ({ row }) => <ResearchPaperActions data={row.original} />,
   },
 ];

@@ -64,6 +64,7 @@ const TeacherDashboard = async ({
     { Category: "Total Users", Value: dashboardData.totalUsers },
     { Category: "Teachers", Value: dashboardData.totalTeachers },
     { Category: "Students", Value: dashboardData.totalStudents },
+    { Category: "Pending Users", Value: dashboardData.totalPendingUsers },
     {
       Category: "Research Proposals",
       Value: dashboardData.totalResearchProposalCount,
@@ -135,6 +136,7 @@ const TeacherDashboard = async ({
             dataKeyX="views"
             dataKeyY="paper"
             barColor="#606C38"
+            dataType="papers"
           />
         </TopPopularBarChart>
         <TopPopularBarChart

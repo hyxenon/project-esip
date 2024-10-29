@@ -45,6 +45,7 @@ import {
 } from "@/actions/paperManagement.action";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Link from "next/link";
+import useDebounce from "@/lib/hooks/useDebounce";
 
 const formSchema = z.object({
   title: z.string().trim().min(1, {
@@ -75,12 +76,18 @@ interface ResearchProposalFormProps {
   isEdit?: boolean;
   paperId?: string;
   paper?: ResearchPaperModel;
+  initialData?: Partial<z.infer<typeof formSchema>>;
+  onChange?: (data: Partial<z.infer<typeof formSchema>>) => void;
+  onSubmitSuccess?: () => void;
 }
 
 const ResearchProposalForm = ({
   isEdit,
   paperId,
   paper,
+  initialData,
+  onChange,
+  onSubmitSuccess,
 }: ResearchProposalFormProps) => {
   const { data: sessionData } = useSession();
   const [selectedDateRange, setSelectedDateRange] = useState({
@@ -99,20 +106,49 @@ const ResearchProposalForm = ({
 
   const { toast } = useToast();
 
+  const defaultValues: Partial<z.infer<typeof formSchema>> = {
+    title: "",
+    researchAdviser: "",
+    introduction: "",
+    researchCategory: undefined,
+    researchConsultant: "",
+    file: "",
+    references: "",
+    isPublic: "false",
+    keywords: "",
+    grade: "",
+  };
+
+  const mergedInitialData = {
+    ...defaultValues,
+    ...initialData,
+  };
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      researchAdviser: "",
-      introduction: "",
-      researchCategory: "",
-      researchConsultant: "",
-      file: "",
-      references: "",
-      isPublic: "false",
-      keywords: "",
-    },
+    defaultValues: mergedInitialData,
   });
+
+  const formData = form.watch();
+  // Wrap onChange in a debounced function
+  const debouncedFormData = useDebounce(formData, 300);
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(debouncedFormData);
+    }
+  }, [debouncedFormData, onChange]);
+
+  useEffect(() => {
+    if (initialData) {
+      Object.keys(initialData).forEach((key) =>
+        form.setValue(
+          key as keyof z.infer<typeof formSchema>,
+          initialData[key as keyof z.infer<typeof formSchema>]
+        )
+      );
+    }
+  }, [initialData, form]);
 
   useEffect(() => {
     if (isEdit && paperId && paper) {
@@ -122,7 +158,7 @@ const ResearchProposalForm = ({
         "researchConsultant",
         paper.researchConsultant.toUpperCase()
       );
-      form.setValue("researchCategory", paper.researchCategory.toUpperCase());
+      form.setValue("researchCategory", paper.researchCategory.toLowerCase());
       form.setValue("introduction", paper.introduction);
       form.setValue("references", paper.references);
       form.setValue("grade", paper.grade ?? "");
@@ -213,12 +249,25 @@ const ResearchProposalForm = ({
 
           addResearchProposalPaper(data).then((paper) => {
             form.reset();
+            form.reset({
+              title: "",
+              researchAdviser: "",
+              researchConsultant: "",
+              researchCategory: undefined,
+              introduction: "",
+              references: "",
+              keywords: "",
+              isPublic: "false",
+            });
             setAuthors([]);
             setProgress(0);
             if (fileInputRef.current) {
-              fileInputRef.current.value = ""; // Reset the input
+              fileInputRef.current.value = "";
             }
-            setFile(undefined); // Reset the file state if needed
+            setFile(undefined);
+            if (onSubmitSuccess) {
+              onSubmitSuccess();
+            }
           });
 
           toast({
@@ -262,7 +311,9 @@ const ResearchProposalForm = ({
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>
+                Title <span className=""> *</span>
+              </FormLabel>
               <FormControl>
                 <Input
                   type="text"
@@ -330,7 +381,9 @@ const ResearchProposalForm = ({
               name="researchAdviser"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Research Adviser</FormLabel>
+                  <FormLabel>
+                    Research Adviser <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       className={`${
@@ -353,7 +406,9 @@ const ResearchProposalForm = ({
               name="researchConsultant"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Research Consultant</FormLabel>
+                  <FormLabel>
+                    Research Consultant <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       className={`${
@@ -376,11 +431,18 @@ const ResearchProposalForm = ({
               name="researchCategory"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Research Category</FormLabel>
+                  <FormLabel>
+                    Research Category <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      value={
+                        field.value ||
+                        (isEdit && paper?.researchCategory.toLowerCase()) ||
+                        ""
+                      }
                     >
                       <SelectTrigger
                         className={`${
@@ -390,7 +452,13 @@ const ResearchProposalForm = ({
                         }`}
                       >
                         <SelectValue
-                          placeholder={field.value ? field.value : "Category"}
+                          placeholder={
+                            field.value ||
+                            (isEdit &&
+                              paper?.researchCategory.toLocaleLowerCase())
+                              ? ""
+                              : "Category"
+                          }
                         />
                       </SelectTrigger>
                       <SelectContent>
@@ -452,7 +520,9 @@ const ResearchProposalForm = ({
             name="introduction"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Introduction</FormLabel>
+                <FormLabel>
+                  Introduction <span className=""> *</span>
+                </FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="Type introduction paper here."
@@ -472,7 +542,9 @@ const ResearchProposalForm = ({
             name="references"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>References</FormLabel>
+                <FormLabel>
+                  References <span className=""> *</span>
+                </FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="Paste references here."

@@ -46,6 +46,7 @@ import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { SingleImageDropzone } from "../../admin/school-management/SingleImageDropzone";
 import Image from "next/image";
+import useDebounce from "@/lib/hooks/useDebounce";
 
 const formSchema = z.object({
   title: z.string().trim().min(1, {
@@ -83,6 +84,9 @@ interface ResearchPaperFormProps {
   paperId?: string;
   paper?: ResearchPaperModel;
   proposalToPaper?: boolean;
+  initialData?: Partial<z.infer<typeof formSchema>>;
+  onChange?: (data: Partial<z.infer<typeof formSchema>>) => void;
+  onSubmitSuccess?: () => void;
 }
 
 const ResearchPaperForm = ({
@@ -90,6 +94,9 @@ const ResearchPaperForm = ({
   paperId,
   paper,
   proposalToPaper,
+  initialData,
+  onChange,
+  onSubmitSuccess,
 }: ResearchPaperFormProps) => {
   const { data: sessionData } = useSession();
   const [selectedDateRange, setSelectedDateRange] = useState({
@@ -110,6 +117,27 @@ const ResearchPaperForm = ({
     paper?.wonCompetition ? paper.wonCompetition : "none"
   );
 
+  const defaultValues: Partial<z.infer<typeof formSchema>> = {
+    title: "",
+    researchAdviser: "",
+    introduction: "",
+    researchCategory: undefined,
+    researchConsultant: "",
+    file: "",
+    references: "",
+    isPublic: "false",
+    keywords: "",
+    abstract: "",
+    price: "",
+    grade: "",
+    wonCompetitonFile: undefined,
+  };
+
+  const mergedInitialData = {
+    ...defaultValues,
+    ...initialData,
+  };
+
   const handleSelectChange = (value: string) => {
     setWonCompetitionValue(value);
   };
@@ -118,20 +146,28 @@ const ResearchPaperForm = ({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      researchAdviser: "",
-      introduction: "",
-      researchCategory: undefined,
-      researchConsultant: "",
-      file: "",
-      references: "",
-      isPublic: "false",
-      keywords: "",
-      abstract: "",
-      price: "",
-    },
+    defaultValues: mergedInitialData,
   });
+
+  const formData = form.watch();
+  const debouncedFormData = useDebounce(formData, 300);
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(debouncedFormData);
+    }
+  }, [debouncedFormData, onChange]);
+
+  useEffect(() => {
+    if (initialData) {
+      Object.keys(initialData).forEach((key) =>
+        form.setValue(
+          key as keyof z.infer<typeof formSchema>,
+          initialData[key as keyof z.infer<typeof formSchema>]
+        )
+      );
+    }
+  }, [initialData, form]);
 
   useEffect(() => {
     if (isEdit && paperId && paper) {
@@ -141,7 +177,7 @@ const ResearchPaperForm = ({
         "researchConsultant",
         paper.researchConsultant.toUpperCase()
       );
-      form.setValue("researchCategory", paper.researchCategory.toUpperCase());
+      form.setValue("researchCategory", paper.researchCategory.toLowerCase());
       form.setValue("abstract", paper.abstract!);
       form.setValue("introduction", paper.introduction);
       form.setValue("references", paper.references);
@@ -219,8 +255,6 @@ const ResearchPaperForm = ({
               : null,
         };
 
-        console.log(data.wonCompetitonFile);
-
         if (fileUrl && paper.file) {
           edgestore.myProtectedFiles.delete({
             url: paper.file,
@@ -258,12 +292,28 @@ const ResearchPaperForm = ({
 
           addResearchProposalPaper(data).then((paper) => {
             form.reset();
+            form.reset({
+              title: "",
+              researchAdviser: "",
+              researchConsultant: "",
+              researchCategory: undefined,
+              introduction: "",
+              abstract: "",
+              references: "",
+              keywords: "",
+              isPublic: "false",
+              price: "",
+              wonCompetitonFile: undefined,
+            });
             setAuthors([]);
             setProgress(0);
             if (fileInputRef.current) {
               fileInputRef.current.value = "";
             }
             setFile(undefined);
+            if (onSubmitSuccess) {
+              onSubmitSuccess();
+            }
           });
 
           toast({
@@ -319,7 +369,9 @@ const ResearchPaperForm = ({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>
+                  Title <span className=""> *</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="text"
@@ -386,7 +438,9 @@ const ResearchPaperForm = ({
                 name="researchAdviser"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Research Adviser</FormLabel>
+                    <FormLabel>
+                      Research Adviser <span className=""> *</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className={`${
@@ -409,7 +463,9 @@ const ResearchPaperForm = ({
                 name="researchConsultant"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Research Consultant</FormLabel>
+                    <FormLabel>
+                      Research Consultant <span className=""> *</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className={`${
@@ -432,11 +488,18 @@ const ResearchPaperForm = ({
                 name="researchCategory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Research Category</FormLabel>
+                    <FormLabel>
+                      Research Category <span className=""> *</span>
+                    </FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
+                        value={
+                          field.value ||
+                          (isEdit && paper?.researchCategory) ||
+                          ""
+                        }
                       >
                         <SelectTrigger
                           className={`${
@@ -446,7 +509,11 @@ const ResearchPaperForm = ({
                           }`}
                         >
                           <SelectValue
-                            placeholder={field.value ? field.value : "Category"}
+                            placeholder={
+                              field.value || (isEdit && paper?.researchCategory)
+                                ? ""
+                                : "Category"
+                            }
                           />
                         </SelectTrigger>
                         <SelectContent>
@@ -507,7 +574,9 @@ const ResearchPaperForm = ({
               name="abstract"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Abstract</FormLabel>
+                  <FormLabel>
+                    Abstract <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Type abstract here."
@@ -528,7 +597,9 @@ const ResearchPaperForm = ({
               name="introduction"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Introduction</FormLabel>
+                  <FormLabel>
+                    Introduction <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Type introduction  here."
@@ -550,7 +621,9 @@ const ResearchPaperForm = ({
               name="references"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>References</FormLabel>
+                  <FormLabel>
+                    References <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Paste references here."

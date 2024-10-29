@@ -8,7 +8,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -17,6 +17,33 @@ import { ResearchPaperModel } from "@/models/models";
 import { Badge } from "@/components/ui/badge";
 import ResearchPaperForm from "./ResearchPaperForm";
 import { RocketIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
+import { z } from "zod";
+
+const formSchema = z.object({
+  title: z.string().trim().min(1, {
+    message: "Title is required.",
+  }),
+  researchAdviser: z.string().trim().min(1, {
+    message: "Research Adviser is required.",
+  }),
+  researchConsultant: z.string().trim().min(1, {
+    message: "Research Consultant is required.",
+  }),
+  researchCategory: z.string().trim().min(1, {
+    message: "Research Category is required.",
+  }),
+  introduction: z.string().min(1, {
+    message: "Introduction is required.",
+  }),
+  references: z.string().min(1, {
+    message: "References is required.",
+  }),
+  isPublic: z.string(),
+  file: z.string().optional(),
+  grade: z.string().optional(),
+  keywords: z.string().optional(),
+});
 
 interface AddPaperFormProps {
   isEdit?: boolean;
@@ -31,6 +58,20 @@ const AddPaperForm = ({
   paper,
   researchType,
 }: AddPaperFormProps) => {
+  const [proposalFormData, setProposalFormData] = useState<
+    Partial<z.infer<typeof formSchema>>
+  >({});
+  const [paperFormData, setPaperFormData] = useState<
+    Partial<z.infer<typeof formSchema>>
+  >({});
+
+  const handleProposalSubmit = () => {
+    setProposalFormData({});
+  };
+
+  const handlePaperSubmit = () => {
+    setPaperFormData({});
+  };
   return (
     <Card className="py-8 px-8 lg:mt-8 lg:p-16 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 mb-8">
       {/* Breadcrumb */}
@@ -110,7 +151,11 @@ const AddPaperForm = ({
             </TabsList>
 
             <TabsContent value="proposal">
-              <ResearchProposalForm />
+              <ResearchProposalForm
+                initialData={proposalFormData}
+                onChange={setProposalFormData}
+                onSubmitSuccess={handleProposalSubmit}
+              />
             </TabsContent>
             <TabsContent value="paper">
               <Alert className="mt-4 mb-10  bg-[#FEFAE0] text-[#606C38] shadow-md ">
@@ -132,7 +177,11 @@ const AddPaperForm = ({
                 </div>
               </Alert>
 
-              <ResearchPaperForm />
+              <ResearchPaperForm
+                initialData={paperFormData}
+                onChange={setPaperFormData}
+                onSubmitSuccess={handlePaperSubmit}
+              />
             </TabsContent>
           </Tabs>
         )}

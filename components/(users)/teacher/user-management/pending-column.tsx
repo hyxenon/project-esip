@@ -1,23 +1,21 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-
 import DeletePendingUser from "./delete-pending-user";
 import AcceptPendingUser from "./accept-pending-user";
 import { Badge } from "@/components/ui/badge";
 import { PendingUserModel } from "@/models/models";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { FaUserCheck } from "react-icons/fa";
+import { MdDeleteForever } from "react-icons/md";
 
 type PendingUserActionsProps = {
   user: PendingUserModel;
@@ -41,27 +39,41 @@ const PendingUserActions: React.FC<PendingUserActionsProps> = ({ user }) => {
         setIsOpen={setIsAcceptOpen}
         name={user.name}
       />
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => setIsAcceptOpen(true)}>
-            Accept
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className="text-red-500"
-            onClick={() => setIsDeleteOpen(true)}
-          >
-            Decline
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className="flex items-center justify-center">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant={"ghost"}
+                className="p-2"
+                onClick={() => setIsAcceptOpen(true)}
+              >
+                <FaUserCheck className="text-[#606C38] w-4 h-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Accept User</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant={"ghost"}
+                className="p-2"
+                onClick={() => setIsDeleteOpen(true)}
+              >
+                <MdDeleteForever className="w-4 h-4 text-red-500" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Remove User Request</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
     </>
   );
 };
@@ -164,6 +176,9 @@ export const pendingColumn: ColumnDef<PendingUserModel>[] = [
   },
   {
     id: "actions",
+    header: ({ column }) => {
+      return <p className="text-center">Actions</p>;
+    },
     cell: ({ row }) => <PendingUserActions user={row.original} />,
   },
 ];

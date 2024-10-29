@@ -1,16 +1,7 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 import { SchoolModel } from "../../../school-management/SchoolForm";
 import { useState } from "react";
@@ -18,6 +9,15 @@ import DeleteUserButton from "../DeleteUserButton";
 import EditUserButton from "../EditUserButton";
 import { Badge } from "@/components/ui/badge";
 import ViewUserDetails from "@/components/(users)/ViewUserDetails";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
+import { MdDeleteForever } from "react-icons/md";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export type User = {
   id: string;
@@ -59,30 +59,58 @@ const UserActions: React.FC<UserActionsProps> = ({ user }) => {
         setIsOpen={setIsViewOpen}
         user={user}
       />
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => setIsViewOpen(true)}>
-            View User
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
-            Edit User
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className="text-red-500"
-            onClick={() => setIsDeleteOpen(true)}
-          >
-            Delete User
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className="flex items-center justify-center">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                className="p-2"
+                variant={"ghost"}
+                onClick={() => setIsViewOpen(true)}
+              >
+                <FaRegEye className="text-[#283618] w-4 h-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>View User</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                className="p-2"
+                variant={"ghost"}
+                onClick={() => setIsEditOpen(true)}
+              >
+                <FaRegEdit className="text-[#BC6C25] w-4 h-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Edit User</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                className="p-2"
+                variant={"ghost"}
+                onClick={() => setIsDeleteOpen(true)}
+              >
+                <MdDeleteForever className="w-4 h-4 text-red-500" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Delete User</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
     </>
   );
 };
@@ -180,6 +208,9 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     id: "actions",
+    header: ({ column }) => {
+      return <p className="text-center">Actions</p>;
+    },
     cell: ({ row }) => <UserActions user={row.original} />,
   },
 ];
