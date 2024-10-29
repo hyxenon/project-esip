@@ -72,6 +72,13 @@ export const getTotalCountTeacherDashboard = async (schoolId: string) => {
     },
   });
 
+  const totalPendingUsers = await db.user.count({
+    where: {
+      schoolId: schoolId,
+      isPending: true,
+    },
+  });
+
   const lifeScienceCount = await db.researchPaper.count({
     where: {
       user: {
@@ -139,6 +146,7 @@ export const getTotalCountTeacherDashboard = async (schoolId: string) => {
     totalUsers,
     totalTeachers,
     totalStudents,
+    totalPendingUsers,
     totalResearchProposalCount,
     totalResearchPaperCount,
     researchCategories: {

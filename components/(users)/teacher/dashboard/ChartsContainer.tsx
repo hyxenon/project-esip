@@ -6,6 +6,7 @@ import ResearchCategory from "./ResearchCategory";
 const teachersStudentsLabels = [
   { name: "Teachers", color: "#283618" },
   { name: "Students", color: "#606C38" },
+  { name: "Pending Users", color: "#FEFAE0" },
 ];
 
 const teachersStudentsConfig = {
@@ -16,6 +17,10 @@ const teachersStudentsConfig = {
   students: {
     label: "Students",
     color: "#606C38",
+  },
+  pending: {
+    label: "Pending Users",
+    color: "#FEFAE0",
   },
 };
 
@@ -32,6 +37,10 @@ const researchTypeConfig = {
   students: {
     label: "Papers",
     color: "#606C38",
+  },
+  pending: {
+    label: "Pending Users",
+    color: "#FEFAE0",
   },
 };
 
@@ -58,6 +67,11 @@ const ChartsContainer = async ({ dashboardData }: ChartsContainerProps) => {
   const teachersStudentsData = [
     { role: "Teachers", count: dashboardData.totalTeachers, fill: "#283618" },
     { role: "Students", count: dashboardData.totalStudents, fill: "#606C38" },
+    {
+      role: "Pending",
+      count: dashboardData.totalPendingUsers,
+      fill: "#FEFAE0",
+    },
   ];
 
   return (
@@ -75,7 +89,8 @@ const ChartsContainer = async ({ dashboardData }: ChartsContainerProps) => {
           </div>
           <p className="text-xs text-gray-500 mt-1">
             Teachers: {dashboardData.totalTeachers} | Students:{" "}
-            {dashboardData.totalStudents}
+            {dashboardData.totalStudents} | Pending:{" "}
+            {dashboardData.totalPendingUsers}
           </p>
           {/* Passing data and labels to PieChartCard */}
           <PieChartCard

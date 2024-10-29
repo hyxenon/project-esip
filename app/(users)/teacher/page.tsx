@@ -64,6 +64,7 @@ const TeacherDashboard = async ({
     { Category: "Total Users", Value: dashboardData.totalUsers },
     { Category: "Teachers", Value: dashboardData.totalTeachers },
     { Category: "Students", Value: dashboardData.totalStudents },
+    { Category: "Pending Users", Value: dashboardData.totalPendingUsers },
     {
       Category: "Research Proposals",
       Value: dashboardData.totalResearchProposalCount,

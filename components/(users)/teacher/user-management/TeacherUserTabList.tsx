@@ -22,7 +22,17 @@ const TeacherUserTabList = ({
         <TabsList className="grid md:w-[400px] grid-cols-3 shadow-md bg-[#D9D9D9] bg-opacity-30">
           <TabsTrigger value="allTeachers">Teachers</TabsTrigger>
           <TabsTrigger value="allStudents">Students</TabsTrigger>
-          <TabsTrigger value="pendingUsers">Pending Users</TabsTrigger>
+          <TabsTrigger
+            className={`${pendingData.length > 0 ? "relative" : ""}`}
+            value="pendingUsers"
+          >
+            Pending Users
+            {pendingData.length > 0 && (
+              <div className="absolute opacity-100 -right-2 -top-3 bg-[#BC6C25] rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="text-xs text-white">{pendingData.length}</span>
+              </div>
+            )}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="allTeachers">
           <TeacherUserManagementTable
