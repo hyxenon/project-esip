@@ -136,6 +136,7 @@ const TeacherDashboard = async ({
             dataKeyX="views"
             dataKeyY="paper"
             barColor="#606C38"
+            dataType="papers"
           />
         </TopPopularBarChart>
         <TopPopularBarChart

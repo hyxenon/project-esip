@@ -23,6 +23,7 @@ interface ReusableChartProps {
   dataKeyX: string; // X-axis key (e.g., "views" or "count")
   dataKeyY: string; // Y-axis key (e.g., "paper" or "keyword")
   barColor?: string; // Customizable bar color (optional)
+  dataType?: string;
 }
 
 const chartConfig = {
@@ -36,6 +37,7 @@ export function PopularCharts({
   dataKeyX,
   dataKeyY,
   barColor = "var(--color-views)", // Default color for bars
+  dataType,
 }: ReusableChartProps) {
   const hasNoViews = data.every((item) => item[dataKeyX] === 0); // Check if all views are 0
 
@@ -77,13 +79,27 @@ export function PopularCharts({
               content={<ChartTooltipContent indicator="line" />}
             />
             <Bar dataKey={dataKeyX} fill={barColor} radius={4}>
-              <LabelList
-                dataKey={dataKeyY}
-                position="insideLeft"
-                offset={8}
-                className="fill-[--color-label]"
-                fontSize={12}
-              />
+              {dataType === "papers" ? (
+                <LabelList
+                  dataKey={dataKeyY}
+                  position="insideLeft"
+                  offset={8}
+                  className="fill-[--color-label]"
+                  fontSize={10}
+                  formatter={(label: any) =>
+                    label.length > 10 ? label.substring(0, 10) + "..." : label
+                  }
+                />
+              ) : (
+                <LabelList
+                  dataKey={dataKeyY}
+                  position="insideLeft"
+                  offset={8}
+                  className="fill-[--color-label]"
+                  fontSize={12}
+                />
+              )}
+
               <LabelList
                 dataKey={dataKeyX}
                 position="right"

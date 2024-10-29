@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,6 +23,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,7 +39,6 @@ import { FormSuccess } from "@/components/form-success";
 import { register } from "@/actions/auth/register";
 
 import { User } from "./teacherTable/column";
-import { PasswordField } from "@/components/ui/password-field";
 
 interface SchoolModel {
   label: string;
@@ -105,34 +104,25 @@ interface ProfileFormProps {
 }
 
 function ProfileForm({ selectedSchool }: ProfileFormProps) {
-  const formSchema = z
-    .object({
-      email: z.string().email({ message: "Email is required." }),
-      password: z.string().min(6, {
-        message: "Minimum 6 characters required",
-      }),
-      confirmPassword: z.string(),
-      firstName: z
-        .string()
-        .trim()
-        .min(1, { message: "First name is required." }),
-      lastName: z.string().trim().min(1, { message: "Last name is required." }),
-      role: z.string().min(1, { message: "Role is required." }),
-      schoolId: z.string({
-        required_error: "Please select your school.",
-      }),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords do not match",
-      path: ["confirmPassword"],
-    });
+  const formSchema = z.object({
+    email: z.string().email({ message: "Email is required." }),
+    password: z.string().min(6, {
+      message: "Please generate a password.",
+    }),
+    firstName: z.string().trim().min(1, { message: "First name is required." }),
+    lastName: z.string().trim().min(1, { message: "Last name is required." }),
+    role: z.string().min(1, { message: "Role is required." }),
+    schoolId: z.string({
+      required_error: "Please select your school.",
+    }),
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
-      confirmPassword: "",
+
       firstName: "",
       lastName: "",
       role: "",
@@ -150,8 +140,7 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
   const { toast } = useToast();
 
   const randomPasswordGenerator = (length: number = 12): string => {
-    const charset =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const charset = `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[!@#$%^&*]`;
     let password = "";
 
     for (let i = 0; i < length; i++) {
@@ -249,9 +238,26 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
           </div>
 
           <div className="grid grid-cols-2 gap-x-4">
-            <PasswordField name="password" title="Password" />
-            <PasswordField name="confirmPassword" title="Confirm Password" />
-
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="password"
+                      placeholder="Generate Password"
+                      className="border-gray-400"
+                      disabled={true}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div></div>
             <Button
               className=" mt-2 "
               type="button"
@@ -259,7 +265,6 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
               onClick={() => {
                 const ranPass = randomPasswordGenerator();
                 form.setValue("password", ranPass);
-                form.setValue("confirmPassword", ranPass);
               }}
             >
               Generate Password
