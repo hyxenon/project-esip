@@ -46,6 +46,7 @@ import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { SingleImageDropzone } from "../../admin/school-management/SingleImageDropzone";
 import Image from "next/image";
+import useDebounce from "@/lib/hooks/useDebounce";
 
 const formSchema = z.object({
   title: z.string().trim().min(1, {
@@ -83,6 +84,9 @@ interface ResearchPaperFormProps {
   paperId?: string;
   paper?: ResearchPaperModel;
   proposalToPaper?: boolean;
+  initialData?: Partial<z.infer<typeof formSchema>>;
+  onChange?: (data: Partial<z.infer<typeof formSchema>>) => void;
+  onSubmitSuccess?: () => void;
 }
 
 const ResearchPaperForm = ({
@@ -90,6 +94,9 @@ const ResearchPaperForm = ({
   paperId,
   paper,
   proposalToPaper,
+  initialData,
+  onChange,
+  onSubmitSuccess,
 }: ResearchPaperFormProps) => {
   const { data: sessionData } = useSession();
   const [selectedDateRange, setSelectedDateRange] = useState({
@@ -110,6 +117,27 @@ const ResearchPaperForm = ({
     paper?.wonCompetition ? paper.wonCompetition : "none"
   );
 
+  const defaultValues: Partial<z.infer<typeof formSchema>> = {
+    title: "",
+    researchAdviser: "",
+    introduction: "",
+    researchCategory: undefined,
+    researchConsultant: "",
+    file: "",
+    references: "",
+    isPublic: "false",
+    keywords: "",
+    abstract: "",
+    price: "",
+    grade: "",
+    wonCompetitonFile: undefined,
+  };
+
+  const mergedInitialData = {
+    ...defaultValues,
+    ...initialData,
+  };
+
   const handleSelectChange = (value: string) => {
     setWonCompetitionValue(value);
   };
@@ -118,20 +146,28 @@ const ResearchPaperForm = ({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      researchAdviser: "",
-      introduction: "",
-      researchCategory: undefined,
-      researchConsultant: "",
-      file: "",
-      references: "",
-      isPublic: "false",
-      keywords: "",
-      abstract: "",
-      price: "",
-    },
+    defaultValues: mergedInitialData,
   });
+
+  const formData = form.watch();
+  const debouncedFormData = useDebounce(formData, 300);
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(debouncedFormData);
+    }
+  }, [debouncedFormData, onChange]);
+
+  useEffect(() => {
+    if (initialData) {
+      Object.keys(initialData).forEach((key) =>
+        form.setValue(
+          key as keyof z.infer<typeof formSchema>,
+          initialData[key as keyof z.infer<typeof formSchema>]
+        )
+      );
+    }
+  }, [initialData, form]);
 
   useEffect(() => {
     if (isEdit && paperId && paper) {
@@ -219,8 +255,6 @@ const ResearchPaperForm = ({
               : null,
         };
 
-        console.log(data.wonCompetitonFile);
-
         if (fileUrl && paper.file) {
           edgestore.myProtectedFiles.delete({
             url: paper.file,
@@ -258,12 +292,28 @@ const ResearchPaperForm = ({
 
           addResearchProposalPaper(data).then((paper) => {
             form.reset();
+            form.reset({
+              title: "",
+              researchAdviser: "",
+              researchConsultant: "",
+              researchCategory: undefined,
+              introduction: "",
+              abstract: "",
+              references: "",
+              keywords: "",
+              isPublic: "false",
+              price: "",
+              wonCompetitonFile: undefined,
+            });
             setAuthors([]);
             setProgress(0);
             if (fileInputRef.current) {
               fileInputRef.current.value = "";
             }
             setFile(undefined);
+            if (onSubmitSuccess) {
+              onSubmitSuccess();
+            }
           });
 
           toast({
