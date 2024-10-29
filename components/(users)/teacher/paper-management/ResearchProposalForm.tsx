@@ -262,7 +262,9 @@ const ResearchProposalForm = ({
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>
+                Title <span className=""> *</span>
+              </FormLabel>
               <FormControl>
                 <Input
                   type="text"
@@ -330,7 +332,9 @@ const ResearchProposalForm = ({
               name="researchAdviser"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Research Adviser</FormLabel>
+                  <FormLabel>
+                    Research Adviser <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       className={`${
@@ -353,7 +357,9 @@ const ResearchProposalForm = ({
               name="researchConsultant"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Research Consultant</FormLabel>
+                  <FormLabel>
+                    Research Consultant <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       className={`${
@@ -376,7 +382,9 @@ const ResearchProposalForm = ({
               name="researchCategory"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Research Category</FormLabel>
+                  <FormLabel>
+                    Research Category <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Select
                       onValueChange={field.onChange}
@@ -452,7 +460,9 @@ const ResearchProposalForm = ({
             name="introduction"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Introduction</FormLabel>
+                <FormLabel>
+                  Introduction <span className=""> *</span>
+                </FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="Type introduction paper here."
@@ -472,7 +482,9 @@ const ResearchProposalForm = ({
             name="references"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>References</FormLabel>
+                <FormLabel>
+                  References <span className=""> *</span>
+                </FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="Paste references here."

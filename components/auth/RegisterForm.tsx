@@ -150,7 +150,9 @@ const RegisterForm = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>
+                        Email <span className=""> *</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -170,7 +172,9 @@ const RegisterForm = () => {
                     name="firstName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>First name</FormLabel>
+                        <FormLabel>
+                          First name <span className=""> *</span>
+                        </FormLabel>
                         <FormControl>
                           <Input
                             {...field}
@@ -189,7 +193,9 @@ const RegisterForm = () => {
                     name="lastName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Last name</FormLabel>
+                        <FormLabel>
+                          Last name <span className=""> *</span>
+                        </FormLabel>
                         <FormControl>
                           <Input
                             {...field}
@@ -208,7 +214,9 @@ const RegisterForm = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>
+                        Password <span className=""> *</span>
+                      </FormLabel>
                       <FormControl>
                         <PasswordInput
                           {...field}
@@ -230,7 +238,9 @@ const RegisterForm = () => {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirm password</FormLabel>
+                      <FormLabel>
+                        Confirm password <span className=""> *</span>
+                      </FormLabel>
                       <FormControl>
                         <PasswordInput
                           {...field}
@@ -249,7 +259,9 @@ const RegisterForm = () => {
                   name="role"
                   render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel>Role</FormLabel>
+                      <FormLabel>
+                        Role <span className=""> *</span>
+                      </FormLabel>
                       <FormControl>
                         <RadioGroup
                           onValueChange={field.onChange}
@@ -282,7 +294,9 @@ const RegisterForm = () => {
                   name="schoolId"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>School</FormLabel>
+                      <FormLabel>
+                        School <span className=""> *</span>
+                      </FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>

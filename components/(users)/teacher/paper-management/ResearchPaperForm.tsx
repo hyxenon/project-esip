@@ -319,7 +319,9 @@ const ResearchPaperForm = ({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>
+                  Title <span className=""> *</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="text"
@@ -386,7 +388,9 @@ const ResearchPaperForm = ({
                 name="researchAdviser"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Research Adviser</FormLabel>
+                    <FormLabel>
+                      Research Adviser <span className=""> *</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className={`${
@@ -409,7 +413,9 @@ const ResearchPaperForm = ({
                 name="researchConsultant"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Research Consultant</FormLabel>
+                    <FormLabel>
+                      Research Consultant <span className=""> *</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className={`${
@@ -432,7 +438,9 @@ const ResearchPaperForm = ({
                 name="researchCategory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Research Category</FormLabel>
+                    <FormLabel>
+                      Research Category <span className=""> *</span>
+                    </FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
@@ -507,7 +515,9 @@ const ResearchPaperForm = ({
               name="abstract"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Abstract</FormLabel>
+                  <FormLabel>
+                    Abstract <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Type abstract here."
@@ -528,7 +538,9 @@ const ResearchPaperForm = ({
               name="introduction"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Introduction</FormLabel>
+                  <FormLabel>
+                    Introduction <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Type introduction  here."
@@ -550,7 +562,9 @@ const ResearchPaperForm = ({
               name="references"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>References</FormLabel>
+                  <FormLabel>
+                    References <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Paste references here."

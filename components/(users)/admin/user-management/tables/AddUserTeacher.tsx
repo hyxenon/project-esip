@@ -187,7 +187,9 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>
+                  Email <span className=""> *</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -206,7 +208,9 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First name</FormLabel>
+                  <FormLabel>
+                    First name <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -223,7 +227,9 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Last name</FormLabel>
+                  <FormLabel>
+                    Last name <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -243,7 +249,9 @@ function ProfileForm({ selectedSchool }: ProfileFormProps) {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>
+                    Password <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}

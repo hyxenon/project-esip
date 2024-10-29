@@ -139,7 +139,9 @@ function ProfileForm() {
               name="schoolName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>School Name</FormLabel>
+                  <FormLabel>
+                    School Name <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -156,7 +158,9 @@ function ProfileForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email Address</FormLabel>
+                  <FormLabel>
+                    Email Address <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -176,7 +180,9 @@ function ProfileForm() {
               name="streetAddress"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Street Address</FormLabel>
+                  <FormLabel>
+                    Street Address <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -193,7 +199,9 @@ function ProfileForm() {
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City</FormLabel>
+                  <FormLabel>
+                    City <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -212,7 +220,9 @@ function ProfileForm() {
               name="province"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Province</FormLabel>
+                  <FormLabel>
+                    Province <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -229,7 +239,9 @@ function ProfileForm() {
               name="postalCode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Zip/Postal Code</FormLabel>
+                  <FormLabel>
+                    Zip/Postal Code <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -247,7 +259,9 @@ function ProfileForm() {
               name="contactNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contact Number</FormLabel>
+                  <FormLabel>
+                    Contact Number <span className=""> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -271,7 +285,7 @@ function ProfileForm() {
                     <div>
                       <div>
                         <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-4">
-                          Logo Image
+                          Logo Image <span className=""> *</span>
                         </p>
                         <div className="flex flex-col justify-center items-center ">
                           <SingleImageDropzone
