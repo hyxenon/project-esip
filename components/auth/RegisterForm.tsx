@@ -6,6 +6,7 @@ import sideBg from "../../assets/student-with-computer-vector-23667723-removebg-
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -48,26 +49,34 @@ const formSchema = z
     email: z.string().email({ message: "Email is required." }),
     password: z
       .string()
-      .min(8, {
-        message: "Password must be at least 8 characters long.",
-      })
+      .min(8, { message: "Password must be at least 8 characters long." })
       .regex(/[A-Z]/, {
         message: "Password must contain at least one uppercase letter.",
       })
       .regex(/[a-z]/, {
         message: "Password must contain at least one lowercase letter.",
       })
-      .regex(/[@$!%*#?&]/, {
-        message:
-          "Password must contain at least one special character such as @$!%*#?&.",
+      .regex(/\d/, { message: "Password must contain at least one number." })
+      .regex(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/, {
+        message: "Password must contain at least one special character.",
       }),
     confirmPassword: z.string(),
-    firstName: z.string().trim().min(1, { message: "First name is required." }),
-    lastName: z.string().trim().min(1, { message: "Last name is required." }),
+    firstName: z
+      .string()
+      .trim()
+      .min(1, { message: "First name is required." })
+      .regex(/^[a-zA-Z-'À-ÖØ-öø-ÿ\s]+$/, {
+        message: "Invalid characters in name.",
+      }),
+    lastName: z
+      .string()
+      .trim()
+      .min(1, { message: "Last name is required." })
+      .regex(/^[a-zA-Z-'À-ÖØ-öø-ÿ\s]+$/, {
+        message: "Invalid characters in name.",
+      }),
     role: z.string().min(1, { message: "Role is required." }),
-    schoolId: z.string({
-      required_error: "Please select your school.",
-    }),
+    schoolId: z.string({ required_error: "Please select your school." }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -132,11 +141,7 @@ const RegisterForm = () => {
       {/* Register Form */}
       <div className="lg:w-[650px] xl:w-[800px] flex flex-col lg:flex-row mt-8 2xl:mt-0 z-10">
         <div className="flex flex-col bg-white items-center px-8 py-12 border border-gray-300 shadow-2xl">
-          <h1
-            className={`text-3xl xl:text-4xl text-[#606C38] ${jacques.className}`}
-          >
-            Register
-          </h1>
+          <h1 className={`text-3xl xl:text-4xl text-[#606C38]`}>Register</h1>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 ">
               <div className="space-y-5 mt-4">
@@ -154,6 +159,7 @@ const RegisterForm = () => {
                           className="border-gray-400"
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -173,6 +179,7 @@ const RegisterForm = () => {
                             className="border-gray-400"
                           />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -191,6 +198,7 @@ const RegisterForm = () => {
                             className="border-gray-400"
                           />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -209,6 +217,10 @@ const RegisterForm = () => {
                           className="border-gray-400"
                         />
                       </FormControl>
+                      <FormDescription>
+                        Must be 8+ characters, include uppercase, lowercase,
+                        number, and special character.
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

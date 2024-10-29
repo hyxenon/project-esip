@@ -61,14 +61,12 @@ const LoginForm = () => {
   return (
     <AuthFormWrapper>
       {/* Login Form */}
-      <div className="xl:w-[800px] h-[450px] flex flex-col lg:flex-row gap-0.5 bg-white mt-8 z-50">
+      <div className="xl:w-[800px] min-h-[450px] flex flex-col lg:flex-row gap-0.5 bg-white mt-8 z-50">
         <div className="bg-[#283618] hidden lg:flex items-center justify-center px-12 border border-gray-300 shadow-2xl">
           <Image draggable="false" src={searchBg} alt="" />
         </div>
         <div className="flex-1 flex items-center justify-center py-4 flex-col border border-gray-300 shadow-2xl">
-          <h1
-            className={`text-3xl xl:text-4xl text-[#606C38] ${jacques.className}`}
-          >
+          <h1 className={`text-3xl xl:text-4xl text-[#606C38]`}>
             Welcome Back
           </h1>
           <Form {...form}>
