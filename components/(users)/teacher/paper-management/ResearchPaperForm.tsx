@@ -177,7 +177,7 @@ const ResearchPaperForm = ({
         "researchConsultant",
         paper.researchConsultant.toUpperCase()
       );
-      form.setValue("researchCategory", paper.researchCategory.toUpperCase());
+      form.setValue("researchCategory", paper.researchCategory.toLowerCase());
       form.setValue("abstract", paper.abstract!);
       form.setValue("introduction", paper.introduction);
       form.setValue("references", paper.references);
@@ -495,6 +495,11 @@ const ResearchPaperForm = ({
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
+                        value={
+                          field.value ||
+                          (isEdit && paper?.researchCategory) ||
+                          ""
+                        }
                       >
                         <SelectTrigger
                           className={`${
@@ -504,7 +509,11 @@ const ResearchPaperForm = ({
                           }`}
                         >
                           <SelectValue
-                            placeholder={field.value ? field.value : "Category"}
+                            placeholder={
+                              field.value || (isEdit && paper?.researchCategory)
+                                ? ""
+                                : "Category"
+                            }
                           />
                         </SelectTrigger>
                         <SelectContent>
