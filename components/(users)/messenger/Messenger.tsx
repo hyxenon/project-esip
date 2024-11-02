@@ -10,6 +10,9 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import useWindowSize from "@/lib/hooks/useWindowSize";
 import { mdBreakpoint } from "@/lib/tailwind";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { FaAlignLeft } from "react-icons/fa";
+import MobileMenu from "../admin/mobileMenu";
 
 const Messenger = () => {
   const chatClient = useInitializeChatClient();
@@ -37,10 +40,22 @@ const Messenger = () => {
   }
 
   return (
-    <div className="h-screen bg-[#faf9f6]">
+    <div className="h-[calc(100vh-73px)] bg-white">
       <div className="max-w-[1600px] min-w-[350px] h-full shadow-sm m-auto flex flex-col">
         <Chat client={chatClient}>
-          <div className="border-b border-b-[#DBDDE1] p-2 md:hidden">
+          <div className="border-b border-b-[#DBDDE1] p-2 lg:hidden flex justify-between items-center">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  className="flex lg:hidden"
+                  variant="ghost"
+                  size={"icon"}
+                >
+                  <FaAlignLeft />
+                </Button>
+              </SheetTrigger>
+              <MobileMenu role={session.user?.role} />
+            </Sheet>
             <Button
               type="button"
               variant={"ghost"}

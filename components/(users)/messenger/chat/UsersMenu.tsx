@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Channel, UserResponse } from "stream-chat";
 import {
   Avatar,
