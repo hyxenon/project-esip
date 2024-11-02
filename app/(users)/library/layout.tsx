@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "My Library",
+  title: "Project E-SIP - My Library",
   description: "Saved Papers",
 };
 

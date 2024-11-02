@@ -13,6 +13,11 @@ import dynamic from "next/dynamic";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { PiStudentFill } from "react-icons/pi";
 import UserHistoryDialog from "@/components/UserHistory";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Project E-SIP - User Management",
+};
 
 const TotalCards = dynamic(() => import("@/components/(users)/TotalCards"), {
   loading: () => <SkeletonCard />,

@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import Navbar from "@/components/(users)/navbar";
 
 export const metadata = {
-  title: "Messenger App",
+  title: "Project E-SIP - Messenger",
   description: "This is the Messenger App page",
 };
 

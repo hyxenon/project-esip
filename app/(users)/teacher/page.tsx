@@ -9,6 +9,11 @@ import Unauthorized from "@/components/UnAuthorized";
 import dynamic from "next/dynamic";
 import { SkeletonCard } from "@/components/(users)/SkeletonCard";
 import { PopularCharts } from "@/components/(users)/teacher/dashboard/PopularCharts";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Project E-SIP - Dashboard",
+};
 
 const ChartsContainer = dynamic(
   () => import("@/components/(users)/teacher/dashboard/ChartsContainer"),
