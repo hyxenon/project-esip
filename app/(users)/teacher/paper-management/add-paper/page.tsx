@@ -2,6 +2,17 @@ import { getPaper } from "@/actions/paperManagement.action";
 import { auth } from "@/auth";
 import AddPaperForm from "@/components/(users)/teacher/paper-management/addPaperForm";
 import Unauthorized from "@/components/UnAuthorized";
+import { Metadata } from "next";
+
+export const generateMetadata = ({
+  searchParams,
+}: {
+  searchParams?: { edit?: string };
+}): Metadata => {
+  return {
+    title: `Project E-SIP - ${searchParams?.edit ? "Edit Paper" : "Add Paper"}`,
+  };
+};
 
 const AddPaper = async ({
   searchParams,

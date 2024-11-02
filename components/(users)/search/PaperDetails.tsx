@@ -262,7 +262,7 @@ export default function PaperDetails({
               <Badge
                 key={index}
                 variant="secondary"
-                className="bg-[#606C38] text-white hover:bg-[#BC6C25] transition-colors capitalize"
+                className="bg-[#606C38] text-white hover:bg-[#606C38] transition-colors capitalize"
               >
                 {keyword}
               </Badge>

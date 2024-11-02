@@ -7,30 +7,34 @@ import { FaAlignLeft } from "react-icons/fa6";
 import MobileMenu from "./admin/mobileMenu";
 import { StudentNavbarMenu } from "./studentNavbarMenu";
 import { AdminNavbarMenu } from "./admin/AdminNavbarMenu";
+import Link from "next/link";
 
 type NavbarProps = {
   role: string;
+  isMessenger?: boolean;
 };
 
-const Navbar = ({ role }: NavbarProps) => {
+const Navbar = ({ role, isMessenger }: NavbarProps) => {
   return (
     <div
       className={`lg:px-16 py-2 px-1 flex items-center bg-white gap-x-8 lg:shadow lg:py-4 lg:bg-[#283618]`}
     >
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button className="flex lg:hidden" variant="ghost" size={"icon"}>
-            <FaAlignLeft />
-          </Button>
-        </SheetTrigger>
-        <MobileMenu role={role} />
-      </Sheet>
+      {!isMessenger && (
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button className="flex lg:hidden" variant="ghost" size={"icon"}>
+              <FaAlignLeft />
+            </Button>
+          </SheetTrigger>
+          <MobileMenu role={role} />
+        </Sheet>
+      )}
       <div className="lg:flex items-center hidden">
         {/* <Image src={logo} alt="logo" className="w-[0px]" /> */}
-        <p className="text-xl font-bold">
+        <Link href={"/"} className="text-xl font-bold">
           <span className="text-[#FEFAE0]">PROJECT</span>{" "}
           <span className="text-[#DDA15E]">E-SIP</span>
-        </p>
+        </Link>
       </div>
       <div className="hidden lg:flex flex-1">
         {role == "TEACHER" && <TeacherNavbarMenu />}

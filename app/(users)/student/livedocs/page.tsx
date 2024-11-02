@@ -9,7 +9,7 @@ import { dateConverter } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import React from "react";
+import { IoDocumentText } from "react-icons/io5";
 
 const LiveDocs = async () => {
   const session = await auth();
@@ -37,16 +37,17 @@ const LiveDocs = async () => {
                   href={`/student/livedocs/${id}`}
                   className="flex flex-1 items-center gap-4"
                 >
-                  <div className="hidden rounded-md p-2 sm:block">
-                    <Image
+                  <div className="rounded-md p-2 ">
+                    {/* <Image
                       src={"/assets/icons/doc.svg"}
                       alt="file"
                       width={40}
                       height={40}
-                    />
+                    /> */}
+                    <IoDocumentText className="w-9 h-9 -ml-1 text-[#606C38]" />
                     <div className="space-y-1">
                       <p className="line-clamp-1 text-lg">{metadata.title}</p>
-                      <p className="text-sm text-blue-500">
+                      <p className="text-sm text-[#BC6C25]">
                         Created about {dateConverter(createdAt)}
                       </p>
                     </div>

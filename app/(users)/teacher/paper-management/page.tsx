@@ -11,7 +11,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Unauthorized from "@/components/UnAuthorized";
 import { ResearchPaperModel } from "@/models/models";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Project E-SIP - Paper Management",
+};
 
 const PaperManagement = async ({
   searchParams,

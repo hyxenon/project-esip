@@ -118,7 +118,7 @@ const MobileMenu = ({ role }: MobileMenuProps) => {
                   <p className="font-semibold text-[#283618]">Messenger</p>
                 </NavLink>
                 <NavLink
-                  href="/messenger"
+                  href="/student/livedocs"
                   className="flex items-center gap-2 py-1 px-4 rounded-md transition-all cursor-pointer hover:bg-gray-200"
                   activeClassName="bg-gray-200"
                 >

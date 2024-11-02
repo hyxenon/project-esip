@@ -60,7 +60,7 @@ const Page = () => {
       {session?.user?.role === "ADMIN" && <Navbar role="ADMIN" />}
 
       <div className="container py-12">
-        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-center text-[#606C38]">
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-center text-[#283618]">
           Image to Text Converter
         </h1>
         <div className="grid mt-12 gap-4 grid-cols-1 lg:grid-cols-2">
@@ -84,20 +84,20 @@ const Page = () => {
               </div>
             ) : (
               <div className="flex items-center justify-center flex-col py-8 md:py-12 lg:py-14 ">
-                <h2 className="scroll-m-20 pb-2 text-2xl font-semibold tracking-tight first:mt-0 text-[#BC6C25]">
+                <h2 className="scroll-m-20 pb-2 text-2xl tracking-tight first:mt-0 text-[#283618]">
                   Choose an Image to convert to text
                 </h2>
-                <IoMdImage className="text-8xl" />
+                <IoMdImage className="text-8xl text-[#BC6C25]" />
               </div>
             )}
           </Card>
           <Card className="flex items-center justify-center">
             {processing && (
               <div className="flex flex-col justify-center items-center">
-                <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+                <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0 text-[#283618]">
                   Processing...
                 </h2>
-                <IoMdImage className="text-8xl animate-pulse" />
+                <IoMdImage className="text-8xl animate-pulse text-[#BC6C25]" />
               </div>
             )}
 

@@ -1,5 +1,8 @@
+import { auth } from "@/auth";
+import Navbar from "@/components/(users)/navbar";
+
 export const metadata = {
-  title: "Messenger App",
+  title: "Project E-SIP - Messenger",
   description: "This is the Messenger App page",
 };
 
@@ -8,5 +11,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div>{children}</div>;
+  const session = await auth();
+
+  if (!session?.user) {
+    return <div>no session found</div>;
+  }
+  return (
+    <>
+      <Navbar isMessenger={true} role={session.user.role} />
+      {children}
+    </>
+  );
 }
