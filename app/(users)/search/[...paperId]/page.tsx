@@ -1,15 +1,40 @@
-import { userSavedPapers } from "@/actions/paperManagement.action";
+import {
+  getPaperTitleOnly,
+  userSavedPapers,
+} from "@/actions/paperManagement.action";
 import { existingPurchase } from "@/actions/paymongo.action";
 import { getPaperDetails } from "@/actions/search";
 import { auth } from "@/auth";
 import PaperDetails from "@/components/(users)/search/PaperDetails";
 import PaperNotFound from "@/components/PaperNotFound";
+import { Metadata } from "next";
 
 interface PaperIdProps {
   params: {
     paperId: string;
   };
 }
+
+export const generateMetadata = async ({
+  params,
+}: PaperIdProps): Promise<Metadata> => {
+  let title = "";
+
+  const paperId = Array.isArray(params.paperId)
+    ? params.paperId[0]
+    : params.paperId;
+
+  try {
+    const titleData = await getPaperTitleOnly(paperId);
+    title = titleData?.title || "Paper Not Found";
+  } catch (error: any) {
+    console.log("Paper not found", error);
+  }
+
+  return {
+    title: `Project E-SIP - ${title}`,
+  };
+};
 
 const PaperId = async ({ params }: PaperIdProps) => {
   const session = await auth();

@@ -304,3 +304,16 @@ export const userSavedPapersWithDetails = async (
     totalPages,
   };
 };
+
+export const getPaperTitleOnly = async (paperId: string) => {
+  const title = await db.researchPaper.findFirst({
+    where: {
+      id: paperId,
+    },
+    select: {
+      title: true,
+    },
+  });
+
+  return title;
+};
