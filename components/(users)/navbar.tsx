@@ -7,6 +7,7 @@ import { FaAlignLeft } from "react-icons/fa6";
 import MobileMenu from "./admin/mobileMenu";
 import { StudentNavbarMenu } from "./studentNavbarMenu";
 import { AdminNavbarMenu } from "./admin/AdminNavbarMenu";
+import Link from "next/link";
 
 type NavbarProps = {
   role: string;
@@ -30,10 +31,10 @@ const Navbar = ({ role, isMessenger }: NavbarProps) => {
       )}
       <div className="lg:flex items-center hidden">
         {/* <Image src={logo} alt="logo" className="w-[0px]" /> */}
-        <p className="text-xl font-bold">
+        <Link href={"/"} className="text-xl font-bold">
           <span className="text-[#FEFAE0]">PROJECT</span>{" "}
           <span className="text-[#DDA15E]">E-SIP</span>
-        </p>
+        </Link>
       </div>
       <div className="hidden lg:flex flex-1">
         {role == "TEACHER" && <TeacherNavbarMenu />}
