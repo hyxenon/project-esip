@@ -18,6 +18,12 @@ export const metadata: Metadata = {
   title: "Project E-SIP - Paper Management",
 };
 
+const options: Intl.DateTimeFormatOptions = {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+};
+
 const PaperManagement = async ({
   searchParams,
 }: {
@@ -25,6 +31,7 @@ const PaperManagement = async ({
     category?: string;
     authorSearch?: string;
     authorSearchTerm?: string;
+    year?: string;
   };
 }) => {
   const session = await auth();
@@ -49,6 +56,10 @@ const PaperManagement = async ({
   const category = categoryMapping[searchParams?.category || ""] || undefined;
   const authorSearch = searchParams?.authorSearch === "true";
   const authorSearchValue = searchParams?.authorSearchTerm || "";
+  const selectedYear =
+    searchParams?.year && searchParams.year !== "all"
+      ? parseInt(searchParams.year)
+      : null;
 
   const res = await getAllPapers(
     schoolId,
@@ -56,10 +67,17 @@ const PaperManagement = async ({
     authorSearch,
     authorSearchValue
   );
-  const papers: ResearchPaperModel[] = res.message.map((paper: any) => ({
+  let papers: ResearchPaperModel[] = res.message.map((paper: any) => ({
     ...paper,
     file: paper.file ?? undefined,
   }));
+
+  if (selectedYear) {
+    papers = papers.filter((paper) => {
+      const paperYear = new Date(paper.date).getFullYear();
+      return paperYear === selectedYear;
+    });
+  }
 
   const totalResearchProposals = papers.filter(
     (paper) => paper.researchType === "proposal"
