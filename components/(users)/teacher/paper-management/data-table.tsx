@@ -71,6 +71,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [category, setCategory] = useState("all");
+  const [year, setYear] = useState("all");
   const [authorSearch, setAuthorSearch] = useState(
     authorSearchParams === "true"
   );
@@ -150,6 +151,14 @@ export function DataTable<TData, TValue>({
     [updateQueryParams] // Include the updateQueryParams function as a dependency
   );
 
+  const handleYearChange = useCallback(
+    (value: string) => {
+      setYear(value);
+      updateQueryParams({ year: value });
+    },
+    [updateQueryParams] // Include updateQueryParams as a dependency
+  );
+
   return (
     <>
       <div className="flex items-center py-4">
@@ -175,7 +184,7 @@ export function DataTable<TData, TValue>({
           )}
 
           <div className="flex flex-col gap-2 md:flex-row">
-            <Select defaultValue="all" onValueChange={handleCategoryChange}>
+            <Select defaultValue="all" onValueChange={handleYearChange}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
