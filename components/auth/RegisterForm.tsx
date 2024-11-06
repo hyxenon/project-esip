@@ -38,6 +38,16 @@ import {
 import { getSchools } from "@/actions/schoolManagement";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { PasswordInput } from "../ui/password-input";
+import { Checkbox } from "../ui/checkbox";
+import { Label } from "../ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 
 const jacques = Jacques_Francois({
   weight: "400",
@@ -77,6 +87,11 @@ const formSchema = z
       }),
     role: z.string().min(1, { message: "Role is required." }),
     schoolId: z.string({ required_error: "Please select your school." }),
+    terms: z.literal(true, {
+      errorMap: () => ({
+        message: "You must accept the terms and conditions.",
+      }),
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -388,6 +403,177 @@ const RegisterForm = () => {
                   )}
                 />
               </div>
+              <FormField
+                control={form.control}
+                name="terms"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormControl>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          id="terms"
+                          name="terms"
+                        />
+                        <Label
+                          htmlFor="terms"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Accept{" "}
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                variant="link"
+                                className="p-0 h-auto font-normal"
+                              >
+                                terms and conditions
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>Terms of Service</DialogTitle>
+                                <DialogDescription>
+                                  Please read our Terms of Service carefully.
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="mt-4 space-y-4">
+                                <h3 className="text-lg font-semibold">
+                                  1. Acceptance of Terms
+                                </h3>
+                                <p>
+                                  By accessing and using this service, you
+                                  accept and agree to be bound by the terms and
+                                  provision of this agreement.
+                                </p>
+
+                                <h3 className="text-lg font-semibold">
+                                  2. Eligibility and Account Responsibility
+                                </h3>
+                                <p>
+                                  This Service is available to STE-affiliated
+                                  school members in the Philippines. You are
+                                  responsible for maintaining the
+                                  confidentiality of your account and password
+                                  and for any activities conducted under your
+                                  account.
+                                </p>
+
+                                <h3 className="text-lg font-semibold">
+                                  3. Use of the Service
+                                </h3>
+                                <p>
+                                  You agree to use the Service for educational
+                                  and research purposes only. Any unauthorized
+                                  reproduction, distribution, or commercial use
+                                  of materials found on this platform is
+                                  strictly prohibited. You may not interfere
+                                  with or disrupt the Service or attempt to
+                                  access other accounts or information without
+                                  permission.
+                                </p>
+
+                                <h3 className="text-lg font-semibold">
+                                  4. Content Ownership and Use Rights
+                                </h3>
+                                <p>
+                                  Content uploaded by users, including research
+                                  papers, remains the intellectual property of
+                                  the author or affiliated institution. By
+                                  uploading content, users grant the Service a
+                                  license to display the material in accordance
+                                  with the visibility settings chosen by the
+                                  user (e.g., public, private with purchase).
+                                </p>
+
+                                <h3 className="text-lg font-semibold">
+                                  5. Purchasing Access to Private Papers
+                                </h3>
+                                <p>
+                                  Certain papers may be set to private by the
+                                  affiliated institution and require a one-time
+                                  payment to access. By purchasing access, you
+                                  agree that:
+                                  <ul>
+                                    <li>
+                                      Purchased papers are for personal academic
+                                      use only.
+                                    </li>
+                                    <li>
+                                      You will not distribute, reproduce, or
+                                      otherwise share the content.
+                                    </li>
+                                    <li>
+                                      All sales are final, and no refunds will
+                                      be issued.
+                                    </li>
+                                  </ul>
+                                </p>
+
+                                <h3 className="text-lg font-semibold">
+                                  6. Privacy Policy
+                                </h3>
+                                <p>
+                                  Your use of the service is also governed by
+                                  our Privacy Policy, which can be found [link
+                                  to privacy policy].
+                                </p>
+
+                                <h3 className="text-lg font-semibold">
+                                  7. Termination of Access
+                                </h3>
+                                <p>
+                                  We reserve the right to terminate or suspend
+                                  your access to the Service without notice for
+                                  conduct that violates these Terms of Service
+                                  or is otherwise harmful to other users, the
+                                  Service, or third parties.
+                                </p>
+
+                                <h3 className="text-lg font-semibold">
+                                  8. Changes to the Terms
+                                </h3>
+                                <p>
+                                  We reserve the right to modify these Terms at
+                                  any time. Your continued use of the Service
+                                  following any changes constitutes acceptance
+                                  of those changes. Please review the Terms
+                                  regularly.
+                                </p>
+
+                                <h3 className="text-lg font-semibold">
+                                  9. Limitation of Liability
+                                </h3>
+                                <p>
+                                  The Service is provided “as is” without
+                                  warranties of any kind, either express or
+                                  implied. The institution does not take
+                                  responsibility for the accuracy, completeness,
+                                  or reliability of content available on the
+                                  platform. In no event shall we be liable for
+                                  any indirect or consequential damages arising
+                                  from your use of the Service.
+                                </p>
+
+                                <h3 className="text-lg font-semibold">
+                                  10. Governing Law
+                                </h3>
+                                <p>
+                                  These Terms are governed by the laws of the
+                                  Philippines. Any disputes arising from these
+                                  Terms will be resolved under the exclusive
+                                  jurisdiction of the courts in the Philippines.
+                                </p>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </Label>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormError message={error} />
               <FormSuccess message={success} />
               <Button
