@@ -53,7 +53,7 @@ export function PieChartCard({
     <>
       <ChartContainer
         config={chartConfig} // Pass the config prop here
-        className="mx-auto aspect-square max-h-[250px] pb-0 [&_.recharts-pie-label-text]:fill-foreground"
+        className="mx-auto aspect-square w-full max-h-[250px] pb-0 [&_.recharts-pie-label-text]:fill-foreground"
       >
         <PieChart>
           <ChartTooltip content={<ChartTooltipContent hideLabel />} />
