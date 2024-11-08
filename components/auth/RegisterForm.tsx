@@ -325,7 +325,7 @@ const RegisterForm = () => {
                             >
                               {field.value ? (
                                 <>
-                                  <div className="flex gap-1">
+                                  <div className="flex gap-2">
                                     <Image
                                       src={
                                         schools?.find(
@@ -369,7 +369,7 @@ const RegisterForm = () => {
                                       form.setValue("schoolId", school.value);
                                     }}
                                   >
-                                    <div className="flex gap-4">
+                                    <div className="flex items-center gap-4">
                                       <Image
                                         alt="logo"
                                         src={
@@ -379,6 +379,7 @@ const RegisterForm = () => {
                                         }
                                         width={20}
                                         height={10}
+                                        className="w-5 h-5"
                                       />
                                       {school.label}
                                     </div>
