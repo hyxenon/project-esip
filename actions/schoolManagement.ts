@@ -58,6 +58,15 @@ export const getSchools = async () => {
   return { message: schools };
 };
 
+export const getSchoolsActive = async () => {
+  const schools = await db.school.findMany({
+    where: {
+      status: "Active",
+    },
+  });
+  return { message: schools };
+};
+
 export const getSchool = async (schoolId: string) => {
   if (schoolId) {
     const school = await db.school.findFirst({
