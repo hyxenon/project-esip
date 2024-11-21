@@ -35,7 +35,7 @@ import {
   CommandList,
 } from "../ui/command";
 
-import { getSchools } from "@/actions/schoolManagement";
+import { getSchoolsActive } from "@/actions/schoolManagement";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { PasswordInput } from "../ui/password-input";
 import { Checkbox } from "../ui/checkbox";
@@ -124,7 +124,7 @@ const RegisterForm = () => {
   useEffect(() => {
     const fetchSchool = async () => {
       try {
-        const res = await getSchools();
+        const res = await getSchoolsActive();
         const formattedSchools = res.message.map((school) => ({
           label: school.schoolName,
           value: school.id,
@@ -426,7 +426,7 @@ const RegisterForm = () => {
                             <DialogTrigger asChild>
                               <Button
                                 variant="link"
-                                className="p-0 h-auto font-normal"
+                                className="p-0 h-auto font-normal underline"
                               >
                                 terms and conditions
                               </Button>
