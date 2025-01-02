@@ -83,7 +83,7 @@ const AdminHome = async ({
       </div>
 
       {/* Charts */}
-      <div className="mt-4">
+      <div className="mt-4 pb-4">
         <h1 className="font-semibold">Usage Statistics</h1>
         {/* <div className="grid grid-cols-1 2xl:grid-cols-2 gap-8 mt-4">
           <TotalVisitors /> 
@@ -115,10 +115,6 @@ const AdminHome = async ({
             />
           </TopPopularBarChart>
         </div>
-      </div>
-
-      <div className="mt-4">
-        <h1 className="font-semibold">Engagement metrics </h1>
       </div>
     </div>
   );
