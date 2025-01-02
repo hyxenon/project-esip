@@ -56,7 +56,7 @@ export function PopularCharts({
             layout="vertical"
             margin={{
               left: 0,
-              right: 16,
+              right: 32,
             }}
             className="-ml-14"
           >
