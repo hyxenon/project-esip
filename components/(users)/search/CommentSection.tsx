@@ -29,6 +29,7 @@ interface Comment {
   user: {
     name: string;
     id: string;
+    image?: string;
   };
   content: string;
   createdAt: string;
@@ -242,7 +243,11 @@ export default function CommentSection({
         <div className="flex">
           <Avatar className="h-8 w-8 mr-2 z-10">
             <AvatarImage
-              src={`https://api.dicebear.com/6.x/initials/svg?seed=${comment.user.name}`}
+              src={
+                comment.user.image!
+                  ? comment.user.image!
+                  : `https://api.dicebear.com/6.x/initials/svg?seed=${comment.user.name}`
+              }
             />
             <AvatarFallback>{comment.user.name[0]}</AvatarFallback>
           </Avatar>
