@@ -77,6 +77,7 @@ export default function CommentSection({
         user: {
           id: session.user?.id!,
           name: session.user?.name || "Unknown",
+          image: session.user?.image || undefined,
         },
         createdAt: new Date().toISOString(),
       };
